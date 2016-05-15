@@ -10,10 +10,22 @@ import Yesod.Form.Bootstrap3
 import Control.Monad.Logger (runStdoutLoggingT)
 
 
+{-- tipo SauipeExpress com um data Constructor SauipeExpress + record syntax --} 
+data SauipeExpress = SauipeExpress {getStatic :: Static, connPool :: ConnectionPool}
 
-data SauipeExpress = SauipeExpress {getStatic :: Static}
+{-- o tipo SauipeExpress é uma instancia da classe Yesod, definida na biblioteca Yesod. 
+ Yesod significa fundação em Hebreu, entao Pagina forma a fundação de nosso website. --}
 
 instance Yesod SauipeExpress
+
+-- tabela 
+share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
+Usuarios json
+   nome Text 
+   login Text
+   senha Text
+   deriving Show
+|]
 
 staticFiles "static"
 
@@ -22,8 +34,198 @@ mkYesod "SauipeExpress" [parseRoutes|
 /quemsomos QuemSomosR GET
 /servicos ServicosR GET 
 /contato ContatoR GET 
+/cadastro UsuarioR GET POST
+/cadastro/action/#UsuariosId ActionR GET PUT DELETE 
+/cadastro/checar/#UsuariosId ChecarR GET
+/erro ErroR GET
 /static StaticR Static getStatic
 |]
+
+instance YesodPersist SauipeExpress where
+   type YesodPersistBackend SauipeExpress = SqlBackend
+   runDB f = do
+       master <- getYesod
+       let pool = connPool master
+       runSqlPool f pool
+
+------------------------------------------------------------------
+
+
+{-- lista todas os usuarios no banco a partir do nome
+getUsuarioR :: Handler ()
+getUsuarioR = do
+    allUsuarios <- runDB $ selectList [] [Asc UsuariosNome]
+    sendResponse (object [pack "data" .= fmap toJSON allUsuarios])
+--} 
+
+{-- cria usuario no banco 
+postUsuarioR :: Handler ()
+postUsuarioR = do
+    usuarios <- requireJsonBody :: Handler Usuarios
+    runDB $ insert usuarios
+    sendResponse (object [pack "resp" .= pack "CRIADO"])
+--}
+
+postUsuarioR :: Handler Html
+postUsuarioR = do
+           ((result, _), _) <- runFormPost usuarioForm
+           case result of 
+               FormSuccess prod -> (runDB $ insert prod) >>= \piid -> redirect (ChecarR piid)
+               _ -> redirect ErroR
+
+
+getChecarR :: UsuariosId -> Handler Html
+getChecarR pid = do
+    usu <- runDB $ get404 pid
+    defaultLayout [whamlet|
+        <p><b> #{usuariosNome  usu}
+        <p><b> #{usuariosLogin usu}  
+        <p><b> #{usuariosSenha usu}
+    |]
+    
+
+-- se o usuario nao exisitr, dá erro 404
+getActionR :: UsuariosId -> Handler ()
+getActionR pid = do
+    usu <- runDB $ get404 pid
+    sendResponse $ toJSON usu
+ 
+-- atualiza um usuario 
+putActionR :: UsuariosId -> Handler ()
+putActionR pid = do
+    usu <- requireJsonBody :: Handler Usuarios
+    runDB $ update pid [UsuariosNome =. usuariosNome usu]
+    sendResponse (object [pack "resp" .= pack "ATUALIZADO"])
+
+-- deleta um usuario pelo ID 
+deleteActionR :: UsuariosId -> Handler ()
+deleteActionR pid = do
+    runDB $ delete pid
+    sendResponse (object [pack "resp" .= pack "DELETADO"])
+
+getErroR :: Handler Html
+getErroR = defaultLayout [whamlet|
+    <p>não foi possivel cadastrar, tente novamente
+|]
+
+instance RenderMessage SauipeExpress FormMessage where
+    renderMessage _ _ = defaultFormMessage
+    
+--data Usuario = Usuario deriving Show
+
+type Form a = Html -> MForm Handler (FormResult a, Widget)
+
+usuarioForm :: Form Usuarios 
+usuarioForm = renderDivs $ Usuarios <$>
+       areq textField "Nome: " Nothing <*>
+       areq textField "Login: " Nothing <*>
+       areq textField "Senha: " Nothing 
+       
+getUsuarioR :: Handler Html
+getUsuarioR = do 
+        (widget, enctype) <- generateFormPost usuarioForm
+        defaultLayout $ do 
+        setTitle "Sauípe Express|Cadastro"
+        addStylesheet $ StaticR css_bootstrap_css
+        addStylesheet $ StaticR css_fontawesomemin_css
+        addStylesheet $ StaticR css_main_css
+        addStylesheet $ StaticR css_principal_css
+        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        toWidget [cassius|
+                label 
+                    font: 20px "typewriter", sans-serif;
+                input[type=text]
+                   color:black;
+                   font-size: 18px;
+                   margin-top: 20px;
+                h1
+                   text-align: center;
+                   font-weight: bold;
+                   font: 30px "typewriter", sans-serif;
+                input[type=submit]
+                   font: 18px "typewriter", sans-serif;    
+                   margin: 20px 0px 10px 0px;
+                   color: black;
+           |]
+        toWidgetHead [hamlet|
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="icon" href=@{StaticR imagens_icones_iconeCoqueiroFundo_png} type="image/x-icon">
+        |]
+        [whamlet| 
+                    <nav class="navbar navbar-default navbar-static-top menu cor1"> 
+                        <div class="container">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+                                    <span class="sr-only">Navegação
+                                    <span class="icon-bar">
+                                    <span class="icon-bar">
+                                    <span class="icon-bar">
+                                <a class="navbar-brand" href=@{HomeR}>Sauípe Express
+                            <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li>
+                                        <a href=@{HomeR}>Home
+                                    <li>
+                                        <a href=@{QuemSomosR}>Quem Somos
+                                    <li>
+                                        <a href=@{ServicosR}>Serviços
+                                    <li>
+                                        <a href=@{ContatoR}>Contato
+                    <div class="section">
+                        <header class="container">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <img src=@{StaticR imagens_logotipo10anos_png} class="img-responsive logotipo">
+                                    <p>Frete e entregas para todo o Brasil.
+                                <div class="links">
+                                    <p>
+                                        <img src=@{StaticR imagens_icones_icone_tel_png} alt="Telefone para contato" title="Telefone para contato Sauípe Express"> Telefone:(13)3223-9211 ou 3224-5876
+                                    <p>
+                                        <img src=@{StaticR imagens_icones_icone_whatsapp_png} alt="Celular para contato" title="Celular para contato Sauípe Express"> Celular:(13)99747-7862
+                                    <p>
+                                        <img src=@{StaticR imagens_icones_icone_cel_png} alt="ID nextel" title="ID Nextel Sauípe Express"> Nextel(ID):129*20237
+                                    <p>
+                                        <a href="https://www.facebook.com/armando.barros.5661?fref=pb&amp;hc_location=profile_browser" title="página do facebook Sauípe Express"><img src=@{StaticR imagens_icones_icone_facebook_png} alt="página do facebook"> Curta nossa página no facebook
+                                    <p>
+                                        <a href=@{ContatoR}><img src=@{StaticR imagens_icones_icone_email_png} alt="email para contato" title="Email para contato Sauípe Express"> contato@sauipeexpress.com.br
+                    <div class="section">
+                        <div class="container fundo1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h1>Formulário de Cadastro
+                                        <form method=post enctype=#{enctype} action=@{UsuarioR}>
+                                            ^{widget}
+                                            <input type="submit" value="Cadastrar" id="cadastrar">
+                    <div class="section">
+                        <footer class="container">
+                            <div class="vcard row">
+                                <div class="col-md-6">
+                                    <h2 class="fn">Sauípe Express Transportes Rápidos Ltda.
+                                    <h3>Mapa do Site
+                                    <a href=@{HomeR}>Home|
+                                    <a href=@{QuemSomosR}>Quem Somos|
+                                    <a href=@{ServicosR}>Serviços|
+                                    <a href=@{ContatoR}>Contato
+                                <div class="adr">Endereço:
+                                    <br>
+                                    <span class="street-addresss">Av. Afonso Pena, 45 - Macuco,
+                                    <br>
+                                    <span class="locality">Santos-
+                                    <span class="region">SP
+                                    <br>
+                                    <span title="Celular Sauípe Express" class="tel">Celular: (13)99747-7862
+                                    <br>
+                                    <span class="tel" title="Telefone Sauípe Express">Telefone: (13)3223-9211 ou 3224-5876 <br>Nextel(ID):129*20237
+                                    <br>
+                                <a href=@{ContatoR} class="email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br                        
+        |]
+        
+                  
+          
+  
+------------------------------------------------------------------
 
 getContatoR :: Handler Html
 getContatoR = defaultLayout $ do
@@ -440,10 +642,15 @@ getHomeR = defaultLayout $ do
                                     <br>
                                 <a href=@{ContatoR} class="email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
             |] 
+            
+connStr = "dbname=dc4os3bfc24nle host=ec2-23-21-165-201.compute-1.amazonaws.com user=mbyfpmgifqzsml password=tx6KvtIZYlmna5zW4D4ISJ_FNU"
 
 main :: IO ()
-main =  do 
-    t@(Static settings) <- static "static"
-    warp 8080 (SauipeExpress t)
+main = do
+       s@(Static settings) <- static "static"    
+       runStdoutLoggingT $ withPostgresqlPool connStr 10 $ \pool -> liftIO $ do 
+       runSqlPersistMPool (runMigration migrateAll) pool
+       warp 8080 (SauipeExpress s pool)
+
 
 
