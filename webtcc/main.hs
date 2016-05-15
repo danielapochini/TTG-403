@@ -118,7 +118,7 @@ getServicosR = defaultLayout $ do
                                     <h3>Mapa do Site
                                     <a href=@{HomeR}>Home|
                                     <a href=@{QuemSomosR}>Quem Somos|
-                                    <a href="../view/servicos.html">Serviços|
+                                    <a href=@{ServicosR}>Serviços|
                                     <a href="../view/contato.html">Contato
                                 <div class="adr">Endereço:
                                     <br>
@@ -167,7 +167,7 @@ getQuemSomosR = defaultLayout $ do
                                     <li>
                                         <a href=@{QuemSomosR}>Quem Somos
                                     <li>
-                                        <a href="../view/servicos.html">Serviços
+                                        <a href=@{ServicosR}>Serviços
                                     <li>
                                         <a href="../view/contato.html">Contato
                     <div class="section">
@@ -218,7 +218,7 @@ getQuemSomosR = defaultLayout $ do
                                     <h3>Mapa do Site
                                     <a href=@{HomeR}>Home|
                                     <a href=@{QuemSomosR}>Quem Somos|
-                                    <a href="../view/servicos.html">Serviços|
+                                    <a href=@{ServicosR}>Serviços|
                                     <a href="../view/contato.html">Contato
                                 <div class="adr">Endereço:
                                     <br>
@@ -265,7 +265,7 @@ getHomeR = defaultLayout $ do
                                     <li>
                                         <a href=@{QuemSomosR}>Quem Somos
                                     <li>
-                                        <a href="../view/servicos.html">Serviços
+                                        <a href=@{ServicosR}>Serviços
                                     <li>
                                         <a href="../view/contato.html">Contato
                     <div class="section">
@@ -301,7 +301,7 @@ getHomeR = defaultLayout $ do
                                     <h3>Mapa do Site
                                     <a href=@{HomeR}>Home|
                                     <a href=@{QuemSomosR}>Quem Somos|
-                                    <a href="../view/servicos.html">Serviços|
+                                    <a href=@{ServicosR}>Serviços|
                                     <a href="../view/contato.html">Contato
                                 <div class="adr">Endereço:
                                     <br>
