@@ -5,148 +5,110 @@
 import Yesod
 import Database.Persist.Postgresql
 import Data.Text
+import Yesod.Static
 import Control.Monad.Logger (runStdoutLoggingT)
 
-{-- tipo Pagina com um data Constructor Pagina --} 
-data Pagina = Pagina{connPool :: ConnectionPool}
 
-{--
- o tipo Pagina é uma instancia da classe Yesod, definida na biblioteca Yesod. 
- Yesod significa fundação em Hebreu, entao Pagina forma a fundação de nosso website.
---}
-instance Yesod Pagina
--- 15, 16, 17, 21 e 22
+data SauipeExpress = SauipeExpress {getStatic :: Static}
 
---tabela
-share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
-Usuarios json
-   nome Text
-   senha Text
-   deriving Show
+instance Yesod SauipeExpress
+
+staticFiles "static"
+
+mkYesod "SauipeExpress" [parseRoutes|
+/ HomeR GET 
+/static StaticR Static getStatic
+--/quemsomos QuemSomosR GET
+--/servicos ServicosR GET 
+--/contato ContatoR GET 
 |]
 
-mkYesod "Pagina" [parseRoutes|
-{-- caminho da rota, nome da rota (Data Constructor), metodo de requisição --}
-/cadastro UsuarioR GET POST
-/cadastro/action/#UsuariosId ActionR GET PUT DELETE 
--- /cadastro/buscar/#UsuariosNome BuscaR GET
-|]
+getHomeR :: Handler Html
+getHomeR = defaultLayout $ do
+            setTitle "Sauípe Express|Home"
+            addStylesheet $ StaticR css_bootstrap_css
+            addStylesheet $ StaticR css_fontawesomemin_css
+            addStylesheet $ StaticR css_main_css
+            addStylesheet $ StaticR css_principal_css
+            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            toWidgetHead [hamlet|
+                    <meta charset="utf-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <link rel="icon" href=@{StaticR imagens_icones_iconeCoqueiroFundo_png} type="image/x-icon">
+            |]
+            [whamlet|
+                    <nav class="navbar navbar-default navbar-static-top menu cor1"> 
+                        <div class="container">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+                                    <span class="sr-only">Navegação
+                                    <span class="icon-bar">
+                                    <span class="icon-bar">
+                                    <span class="icon-bar">
+                                <a class="navbar-brand" href=@{HomeR}>Sauípe Express
+                            <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li>
+                                        <a href=@{HomeR}>Home
+                                    <li>
+                                        <a href="../view/quemsomos.html">Quem Somos
+                                    <li>
+                                        <a href="../view/servicos.html">Serviços
+                                    <li>
+                                        <a href="../view/contato.html">Contato
+                    <div class="section">
+                        <header class="container">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <img src=@{StaticR imagens_logotipo10anos_png} class="img-responsive logotipo">
+                                    <p>Frete e entregas para todo o Brasil.
+                                <div class="links">
+                                    <p>
+                                        <img src=@{StaticR imagens_icones_icone_tel_png} alt="Telefone para contato" title="Telefone para contato Sauípe Express"> Telefone:(13)3223-9211 ou 3224-5876
+                                    <p>
+                                        <img src=@{StaticR imagens_icones_icone_whatsapp_png} alt="Celular para contato" title="Celular para contato Sauípe Express"> Celular:(13)99747-7862
+                                    <p>
+                                        <img src=@{StaticR imagens_icones_icone_cel_png} alt="ID nextel" title="ID Nextel Sauípe Express"> Nextel(ID):129*20237
+                                    <p>
+                                        <a href="https://www.facebook.com/armando.barros.5661?fref=pb&amp;hc_location=profile_browser" title="página do facebook Sauípe Express"><img src=@{StaticR imagens_icones_icone_facebook_png} alt="página do facebook"> Curta nossa página no facebook
+                                    <p>
+                                        <a href="../view/contato.html"><img src=@{StaticR imagens_icones_icone_email_png} alt="email para contato" title="Email para contato Sauípe Express"> contato@sauipeexpress.com.br
+                    <div class="section">
+                        <div class="container fundo1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h1 class="central">Seja Bem Vindo ao nosso site!
+                                    <p>No ano que fazemos nosso aniversário de 10 anos, reformulamos nosso site para melhor atendê-lo.
+                                    <img src=@{StaticR imagens_designResponsivoLogo_png} alt="Dispositivos móveis(Design Responsivo)" title="Dispositivos móveis(Design Responsivo)" class="center-block hidden-xs">
+                                    <p>Agora com o site totalmente responsivo, facilitando seu acesso através do Computador, Notebook, Tablet, celular e demais dispositivos móveis
+                    <div class="section">
+                        <footer class="container">
+                            <div class="vcard row">
+                                <div class="col-md-6">
+                                    <h2 class="fn">Sauípe Express Transportes Rápidos Ltda.
+                                    <h3>Mapa do Site
+                                    <a href=@{HomeR}>Home|
+                                    <a href="../view/quemsomos.html">Quem Somos|
+                                    <a href="../view/servicos.html">Serviços|
+                                    <a href="../view/contato.html">Contato
+                                <div class="adr">Endereço:
+                                    <br>
+                                    <span class="street-addresss">Av. Afonso Pena, 45 - Macuco,
+                                    <br>
+                                    <span class="locality">Santos-
+                                    <span class="region">SP
+                                    <br>
+                                    <span title="Celular Sauípe Express" class="tel">Celular: (13)99747-7862
+                                    <br>
+                                    <span class="tel" title="Telefone Sauípe Express">Telefone: (13)3223-9211 ou 3224-5876 <br>Nextel(ID):129*20237
+                                    <br>
+                                <a href="../view/contato.html" class="email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
+            |] 
 
-instance YesodPersist Pagina where
-   type YesodPersistBackend Pagina = SqlBackend
-   runDB f = do
-       master <- getYesod
-       let pool = connPool master
-       runSqlPool f pool
-------------------------------------------------------
-
--- lista todas os usuarios no banco a partir do nome
-getUsuarioR :: Handler ()
-getUsuarioR = do
-    allUsuarios <- runDB $ selectList [] [Asc UsuariosNome]
-    sendResponse (object [pack "data" .= fmap toJSON allUsuarios])
-
--- cria usuario no banco 
-postUsuarioR :: Handler ()
-postUsuarioR = do
-    usuarios <- requireJsonBody :: Handler Usuarios
-    runDB $ insert usuarios
-    sendResponse (object [pack "resp" .= pack "CRIADO"])
-
-
--- se o usuario nao exisitr, dá erro 404
-getActionR :: UsuariosId -> Handler ()
-getActionR pid = do
-    usu <- runDB $ get404 pid
-    sendResponse $ toJSON usu
- 
--- atualiza um usuario 
-putActionR :: UsuariosId -> Handler ()
-putActionR pid = do
-    usu <- requireJsonBody :: Handler Usuarios
-    runDB $ update pid [UsuariosNome =. usuariosNome usu]
-    sendResponse (object [pack "resp" .= pack "ATUALIZADO"])
-
--- deleta um usuario pelo ID 
-deleteActionR :: UsuariosId -> Handler ()
-deleteActionR pid = do
-    runDB $ delete pid
-    sendResponse (object [pack "resp" .= pack "DELETADO")
-    
-       
-
-    
-{- 
-mkYesod "Pagina" [parseRoutes|
-/cadastro UserR GET POST
-/cadastro/action/#ClientesId ActionR GET PUT DELETE
-|]
-
-instance YesodPersist Pagina where
-   type YesodPersistBackend Pagina = SqlBackend
-   runDB f = do
-       master <- getYesod
-       let pool = connPool master
-       runSqlPool f pool
-------------------------------------------------------
-getUserR :: Handler ()
-getUserR = do
-    allClientes <- runDB $ selectList [] [Asc ClientesNome]
-    sendResponse (object [pack "data" .= fmap toJSON allClientes])
-    
-postUserR :: Handler ()
-postUserR = do
-    clientes <- requireJsonBody :: Handler Clientes
-    runDB $ insert clientes
-    sendResponse (object [pack "resp" .= pack "CREATED"])
-
-getActionR :: ClientesId -> Handler ()
-getActionR pid = do
-    cli <- runDB $ get404 pid
-    sendResponse $ toJSON cli
-
-deleteActionR :: ClientesId -> Handler ()
-deleteActionR pid = do
-    runDB $ delete pid
-    sendResponse (object [pack "resp" .= pack "DELETED"])
-    
-putActionR :: ClientesId -> Handler ()
-putActionR pid = do
-    cli <- requireJsonBody :: Handler Clientes
-    runDB $ update pid [ClientesNome =. clientesNome cli]
-    
-    
-    getBuscaR :: UsuariosNome -> Handler ()
-getBuscaR text = do
-    allUsuarios <- runDB $ selectList [text] [Asc UsuariosNome]
-    sendResponse (object [pack "data" .= toJSON allUsuarios])
--}
-connStr = "dbname=dc4os3bfc24nle host=ec2-23-21-165-201.compute-1.amazonaws.com user=mbyfpmgifqzsml password=tx6KvtIZYlmna5zW4D4ISJ_FNU"
-
-main::IO()
-main = runStdoutLoggingT $ withPostgresqlPool connStr 10 $ \pool -> liftIO $ do 
-       runSqlPersistMPool (runMigration migrateAll) pool
-       warp 8080 (Pagina pool) --porta que sera executada
+main :: IO ()
+main =  do 
+    t@(Static settings) <- static "static"
+    warp 8080 (SauipeExpress t)
 
 
-{- comandos:
-cd web2
-    stack build
-
-curl https://webdev-manfi89.c9users.io/cadastro \
-  -v \
-  -X POST \
-  -H 'Content-Type: application/json' \
-  -d '{"nome":"Beatriz"}'
-  
-  
-  curl https://webdev-manfi89.c9users.io/cadastro/delete/1 \
-  -v \
-  -X DELETE \
-  
-  curl https://webdev-manfi89.c9users.io/cadastro/update/2 \
-  -v \
-  -X PUT \
-  -H 'Content-Type: application/json' \
-  -d '{"nome":"Mauro"}'
-  -}

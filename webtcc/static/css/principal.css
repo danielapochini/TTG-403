@@ -1,0 +1,427 @@
+
+html{
+	
+		/*padding:0px;
+		clear:both;
+		*/	
+	}
+	body{
+		font-family:verdana,sans-serif;
+		font-size:16px;
+		background-image: url(../imagens/fundoOrlaSantos.jpg);/*linear-gradient(to bottom, #4169E1, #63B8FF, #00008B, #000080);*/
+		background-repeat:no-repeat;
+		background-attachment:fixed;
+		position:relative;
+	}
+	
+	.navbar-brand:before{
+		content:url(../imagens/icones/iconeCoqueiro.png);
+		}
+	
+	header{
+		background-color:rgba(255,255,255,0.90);
+		border-radius:10px;
+		color:#008;
+	}
+	
+	
+	img{
+		border-radius:10px;
+		max-width:100%;
+	}
+	.logotipo {
+		margin:2px;
+		font-size: 15px;
+	}
+	.logotipo + p{
+		color:#008;
+	}
+	.fundo1{
+		background-color:rgba(68,153 ,221, 0.85);
+		border-radius:10px;
+	}
+	 a{
+		text-decoration:none;	
+		transition: 0.5s;
+		color:#77ddff;
+	}
+	a:hover{	
+		transition: 0.5s;
+		color:#008;
+		font-weight:bold;
+		text-decoration:none;
+	}
+	nav{
+		/*padding:7px 0px 0px 0px ;
+		font-family:"levenim mt";
+		font-size:20px;	
+		margin:0px;
+		text-align:right;*/	
+	}
+	
+	nav li{
+	
+		border-radius:4px;
+		list-style:none;
+		display:inline;	
+		margin:3px;
+		border-top-right-radius:19px;
+		border-bottom-left-radius:19px;
+		background-color:#0099ff;
+		color:#000;
+		font-weight:bold;
+		}
+
+	nav li a{
+		border-radius:4px;
+		border-top-right-radius:19px;
+		border-bottom-left-radius:19px;
+		color:#fff;	
+		background-color:#332299;
+	}
+	/*.atual{
+		border-radius:18px;
+		background-color:#FF4500;
+		color:#ccc;
+		padding:1px;
+		margin:3px;
+	}*/
+	.links{
+		margin:15px;
+	}
+	
+	.links a{
+		border-radius:10px;
+		position:relative;
+		top:0;
+		transition: all .2s ease-in-out;
+		color:#008;
+	}
+	.links a:hover{
+		text-decoration:none;
+		top:-4px;
+		color:#000080;
+		font-weight:normal;
+		background-color:transparent;
+		box-shadow:0 4px 3px #999
+	}
+	iframe{
+		border-radius:20px;
+	}
+	
+	footer{	
+		font-size:14px;		
+		border-radius:10px;
+		background-color:rgba(68, 68, 119,0.85);/*#444477; */
+		color:#ccc;
+		font-weight:bold;
+		padding:10px;
+	}
+	
+	.lado1{
+		display:inline block;
+		float:left;
+	}
+	
+	.lado2{
+		display:inline block;
+		float:right;
+	}
+	
+	/*#logo img{
+		float:left;
+		margin:5px auto;
+		padding:0px;
+	}
+	#logo h1{
+		display:inline;
+		float:left;
+		color:#fff;
+		margin:0px 0px 0px 0px;
+		padding:10px 0px 0px 0px;
+	}
+	#logo h1 span{
+		color:#FF4500;
+	}
+	#main{    //*TAG main não obteve renderização pelo navegador I.E.*/
+		/*background-color:rgba(255, 255, 255, 0.7);
+		margin:auto;
+		padding:8px;
+		border-radius:10px;	
+		display:table;
+		clear:both;
+	}
+		
+	#main h1{
+		color:#000080;
+		font-size:44px;
+		margin:0px 0px 20px 30px;
+	}
+	
+	#main h1 span{
+		margin-left:120px;
+	}
+
+	#main h2{
+		color:#00008B;
+	}
+	
+	#main iframe{
+		border-radius:10px;
+		width:500px;
+		height:280px;
+		display:block;
+	}
+	#main p+img{
+		float:right;
+		margin-right:150px;
+		border-radius:6px;
+	}
+	#main p>a{
+		text-decoration:none;
+		font-weight:bold;
+		color:#000;
+	}
+	#main p>a:hover{
+		text-decoration:underline;
+	}
+	
+	form {
+		padding:6px;
+		border-radius:10px;
+		margin:4px;
+		font-weight:bold;
+		background-image:linear-gradient(#fa0, #FF4500);
+		display:block;
+	}
+
+	form label{
+		display:block;
+		margin:5px;
+	}
+	form label input{
+		border-radius:6px;
+	}
+	form input[type="text"]{
+	float:right;
+	}
+	form label textarea{
+		border-radius:6px;
+	}
+	button, input[type="submit"],[type="reset"]{
+		border-radius:4px;
+		padding:4px;
+		margin:4px;
+		background-color:#333;
+		color:#FFF;
+	}
+	.central{
+		display:block;
+		text-align:center;
+	}
+	.central h2{
+		font-weight:bold;
+		margin-top:-30px;
+	}
+	.central h2 span{
+		color:#000;
+	}
+	.opcoes
+	{
+		width:500px;
+		margin:0 auto;
+		text-align:center;
+	}
+	.opcoes div
+	{
+		text-align:center;
+		cursor:pointer;
+		width:150px;
+		display:inline-block;
+		margin:0 40px 40px 40px;
+	}
+	.opcoes h2
+	{
+		z-index:40;
+	}
+
+	.linha2 img, .linha1 img{
+		border-radius:10px;
+		
+	}
+	#fundo_alpha
+	{
+		position:fixed;
+		top:0;
+		right:0;
+		bottom:0;
+		left:0;
+		margin:0;
+		background-color:#000;
+		opacity:0.9;
+		z-index:50;
+		display:none;
+	}
+	.album
+	{
+		z-index:99;
+		position:fixed;
+		top:50%;
+		left:50%;
+		display:none;
+		text-align:center;
+		border:solid #fff 10px;
+	}
+	.seta_esq, .seta_dir
+	{
+		position:absolute;
+		width:50%;
+		height:100%;
+		cursor:pointer;
+		display:none;
+		z-index:100;
+		
+	}
+	.seta_dir img, .seta_esq img
+	{
+		position:relative;
+		top:50%;
+		margin-top:-44px;
+	}
+	.seta_esq
+	{
+		left:0;
+		text-align:left;
+	}
+	.seta_dir
+	{
+		right:0;
+		text-align:right;
+	}
+	.fechar
+	{
+		position:absolute;
+		top:0;
+		right:0;
+		z-index:100;
+		margin-top:-16.5px;
+		margin-right:-19.5px;
+	}
+	.festa, .ensaios, .evento, .aniversario
+	{
+		height:auto;
+		display:none;
+		width:800px;
+	}
+	.festa img, .ensaios img, .evento img, .aniversario img
+	{
+		position:absolute;
+		margin: 0 auto;
+		display:none;
+	}
+	.festa img.active, .ensaios img.active, .evento img.active, .aniversario img.active
+	{
+		display:block;
+	}
+	.festa img.last-active, .ensaios img.last-active, .evento img.last-active, .aniversario img.last-active
+	{
+		display:none;
+	}
+	
+	.fn{
+		color:#FF4500;
+		text-decoration:none;
+	}
+	.url{
+		display:inline-block;
+		margin:10px 3px;
+		float:left;
+	}
+	.adr{
+		display:block;
+		text-align:right;
+		margin-right:10px;
+	}
+	.tel{
+		display:block;	
+	}
+	.tel:before{
+		content:"Telefone: ";
+	}
+	.tel:after{
+		content:url(../icones/icone-tel.png);
+		margin-left:4px;	
+	}
+	.email{
+		float:right;
+	}
+	.email:after{
+		content:url(../icones/icone-email.gif);
+		margin-left:4px;
+	}
+	a.email{
+		color:#fff;
+		text-decoration:none;
+	}
+	a.email:hover{
+		text-decoration:underline;
+	}
+	
+	.lado1{
+		float:left;
+	}
+	
+	.lado2{
+		float:right;
+	}
+	.lado1 form{
+		float:left;
+		display:block;
+	}
+	
+	.lado2 h2{
+		color:#fff;
+	}
+	.lado2 h2 span{
+		color:#FF4500;
+	}
+	
+	#lista table{
+		background-color:#000;
+		color:#FF4500;
+		margin:4px;
+	}
+	
+	#lista th, td {	
+		padding: 5px;
+		border: 1px solid #FF4500;
+	}
+	
+	#exit{
+		display:block;
+		float:right;
+		font-size:20px;
+		padding:6px;
+		color:#FF4500;
+	}
+	
+	#search{
+		padding:1px;
+		font-size:12px;
+		float:right;
+		background:none;
+		margin:0px;
+	}
+	#search label,input{
+		display:inline;
+		margin:0px;
+	}
+	#resultado a{
+		color:#333;
+	}
+	#resultado h2{
+		font-size:13px;
+	}
+	#resultado p{
+		font-size:11px;
+	}*/
