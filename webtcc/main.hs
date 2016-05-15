@@ -1,6 +1,5 @@
 {-# LANGUAGE OverloadedStrings, TypeFamilies, QuasiQuotes,
              TemplateHaskell, GADTs, FlexibleInstances,
-             TupleSections, OverloadedStrings,
              MultiParamTypeClasses, DeriveDataTypeable,
              GeneralizedNewtypeDeriving, ViewPatterns, EmptyDataDecls #-}
 import Yesod
@@ -61,7 +60,7 @@ getContatoR = defaultLayout $ do
                                     <li>
                                         <a href=@{ServicosR}>Serviços
                                     <li>
-                                        <a href="../view/contato.html">Contato
+                                        <a href=@{ContatoR}>Contato
                     <div class="section">
                         <header class="container">
                             <div class="row">
@@ -78,7 +77,7 @@ getContatoR = defaultLayout $ do
                                     <p>
                                         <a href="https://www.facebook.com/armando.barros.5661?fref=pb&amp;hc_location=profile_browser" title="página do facebook Sauípe Express"><img src=@{StaticR imagens_icones_icone_facebook_png} alt="página do facebook"> Curta nossa página no facebook
                                     <p>
-                                        <a href="../view/contato.html"><img src=@{StaticR imagens_icones_icone_email_png} alt="email para contato" title="Email para contato Sauípe Express"> contato@sauipeexpress.com.br
+                                        <a href=@{ContatoR}><img src=@{StaticR imagens_icones_icone_email_png} alt="email para contato" title="Email para contato Sauípe Express"> contato@sauipeexpress.com.br
                     <div class="section">
                         <div class="container fundo1">
                             <div class="row">
@@ -131,7 +130,7 @@ getContatoR = defaultLayout $ do
                                     <a href=@{HomeR}>Home|
                                     <a href=@{QuemSomosR}>Quem Somos|
                                     <a href=@{ServicosR}>Serviços|
-                                    <a href="../view/contato.html">Contato
+                                    <a href=@{ContatoR}>Contato
                                 <div class="adr">Endereço:
                                     <br>
                                     <span class="street-addresss">Av. Afonso Pena, 45 - Macuco,
@@ -143,7 +142,7 @@ getContatoR = defaultLayout $ do
                                     <br>
                                     <span class="tel" title="Telefone Sauípe Express">Telefone: (13)3223-9211 ou 3224-5876 <br>Nextel(ID):129*20237
                                     <br>
-                                <a href="../view/contato.html" class="email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
+                                <a href=@{ContatoR} class="email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
             |]
 
                 
@@ -184,7 +183,7 @@ getServicosR = defaultLayout $ do
                                     <li>
                                         <a href=@{ServicosR}>Serviços
                                     <li>
-                                        <a href="../view/contato.html">Contato
+                                        <a href=@{ContatoR}>Contato
                     <div class="section">
                         <header class="container">
                             <div class="row">
@@ -201,7 +200,7 @@ getServicosR = defaultLayout $ do
                                     <p>
                                         <a href="https://www.facebook.com/armando.barros.5661?fref=pb&amp;hc_location=profile_browser" title="página do facebook Sauípe Express"><img src=@{StaticR imagens_icones_icone_facebook_png} alt="página do facebook"> Curta nossa página no facebook
                                     <p>
-                                        <a href="../view/contato.html"><img src=@{StaticR imagens_icones_icone_email_png} alt="email para contato" title="Email para contato Sauípe Express"> contato@sauipeexpress.com.br
+                                        <a href=@{ContatoR}><img src=@{StaticR imagens_icones_icone_email_png} alt="email para contato" title="Email para contato Sauípe Express"> contato@sauipeexpress.com.br
                     <div class="section">
                         <div class="container fundo1">
                             <div class="row">
@@ -234,7 +233,7 @@ getServicosR = defaultLayout $ do
                                         e qualidade. O valor do serviço é definido previamente de acordo com a
                                         tabela de localidades, em função da distância.
                                     <p>
-                                        <a href="../view/contato.html">Entre em contato conosco e veja os detalhes deste tipo de serviço
+                                        <a href=@{ContatoR}>Entre em contato conosco e veja os detalhes deste tipo de serviço
                     <div class="section">
                         <footer class="container">
                             <div class="vcard row">
@@ -244,7 +243,7 @@ getServicosR = defaultLayout $ do
                                     <a href=@{HomeR}>Home|
                                     <a href=@{QuemSomosR}>Quem Somos|
                                     <a href=@{ServicosR}>Serviços|
-                                    <a href="../view/contato.html">Contato
+                                    <a href=@{ContatoR}>Contato
                                 <div class="adr">Endereço:
                                     <br>
                                     <span class="street-addresss">Av. Afonso Pena, 45 - Macuco,
@@ -256,7 +255,7 @@ getServicosR = defaultLayout $ do
                                     <br>
                                     <span class="tel" title="Telefone Sauípe Express">Telefone: (13)3223-9211 ou 3224-5876 <br>Nextel(ID):129*20237
                                     <br>
-                                <a href="../view/contato.html" class="email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
+                                <a href=@{ContatoR} class="email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
             |]
 
 getQuemSomosR :: Handler Html
@@ -294,7 +293,7 @@ getQuemSomosR = defaultLayout $ do
                                     <li>
                                         <a href=@{ServicosR}>Serviços
                                     <li>
-                                        <a href="../view/contato.html">Contato
+                                        <a href=@{ContatoR}>Contato
                     <div class="section">
                         <header class="container">
                             <div class="row">
@@ -311,7 +310,7 @@ getQuemSomosR = defaultLayout $ do
                                     <p>
                                         <a href="https://www.facebook.com/armando.barros.5661?fref=pb&amp;hc_location=profile_browser" title="página do facebook Sauípe Express"><img src=@{StaticR imagens_icones_icone_facebook_png} alt="página do facebook"> Curta nossa página no facebook
                                     <p>
-                                        <a href="../view/contato.html"><img src=@{StaticR imagens_icones_icone_email_png} alt="email para contato" title="Email para contato Sauípe Express"> contato@sauipeexpress.com.br
+                                        <a href=@{ContatoR}><img src=@{StaticR imagens_icones_icone_email_png} alt="email para contato" title="Email para contato Sauípe Express"> contato@sauipeexpress.com.br
                     <div class="section">
                         <div class="container fundo1">
                             <div class="row">
@@ -344,7 +343,7 @@ getQuemSomosR = defaultLayout $ do
                                     <a href=@{HomeR}>Home|
                                     <a href=@{QuemSomosR}>Quem Somos|
                                     <a href=@{ServicosR}>Serviços|
-                                    <a href="../view/contato.html">Contato
+                                    <a href=@{ContatoR}>Contato
                                 <div class="adr">Endereço:
                                     <br>
                                     <span class="street-addresss">Av. Afonso Pena, 45 - Macuco,
@@ -356,7 +355,7 @@ getQuemSomosR = defaultLayout $ do
                                     <br>
                                     <span class="tel" title="Telefone Sauípe Express">Telefone: (13)3223-9211 ou 3224-5876 <br>Nextel(ID):129*20237
                                     <br>
-                                <a href="../view/contato.html" class="email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
+                                <a href=@{ContatoR} class="email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
             |]
 
 getHomeR :: Handler Html
@@ -392,7 +391,7 @@ getHomeR = defaultLayout $ do
                                     <li>
                                         <a href=@{ServicosR}>Serviços
                                     <li>
-                                        <a href="../view/contato.html">Contato
+                                        <a href=@{ContatoR}>Contato
                     <div class="section">
                         <header class="container">
                             <div class="row">
@@ -409,7 +408,7 @@ getHomeR = defaultLayout $ do
                                     <p>
                                         <a href="https://www.facebook.com/armando.barros.5661?fref=pb&amp;hc_location=profile_browser" title="página do facebook Sauípe Express"><img src=@{StaticR imagens_icones_icone_facebook_png} alt="página do facebook"> Curta nossa página no facebook
                                     <p>
-                                        <a href="../view/contato.html"><img src=@{StaticR imagens_icones_icone_email_png} alt="email para contato" title="Email para contato Sauípe Express"> contato@sauipeexpress.com.br
+                                        <a href=@{ContatoR}><img src=@{StaticR imagens_icones_icone_email_png} alt="email para contato" title="Email para contato Sauípe Express"> contato@sauipeexpress.com.br
                     <div class="section">
                         <div class="container fundo1">
                             <div class="row">
@@ -427,7 +426,7 @@ getHomeR = defaultLayout $ do
                                     <a href=@{HomeR}>Home|
                                     <a href=@{QuemSomosR}>Quem Somos|
                                     <a href=@{ServicosR}>Serviços|
-                                    <a href="../view/contato.html">Contato
+                                    <a href=@{ContatoR}>Contato
                                 <div class="adr">Endereço:
                                     <br>
                                     <span class="street-addresss">Av. Afonso Pena, 45 - Macuco,
@@ -439,7 +438,7 @@ getHomeR = defaultLayout $ do
                                     <br>
                                     <span class="tel" title="Telefone Sauípe Express">Telefone: (13)3223-9211 ou 3224-5876 <br>Nextel(ID):129*20237
                                     <br>
-                                <a href="../view/contato.html" class="email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
+                                <a href=@{ContatoR} class="email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
             |] 
 
 main :: IO ()
