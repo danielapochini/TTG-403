@@ -10,6 +10,42 @@ import Control.Monad.Logger (runStdoutLoggingT)
 {-- tipo Pagina com um data Constructor Pagina --} 
 data Pagina = Pagina{connPool :: ConnectionPool}
 
+
+{-- 
+ lista todas os usuarios no banco a partir do nome
+getUsuarioR :: Handler ()
+getUsuarioR = do
+    allUsuarios <- runDB $ selectList [] [Asc UsuariosNome]
+    sendResponse (object [pack "data" .= fmap toJSON allUsuarios])
+
+ cria usuario no banco 
+postUsuarioR :: Handler ()
+postUsuarioR = do
+    usuarios <- requireJsonBody :: Handler Usuarios
+    runDB $ insert usuarios
+    sendResponse (object [pack "resp" .= pack "CRIADO"])
+
+-- se o usuario nao exisitr, dá erro 404
+getActionR :: UsuariosId m a -> a Handler ()
+getActionR pid = do
+    usu <- runDB $ get404 pid
+    sendResponse $ toJSON usu
+ 
+-- atualiza um usuario 
+putActionR :: UsuariosId -> Handler ()
+putActionR pid = do
+    usu <- requireJsonBody :: Handler Usuarios
+    runDB $ update pid [UsuariosNome =. usuariosNome usu]
+    sendResponse (object [pack "resp" .= pack "ATUALIZADO"])
+
+-- deleta um usuario pelo ID 
+deleteActionR :: UsuariosId -> Handler ()
+deleteActionR pid = do
+    runDB $ delete pid
+    sendResponse (object [pack "resp" .= pack "DELETADO"])
+ --}
+ 
+ 
 {--
  o tipo Pagina é uma instancia da classe Yesod, definida na biblioteca Yesod. 
  Yesod significa fundação em Hebreu, entao Pagina forma a fundação de nosso website.
