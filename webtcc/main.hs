@@ -5,6 +5,9 @@
 import Yesod
 import Database.Persist.Postgresql
 import Data.Text
+import Data.Text (Text, pack) 
+import Text.Julius (Javascript) 
+import Text.Lucius (Css) 
 import Yesod.Static
 import Yesod.Form.Bootstrap3
 import Control.Monad.Logger (runStdoutLoggingT)
@@ -36,15 +39,16 @@ quando o identificador do arquivo estatico é gerado
 
 {-- caminho da rota, nome da rota (Data Constructor), metodo de requisição --}
 mkYesod "SauipeExpress" [parseRoutes|
-/ HomeR GET 
-/quemsomos QuemSomosR GET
-/servicos ServicosR GET 
-/contato ContatoR GET 
+-- /cadastro/action/#UsuariosId ActionR GET PUT DELETE
+/ HomeR GET
 /cadastro UsuarioR GET POST
--- /cadastro/action/#UsuariosId ActionR GET PUT DELETE 
 /cadastro/checar/#UsuariosId ChecarR GET
+/contato ContatoR GET
 /erro ErroR GET
-/static StaticR Static getStatic 
+/geolocalizacao GeolocalizacaoR GET 
+/quemsomos QuemSomosR GET
+/servicos ServicosR GET
+/static StaticR Static getStatic
 |]
 
 {--
@@ -739,6 +743,113 @@ getContatoR = defaultLayout $ do
                                     <br>
                                 <a href=@{ContatoR} ."email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
             |]
+            
+-------------- GEOLOCALIZACAO ---------------------
+
+getGeolocalizacaoR :: Handler Html
+getGeolocalizacaoR = defaultLayout $ do
+        setTitle "Sauípe Express|Geolocalização"
+        addStylesheet $ StaticR css_bootstrap_css
+        addStylesheet $ StaticR css_fontawesomemin_css
+        addStylesheet $ StaticR css_main_css
+        addStylesheet $ StaticR css_principal_css
+        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        addScriptRemote "https://maps.googleapis.com/maps/api/js?key=AIzaSyDhcgn5SQ2cFSDA7jOTD1dwW4cX2oRiw4k"
+        toWidget[julius|
+            var map,
+                currentPositionMarker,
+                mapCenter = new google.maps.LatLng(-23.9581857, -46.3207414),
+                map;
+    
+            function initializeMap()
+            {
+                map = new google.maps.Map(document.getElementById('map_canvas'), {
+                   zoom: 16,
+                   center: mapCenter,
+                   mapTypeId: google.maps.MapTypeId.ROADMAP
+                 });
+                 
+            }
+     
+            function locError(error) {
+                alert("A posição não pode ser encontrada");
+            }
+           
+            function setCurrentPosition(pos) {
+                currentPositionMarker = new google.maps.Marker({
+                    map: map,
+                    position: new google.maps.LatLng(
+                        pos.coords.latitude,
+                        pos.coords.longitude
+                    ),
+                    title: "Posição Atual"
+                });
+                
+                map.panTo(new google.maps.LatLng(
+                        pos.coords.latitude,
+                        pos.coords.longitude
+                    ));
+                    
+                var infowindow = new google.maps.InfoWindow({
+                content: 'Motoboy: Mauro'
+            });
+            infowindow.open(map,currentPositionMarker);
+            }
+     
+            function displayAndWatch(position) {
+             
+                setCurrentPosition(position);
+                watchCurrentPosition();
+            }
+     
+            function watchCurrentPosition() {
+                var positionTimer = navigator.geolocation.watchPosition(
+                    function (position) {
+                        setMarkerPosition(
+                            currentPositionMarker,
+                            position
+                        );
+                    });
+            }
+     
+            function setMarkerPosition(marker, position) {
+                marker.setPosition(
+                    new google.maps.LatLng(
+                        position.coords.latitude,
+                        position.coords.longitude)
+                );
+            }
+     
+            function initLocationProcedure() {
+                initializeMap();
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(displayAndWatch, locError);
+                } else {
+                    alert("Seu navegador não suporta o Geolocation API!");
+                }
+            }
+      
+            $(document).ready(function() {
+                initLocationProcedure();
+            });
+        |]
+        toWidget 
+                [cassius|
+                    .gm-style .gm-style-iw
+                        color: #001f3f;
+                |]
+        toWidgetHead 
+                [hamlet|
+                    <meta charset="utf-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <link rel="icon" href=@{StaticR imagens_icones_iconeCoqueiroFundo_png} type="image/x-icon">
+                |] 
+        toWidget 
+                [whamlet|
+                    <h1>Localização Atual: 
+                    <div #"map_canvas" style="height:25em; margin:0; padding:0;">
+                |]
 
 main :: IO ()
 main = do
