@@ -19,8 +19,6 @@ data SauipeExpress = SauipeExpress {getStatic :: Static, connPool :: ConnectionP
 {-- o tipo SauipeExpress é uma instancia da classe Yesod, definida na biblioteca Yesod. 
  Yesod significa fundação em Hebreu, entao Pagina forma a fundação de nosso website. --}
 
-instance Yesod SauipeExpress
-
 -- tabela BD 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Usuarios json
@@ -38,18 +36,52 @@ quando o identificador do arquivo estatico é gerado
 --}
 
 {-- caminho da rota, nome da rota (Data Constructor), metodo de requisição --}
-mkYesod "SauipeExpress" [parseRoutes|
--- /cadastro/action/#UsuariosId ActionR GET PUT DELETE
+mkYesod "SauipeExpress" [parseRoutes| 
 / HomeR GET
+/admin AdminR GET
 /cadastro UsuarioR GET POST
-/cadastro/checar/#UsuariosId ChecarR GET
 /contato ContatoR GET
 /erro ErroR GET
-/geolocalizacao GeolocalizacaoR GET 
+/geolocalizacao GeolocalizacaoR GET
+/login LoginR GET POST
+/logout LogoutR GET
+/perfil/#UsuariosId PerfilR GET
 /quemsomos QuemSomosR GET
 /servicos ServicosR GET
 /static StaticR Static getStatic
 |]
+
+
+
+--A função 'isAuthorized' determina os acessos por rota 
+instance Yesod SauipeExpress where 
+    authRoute _ = Just LoginR
+    
+    isAuthorized LoginR _     = return Authorized
+    isAuthorized ErroR _      = return Authorized
+    isAuthorized UsuarioR _   = return Authorized
+    isAuthorized HomeR _      = return Authorized
+    isAuthorized QuemSomosR _ = return Authorized
+    isAuthorized ServicosR _  = return Authorized
+    isAuthorized ContatoR _   = return Authorized 
+    isAuthorized AdminR _     = isAdmin
+    isAuthorized _ _          = isUser
+
+--Autenticação do Admin
+isAdmin = do
+    mu <- lookupSession "_ID"
+    return $ case mu of
+        Nothing      -> AuthenticationRequired
+        Just "admin" -> Authorized
+        Just _       -> Unauthorized "Você precisa ser Admin para ter acesso a essa área!"
+
+--A função isUser faz a autenticação do Usuário
+isUser = do
+    -- 'lookupSession' verifica se há session, e atribui à 'mu'
+    mu <- lookupSession "_ID"
+    return $ case mu of
+        Nothing -> AuthenticationRequired
+        Just _  -> Authorized
 
 {--
 Para acessar o BD é preciso criar uma instancia YesodPersist, que diz
@@ -81,7 +113,25 @@ usuarioForm = renderDivs $ Usuarios <$>  -- coloca Usuarios pra dentro da Monad 
        areq textField "Login: " Nothing <*>
         -- Nothing pq o campo começa vazio
        areq passwordField "Senha: " Nothing 
-       
+
+--Abaixo, criamos o Form com uma Tupla de dois Text, pois queremos acessar apenas os campos Login e Senha de usuarios,
+--Mas NÃO queremos o campo Nome (Senão bastaria usar o formUser acima) 
+loginForm :: Form (Text,Text)
+loginForm = renderDivs $ (,) <$>
+           areq textField "Login: " Nothing <*>
+           areq passwordField "Senha: " Nothing
+           
+
+getLoginR :: Handler Html
+getLoginR = do
+           (widget, enctype) <- generateFormPost loginForm
+           defaultLayout [whamlet|
+                 <form method=post enctype=#{enctype} action=@{LoginR}>
+                     ^{widget}
+                     <input type="submit" value="Login">
+           |]
+
+
 getUsuarioR :: Handler Html
 getUsuarioR = do 
         -- Gera o formulario para ser exibido
@@ -112,6 +162,144 @@ getUsuarioR = do
                 <link rel="icon" href=@{StaticR imagens_icones_iconeCoqueiroFundo_png} type="image/x-icon">
         |]
         [whamlet| 
+                   {- <nav ."navbar navbar-default navbar-static-top menu cor1"> 
+                        <div ."container">
+                            <div ."navbar-header">
+                                <button type="button" ."navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+                                    <span ."sr-only">Navegação
+                                    <span ."icon-bar">
+                                    <span ."icon-bar">
+                                    <span ."icon-bar">
+                                <a ."navbar-brand" href=@{HomeR}>Sauípe Express
+                            <div ."collapse navbar-collapse" #"navbar-ex-collapse">
+                                <ul ."nav navbar-nav navbar-right">
+                                    <li> 
+                                        <a href=@{HomeR}>Home
+                                    <li>
+                                        <a href=@{QuemSomosR}>Quem Somos
+                                    <li>
+                                        <a href=@{ServicosR}>Serviços
+                                    <li>
+                                        <a href=@{ContatoR}>Contato
+                    <div ."section">
+                        <header ."container">
+                            <div ."row">
+                                <div ."col-md-6">
+                                    <img src=@{StaticR imagens_logotipo10anos_png} ."img-responsive logotipo">
+                                    <p>Frete e entregas para todo o Brasil.
+                                <div ."links">
+                                    <p>
+                                        <img src=@{StaticR imagens_icones_icone_tel_png} alt="Telefone para contato" title="Telefone para contato Sauípe Express"> Telefone:(13)3223-9211 ou 3224-5876
+                                    <p>
+                                        <img src=@{StaticR imagens_icones_icone_whatsapp_png} alt="Celular para contato" title="Celular para contato Sauípe Express"> Celular:(13)99747-7862
+                                    <p>
+                                        <img src=@{StaticR imagens_icones_icone_cel_png} alt="ID nextel" title="ID Nextel Sauípe Express"> Nextel(ID):129*20237
+                                    <p>
+                                        <a href="https://www.facebook.com/armando.barros.5661?fref=pb&amp;hc_location=profile_browser" title="página do facebook Sauípe Express"><img src=@{StaticR imagens_icones_icone_facebook_png} alt="página do facebook"> Curta nossa página no facebook
+                                    <p>
+                                        <a href=@{ContatoR}><img src=@{StaticR imagens_icones_icone_email_png} alt="email para contato" title="Email para contato Sauípe Express"> contato@sauipeexpress.com.br
+                    <div ."section">
+                        <div ."container fundo1">
+                            <div ."row">
+                                <div ."col-md-12">
+                                    <h1>Cadastro de Usuário
+                                        <form method=post enctype=#{enctype} action=@{UsuarioR}>
+                                            ^{widget}
+                                            <input type="submit" value="Cadastrar" #"cadastrar"> 
+-}
+                     <div ."section">
+                        <header ."container">
+                            <div ."row">
+                                <div ."col-md-6">
+                                    <img src=@{StaticR imagens_logotipo10anos_png} ."img-responsive logotipo">
+                                    <h1>Preencha o cadastro
+                                        <form method=post enctype=#{enctype} action=@{UsuarioR}>
+                                            ^{widget}
+                                            <input type="submit" value="Cadastrar" #"cadastrar">
+                    <div ."section">
+                        <div ."container fundo1">
+                            <div ."row">
+                                <div ."col-md-12">
+                                    <h1>Cadastro de Usuário
+                                        <p>Área do Administrador
+                    <div ."section">
+                        <footer ."container">
+                            <div ."vcard row">
+                                <div ."col-md-6">
+                                    <h2 ."fn">Sauípe Express Transportes Rápidos Ltda.
+                                    <h3>Mapa do Site
+                                    <a href=@{HomeR}>Home|
+                                    <a href=@{QuemSomosR}>Quem Somos|
+                                    <a href=@{ServicosR}>Serviços|
+                                    <a href=@{ContatoR}>Contato
+                                <div ."adr">Endereço:
+                                    <br>
+                                    <span ."street-addresss">Av. Afonso Pena, 45 - Macuco,
+                                    <br>
+                                    <span ."locality">Santos-
+                                    <span ."region">SP
+                                    <br>
+                                    <span title="Celular Sauípe Express" ."tel">Celular: (13)99747-7862
+                                    <br>
+                                    <span ."tel" title="Telefone Sauípe Express">Telefone: (13)3223-9211 ou 3224-5876 <br>Nextel(ID):129*20237
+                                    <br>
+                                <a href=@{ContatoR} ."email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br                        
+        |]
+        
+--'Post' dos campos do login para a autenticação do usuário
+--Obs.: Funções do Banco de Dados SEMPRE têm o runDB
+postLoginR :: Handler Html
+postLoginR = do
+           ((result, _), _) <- runFormPost loginForm
+           case result of 
+               --Caso seja Admin:
+               FormSuccess ("admin","admin") -> setSession "_ID" "admin" >> redirect AdminR
+               --Caso seja Usuário Comum:
+               FormSuccess (login,senha) -> do 
+                   user <- runDB $ selectFirst [UsuariosLogin ==. login, UsuariosSenha ==. senha] []
+                   case user of
+                       --Caso o User venha 'vazio'            
+                       Nothing -> redirect LoginR
+                       --Caso o user seja retornado com sucesso, setamos a sessão e redirecionamos para a HomeR
+                       --Abaixo: "pid" é o ID, e "u" contém todos os outros campos do registro
+                       --A session é setada com o id do usuário
+                       Just (Entity pid u) -> setSession "_ID" (pack $ show $ fromSqlKey pid) >> redirect (PerfilR pid)
+               _ -> redirect ErroR --Em caso de erro, redirect para ErroR
+               
+postUsuarioR :: Handler Html
+postUsuarioR = do
+           ((result, _), _) <- runFormPost usuarioForm
+           case result of 
+               FormSuccess user -> (runDB $ insert user) >>= \piid -> redirect (PerfilR piid)
+               _ -> redirect ErroR
+
+
+getPerfilR :: UsuariosId -> Handler Html
+getPerfilR uid = do
+      user <- runDB $ get404 uid
+      defaultLayout [whamlet|
+          <p><b> Pagina de #{usuariosNome user}
+          <p><b> Login: #{usuariosLogin user}
+      |]
+
+-- Pagina de Erro 
+getErroR :: Handler Html
+getErroR = defaultLayout $ do  
+            setTitle "Sauípe Express"
+            addStylesheet $ StaticR css_bootstrap_css
+            addStylesheet $ StaticR css_fontawesomemin_css
+            addStylesheet $ StaticR css_main_css
+            addStylesheet $ StaticR css_principal_css
+            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            toWidgetHead [hamlet|
+                    <meta charset="utf-8" HTTP-EQUIV="refresh"
+CONTENT="5;URL=@{HomeR}">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <link rel="icon" href=@{StaticR imagens_icones_iconeCoqueiroFundo_png} type="image/x-icon">
+            |]
+            toWidget 
+                [whamlet|
                     <nav ."navbar navbar-default navbar-static-top menu cor1"> 
                         <div ."container">
                             <div ."navbar-header">
@@ -152,10 +340,11 @@ getUsuarioR = do
                         <div ."container fundo1">
                             <div ."row">
                                 <div ."col-md-12">
-                                    <h1>Cadastro de Usuário
-                                        <form method=post enctype=#{enctype} action=@{UsuarioR}>
-                                            ^{widget}
-                                            <input type="submit" value="Cadastrar" #"cadastrar">
+                                  <h1>Desculpe! 
+                                  <img .="img-responsive" src=@{StaticR imagens_erro1_png}>
+                                  <h3>A página que você digitou não existe ou está fora do ar. 
+                                  <p>Em instantes você será redirecionada para nossa página principal.
+                                  <br> Obrigado!
                     <div ."section">
                         <footer ."container">
                             <div ."vcard row">
@@ -177,156 +366,42 @@ getUsuarioR = do
                                     <br>
                                     <span ."tel" title="Telefone Sauípe Express">Telefone: (13)3223-9211 ou 3224-5876 <br>Nextel(ID):129*20237
                                     <br>
-                                <a href=@{ContatoR} ."email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br                        
-        |]
-        
+                                <a href=@{ContatoR} ."email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
+            |]
+ 
 
-postUsuarioR :: Handler Html
-postUsuarioR = do
-           ((result, _), _) <- runFormPost usuarioForm
-           case result of 
-               FormSuccess prod -> (runDB $ insert prod) >>= \piid -> redirect (ChecarR piid)
-               _ -> redirect ErroR
-
-
--- mensagem de erro caso não consiga cadastrar
-getErroR :: Handler Html
-getErroR = defaultLayout [whamlet|
-    <p>não foi possivel cadastrar, tente novamente
+-- Pagina apenas para Admin 
+getAdminR :: Handler Html
+getAdminR = defaultLayout [whamlet|
+     <h1> Bem-vindo!
 |]
 
--- pega o ID e devolve o nome/usuario/senha cadastrado do BD para a pagina 
-getChecarR :: UsuariosId -> Handler Html
-getChecarR pid = do
-    usu <- runDB $ get404 pid
-    defaultLayout $ do 
-        setTitle "Sauípe Express|Checar Cadastro"
-        addStylesheet $ StaticR css_bootstrap_css
-        addStylesheet $ StaticR css_fontawesomemin_css
-        addStylesheet $ StaticR css_main_css
-        addStylesheet $ StaticR css_principal_css
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        toWidget [cassius|
-                #user h1
-                   text-align: center;
-                   font-weight: bold;
-                   font: 30px "typewriter", sans-serif;
-                #user p
-                   text-align: center;
-                   font: 20px "typewriter", sans-serif;
-        |]
-        toWidgetHead [hamlet|
-                <meta charset="utf-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <link rel="icon" href=@{StaticR imagens_icones_iconeCoqueiroFundo_png} type="image/x-icon">
-        |]
-        [whamlet| 
-                    <nav ."navbar navbar-default navbar-static-top menu cor1"> 
-                        <div ."container">
-                            <div ."navbar-header">
-                                <button type="button" ."navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
-                                    <span ."sr-only">Navegação
-                                    <span ."icon-bar">
-                                    <span ."icon-bar">
-                                    <span ."icon-bar">
-                                <a ."navbar-brand" href=@{HomeR}>Sauípe Express
-                            <div ."collapse navbar-collapse" #"navbar-ex-collapse">
-                                <ul ."nav navbar-nav navbar-right">
-                                    <li>
-                                        <a href=@{HomeR}>Home
-                                    <li>
-                                        <a href=@{QuemSomosR}>Quem Somos
-                                    <li>
-                                        <a href=@{ServicosR}>Serviços
-                                    <li>
-                                        <a href=@{ContatoR}>Contato
-                    <div ."section">
-                        <header ."container">
-                            <div ."row">
-                                <div ."col-md-6">
-                                    <img src=@{StaticR imagens_logotipo10anos_png} ."img-responsive logotipo">
-                                    <p>Frete e entregas para todo o Brasil.
-                                <div ."links">
-                                    <p>
-                                        <img src=@{StaticR imagens_icones_icone_tel_png} alt="Telefone para contato" title="Telefone para contato Sauípe Express"> Telefone:(13)3223-9211 ou 3224-5876
-                                    <p>
-                                        <img src=@{StaticR imagens_icones_icone_whatsapp_png} alt="Celular para contato" title="Celular para contato Sauípe Express"> Celular:(13)99747-7862
-                                    <p>
-                                        <img src=@{StaticR imagens_icones_icone_cel_png} alt="ID nextel" title="ID Nextel Sauípe Express"> Nextel(ID):129*20237
-                                    <p>
-                                        <a href="https://www.facebook.com/armando.barros.5661?fref=pb&amp;hc_location=profile_browser" title="página do facebook Sauípe Express"><img src=@{StaticR imagens_icones_icone_facebook_png} alt="página do facebook"> Curta nossa página no facebook
-                                    <p>
-                                        <a href=@{ContatoR}><img src=@{StaticR imagens_icones_icone_email_png} alt="email para contato" title="Email para contato Sauípe Express"> contato@sauipeexpress.com.br
-                    <div ."section">
-                        <div ."container fundo1">
-                            <div ."row">
-                                <div ."col-md-12" #"user">
-                                            <h1> Checar Usuário Cadastrado 
-                                            <br>
-                                            <p>Nome:  #{usuariosNome  usu}
-                                            <p>Login: #{usuariosLogin usu}  
-                                            <p>Senha: #{usuariosSenha usu}
-                                            <br>
-                    <div ."section">
-                        <footer ."container">
-                            <div ."vcard row">
-                                <div ."col-md-6">
-                                    <h2 ."fn">Sauípe Express Transportes Rápidos Ltda.
-                                    <h3>Mapa do Site
-                                    <a href=@{HomeR}>Home|
-                                    <a href=@{QuemSomosR}>Quem Somos|
-                                    <a href=@{ServicosR}>Serviços|
-                                    <a href=@{ContatoR}>Contato
-                                <div ."adr">Endereço:
-                                    <br>
-                                    <span ."street-addresss">Av. Afonso Pena, 45 - Macuco,
-                                    <br>
-                                    <span ."locality">Santos-
-                                    <span ."region">SP
-                                    <br>
-                                    <span title="Celular Sauípe Express" ."tel">Celular: (13)99747-7862
-                                    <br>
-                                    <span ."tel" title="Telefone Sauípe Express">Telefone: (13)3223-9211 ou 3224-5876 <br>Nextel(ID):129*20237
-                                    <br>
-                                <a href=@{ContatoR} ."email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br                        
-        |]
+-- Pagina de Logout 
+getLogoutR :: Handler Html
+getLogoutR = do
+     deleteSession "_ID"
+     defaultLayout [whamlet| 
+         <h1> ADEUS!
+     |]
 
+getQuemR :: Handler Html
+getQuemR = do
+     mu <- lookupSession "_ID"
+     case mu of
+        --Se em 'mu' houver sessão:
+        Just sess -> do
+            --Na Session é guardado um Text, mas só é possível converter de Text para String (unpack), e de String para Int (read)
+            --O 'toSqlKey' converte de Int para Key(do BD)
 
-{-- 
---  lista todas os usuarios no banco a partir do nome
-getUsuarioR :: Handler ()
-getUsuarioR = do
-    allUsuarios <- runDB $ selectList [] [Asc UsuariosNome]
-    sendResponse (object [pack "data" .= fmap toJSON allUsuarios])
-
--- cria usuario no banco 
-postUsuarioR :: Handler ()
-postUsuarioR = do
-    usuarios <- requireJsonBody :: Handler Usuarios
-    runDB $ insert usuarios
-    sendResponse (object [pack "resp" .= pack "CRIADO"]) 
-    
-    
--- se o usuario nao existir, dá erro 404
-getActionR :: UsuariosId -> Handler ()
-getActionR pid = do
-    usu <- runDB $ get404 pid
-    sendResponse $ toJSON usu
- 
--- atualiza um usuario 
-putActionR :: UsuariosId -> Handler ()
-putActionR pid = do
-    usu <- requireJsonBody :: Handler Usuarios
-    runDB $ update pid [UsuariosNome =. usuariosNome usu]
-    sendResponse (object [pack "resp" .= pack "ATUALIZADO"])
-
--- deleta um usuario pelo ID 
-deleteActionR :: UsuariosId -> Handler ()
-deleteActionR pid = do
-    runDB $ delete pid
-    sendResponse (object [pack "resp" .= pack "DELETADO"])     
---}    
+            --(toSqlKey $ read $ unpack sess) <--- Transforma a Session de Text pra String, de String pra Inteiro e de Int pra chave
+            uid <- return (toSqlKey $ read $ unpack sess) :: Handler (Key Usuarios)
+            user <- runDB $ get404 uid
+            defaultLayout [whamlet|
+               <h1> Quem sou? #{usuariosNome user}
+            |]
+        --Se não houver (é Nothing):
+        Nothing -> redirect ErroR
+        
   
 ----------------VIEW: Páginas do Site, Home, Quem Somos, Serviços, Contato-----------------------
 
@@ -857,3 +932,31 @@ main = do
        runStdoutLoggingT $ withPostgresqlPool connStr 10 $ \pool -> liftIO $ do 
        runSqlPersistMPool (runMigration migrateAll) pool
        warp 8080 (SauipeExpress s pool)
+       
+       
+       
+       
+{-
+cd web2
+    stack build
+
+lsof -i:8080
+kill -9 pid ????
+
+curl https://webdev-manfi89.c9users.io/cadastro \
+  -v \
+  -X POST \
+  -H 'Content-Type: application/json' \
+  -d '{"nome":"Beatriz"}'
+  
+  
+  curl https://webdev-manfi89.c9users.io/cadastro/delete/1 \
+  -v \
+  -X DELETE \
+  
+  curl https://webdev-manfi89.c9users.io/cadastro/update/2 \
+  -v \
+  -X PUT \
+  -H 'Content-Type: application/json' \
+  -d '{"nome":"Mauro"}'
+-}
