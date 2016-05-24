@@ -1,3 +1,20 @@
+Pasta SRC: Foundation.hs, Handlers.hs e Routes.hs
+
+Foundation -> Instancias de Yesod, BD
+Handlers -> Codigos da Aplicação
+Routes -> Rotas
+
+Pasta STATIC: Arquivos estaticos, imagens, js, cs etc
+
+PASTA TEMPLATES: cassius, hamlet, julius, whamlet
+arquivos em Cassius -> CSS
+arquivos em Hamlet  -> html do head 
+arquivos em Julius  -> JS
+arquivos em Whamlet -> html do body
+
+
+============================================
+
 Duvidas:
 1 - Como fazer no Padrão MVC? 
 Persistencia BD/Form em Model, Paginas em View e Rotas/Handlers em Controller
