@@ -1,20 +1,3 @@
-getPaginaR :: Handler Html
-getPaginaR = defaultLayout $ do
-        setTitle "Sauípe Express|Estrutura"
-        addStylesheet $ StaticR css_bootstrap_css
-        addStylesheet $ StaticR css_fontawesomemin_css
-        addStylesheet $ StaticR css_main_css
-        addStylesheet $ StaticR css_principal_css
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        toWidgetHead 
-                [hamlet|
-                    <meta charset="utf-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <link rel="icon" href=@{StaticR imagens_icones_iconeCoqueiroFundo_png} type="image/x-icon">
-                |]
-        toWidget 
-                [whamlet|
                     <nav ."navbar navbar-default navbar-static-top menu cor1"> 
                         <div ."container">
                             <div ."navbar-header">
@@ -55,7 +38,35 @@ getPaginaR = defaultLayout $ do
                         <div ."container fundo1">
                             <div ."row">
                                 <div ."col-md-12">
-                                    -- INSERIR O CONTEUDO AQUI -- 
+                                    <img ."hidden-xs lado1" src=@{StaticR imagens_motoLogo1_png}>
+                                    <h1>Serviços
+                                    <p>Ao contratar os nossos serviços você agilizará suas entregas e retiradas
+                                        de malotes, duplicatas, notas fiscais, serviços, bancários, pequenos e
+                                        médios volumes entre outros, com total rapidez e segurança, pois contamos
+                                        com uma equipe especializada para cada tipo de serviço, personalizando
+                                        o atendimento para a necessidade de cada cliente, em diversos segmentos
+                                        como:
+                                    <p>Indústrias, bancos, financeiras, consultórios, concessionárias, contabilidades,
+                                        advocacias, farmácias, restaurantes, deliverys , e todos estabelescimentos
+                                        ou empresas que buscam uma solução definitiva e econômica em transportes
+                                        urgentes.
+                                    <h2>Mensal
+                                    <p>Colocamos à disposição de sua empresa, um ou mais Motofretistas, uniformizados
+                                        e equipados com CELULAR ou RADIOCOMUNICAÇÃO que servirão a sua empresa
+                                        em qualquer tipo de serviço externo nos horários determinados em contrato.
+                                    <h3>Integral
+                                    <p>Segunda à sexta feira jornada de 8h/dia.
+                                    <img ."hidden-xs lado2" src=@{StaticR imagens_montanaLogo1_png}>
+                                    <h3>Meio Período(Manhã)
+                                    <p>Jornada de 4h/dia Obs.: Em caso de algum imprevisto a substituição do
+                                        condutor ou veículo será efetuada no maximo em 90 minutos.
+                                    <h2>Esporádico
+                                    <p>Serviços de entregas rápidas de encomendas leves de um ponto para o outro
+                                        da cidade, este serviço atende a pessoas físicas e jurídicas, com rapidez
+                                        e qualidade. O valor do serviço é definido previamente de acordo com a
+                                        tabela de localidades, em função da distância.
+                                    <p>
+                                        <a href=@{ContatoR}>Entre em contato conosco e veja os detalhes deste tipo de serviço
                     <div ."section">
                         <footer ."container">
                             <div ."vcard row">
@@ -78,4 +89,3 @@ getPaginaR = defaultLayout $ do
                                     <span ."tel" title="Telefone Sauípe Express">Telefone: (13)3223-9211 ou 3224-5876 <br>Nextel(ID):129*20237
                                     <br>
                                 <a href=@{ContatoR} ."email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
-            |]

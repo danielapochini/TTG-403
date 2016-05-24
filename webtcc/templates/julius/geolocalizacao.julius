@@ -1,0 +1,73 @@
+    var map,
+        currentPositionMarker,
+        mapCenter = new google.maps.LatLng(-23.9581857, -46.3207414),
+        map;
+
+    function initializeMap() {
+        map = new google.maps.Map(document.getElementById('map_canvas'), {
+            zoom: 16,
+            center: mapCenter,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+    }
+
+    function locError(error) {
+        alert("A posição não pode ser encontrada");
+    }
+
+    function setCurrentPosition(pos) {
+        currentPositionMarker = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(
+                pos.coords.latitude,
+                pos.coords.longitude
+            ),
+            title: "Posição Atual"
+        });
+
+        map.panTo(new google.maps.LatLng(
+            pos.coords.latitude,
+            pos.coords.longitude
+        ));
+
+        var infowindow = new google.maps.InfoWindow({
+            content: 'Motoboy: Mauro'
+        });
+        infowindow.open(map, currentPositionMarker);
+    }
+
+    function displayAndWatch(position) {
+        setCurrentPosition(position);
+        watchCurrentPosition();
+    }
+
+    function watchCurrentPosition() {
+        var positionTimer = navigator.geolocation.watchPosition(
+            function(position) {
+                setMarkerPosition(
+                    currentPositionMarker,
+                    position
+                );
+            });
+    }
+
+    function setMarkerPosition(marker, position) {
+        marker.setPosition(
+            new google.maps.LatLng(
+                position.coords.latitude,
+                position.coords.longitude)
+        );
+    }
+
+    function initLocationProcedure() {
+        initializeMap();
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(displayAndWatch, locError);
+        } else {
+            alert("Seu navegador não suporta o Geolocation API!");
+        }
+    }
+
+    $(document).ready(function() {
+        initLocationProcedure();
+    });
