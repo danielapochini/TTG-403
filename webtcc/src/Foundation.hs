@@ -39,20 +39,27 @@ Clientes
 
 staticFiles "static" -- pasta static 
 
+
+mkMessage "SauipeExpress" "messages" "pt-br" -- linguagem default
+
 mkYesodData "SauipeExpress" pRoutes
 
 --A função 'isAuthorized' determina os acessos por rota 
 instance Yesod SauipeExpress where 
+
+    errorHandler NotFound = redirect ErroR
+    errorHandler other = defaultErrorHandler other
+
     authRoute _ = Just LoginR
     
     isAuthorized LoginR _     = return Authorized
     isAuthorized ErroR _      = return Authorized
-    isAuthorized UsuarioR _   = return Authorized
     isAuthorized HomeR _      = return Authorized
     isAuthorized QuemSomosR _ = return Authorized
     isAuthorized ServicosR _  = return Authorized
     isAuthorized ContatoR _   = return Authorized 
     isAuthorized AdminR _     = isAdmin
+    isAuthorized UsuarioR _   = isAdmin
     isAuthorized _ _          = isUser
 
 --Autenticação do Admin

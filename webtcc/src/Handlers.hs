@@ -34,7 +34,7 @@ postUsuarioR :: Handler Html
 postUsuarioR = do
            ((result, _), _) <- runFormPost usuarioForm
            case result of 
-               FormSuccess user -> (runDB $ insert user) >>= \piid -> redirect (PerfilR piid)
+               FormSuccess user -> (runDB $ insert user) >> redirect SucessoR
                _ -> redirect ErroR
 
 --Abaixo, criamos o Form com uma Tupla de dois Text, pois queremos acessar apenas os campos Login e Senha de usuarios,
@@ -101,10 +101,21 @@ getUsuarioR = do
 getPerfilR :: UsuariosId -> Handler Html
 getPerfilR uid = do
       user <- runDB $ get404 uid
-      defaultLayout [whamlet|
-          <p><b> Pagina de #{usuariosNome user}
-          <p><b> Login: #{usuariosLogin user}
-      |]
+      defaultLayout $ do 
+            setTitle "Sauípe Express|Funcionário"
+            addStylesheet $ StaticR css_bootstrap_css
+            addStylesheet $ StaticR css_fontawesomemin_css
+            addStylesheet $ StaticR css_main_css
+            addStylesheet $ StaticR css_principal_css
+            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+            addStylesheetRemote "https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css"
+            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            addScriptRemote "https://cdn.firebase.com/js/client/2.2.1/firebase.js"
+            addScriptRemote "https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js"
+            toWidget $(juliusFile "templates/julius/geolocalizacao.julius") 
+            toWidget $(cassiusFile "templates/cassius/funcionario.cassius")
+            toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
+            toWidget $(whamletFile "templates/whamlet/funcionario.hamlet") 
 
 -- Pagina de Erro 
 getErroR :: Handler Html
@@ -116,9 +127,22 @@ getErroR = defaultLayout $ do
             addStylesheet $ StaticR css_principal_css
             addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
             addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            toWidgetHead $(hamletFile "templates/hamlet/headerror.hamlet")
+            toWidgetHead $(hamletFile "templates/hamlet/headhome.hamlet")
             toWidget $(whamletFile "templates/whamlet/error.hamlet") 
-        
+
+-- Pagina de Sucesso 
+getSucessoR :: Handler Html
+getSucessoR = defaultLayout $ do  
+            setTitle "Sauípe Express"
+            addStylesheet $ StaticR css_bootstrap_css
+            addStylesheet $ StaticR css_fontawesomemin_css
+            addStylesheet $ StaticR css_main_css
+            addStylesheet $ StaticR css_principal_css
+            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            toWidgetHead $(hamletFile "templates/hamlet/headadmin.hamlet")
+            toWidget $(whamletFile "templates/whamlet/sucesso.hamlet") 
+                
             
 -- Pagina apenas para Admin 
 getAdminR :: Handler Html
@@ -129,9 +153,11 @@ getAdminR = defaultLayout $ do
             addStylesheet $ StaticR css_main_css
             addStylesheet $ StaticR css_principal_css
             addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+            addStylesheetRemote "https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css"
             addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            addScriptRemote "https://maps.googleapis.com/maps/api/js?key=AIzaSyDhcgn5SQ2cFSDA7jOTD1dwW4cX2oRiw4k"
-            toWidget $(juliusFile "templates/julius/geolocalizacao.julius") 
+            addScriptRemote "https://cdn.firebase.com/js/client/2.2.1/firebase.js"
+            addScriptRemote "https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js"
+            toWidget $(juliusFile "templates/julius/geoadmin.julius") 
             toWidget $(cassiusFile "templates/cassius/admin.cassius")
             toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
             toWidget $(whamletFile "templates/whamlet/admin.hamlet") 
@@ -141,9 +167,16 @@ getAdminR = defaultLayout $ do
 getLogoutR :: Handler Html
 getLogoutR = do
      deleteSession "_ID"
-     defaultLayout [whamlet| 
-         <h1> ADEUS!
-     |]
+     defaultLayout $ do
+            setTitle "Sauípe Express"
+            addStylesheet $ StaticR css_bootstrap_css
+            addStylesheet $ StaticR css_fontawesomemin_css
+            addStylesheet $ StaticR css_main_css
+            addStylesheet $ StaticR css_principal_css
+            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            toWidgetHead $(hamletFile "templates/hamlet/headhome.hamlet")
+            toWidget $(whamletFile "templates/whamlet/logout.hamlet") 
 
 getQuemR :: Handler Html
 getQuemR = do

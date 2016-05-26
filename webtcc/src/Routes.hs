@@ -15,5 +15,6 @@ pRoutes = [parseRoutes|
    /perfil/#UsuariosId PerfilR GET
    /quemsomos QuemSomosR GET
    /servicos ServicosR GET
+   /sucesso SucessoR GET
    /static StaticR Static getStatic
 |]
