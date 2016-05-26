@@ -8,10 +8,12 @@ html{
 	body{
 		font-family:verdana,sans-serif;
 		font-size:16px;
-		background-image: url(../imagens/fundoOrlaSantos.jpg);/*linear-gradient(to bottom, #4169E1, #63B8FF, #00008B, #000080);*/
-		background-repeat:no-repeat;
-		background-attachment:fixed;
-		position:relative;
+		background: url(../imagens/fundoOrlaSantos.jpg) no-repeat center center fixed;
+  		-webkit-background-size: cover;
+  		-moz-background-size: cover;
+  		-o-background-size: cover;
+  		background-size: cover;
+  		height: 100%;
 	}
 	
 	.navbar-brand:before{
@@ -40,7 +42,7 @@ html{
 		background-color:rgba(68,153 ,221, 0.85);
 		border-radius:10px;
 	}
-	 a{
+	a{
 		text-decoration:none;	
 		transition: 0.5s;
 		color:#77ddff;
@@ -143,7 +145,7 @@ html{
 	#logo h1 span{
 		color:#FF4500;
 	}
-	#main{    //*TAG main não obteve renderização pelo navegador I.E.*/
+	#main{    //*TAG main nï¿½o obteve renderizaï¿½ï¿½o pelo navegador I.E.*/
 		/*background-color:rgba(255, 255, 255, 0.7);
 		margin:auto;
 		padding:8px;
