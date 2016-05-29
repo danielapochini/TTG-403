@@ -1,28 +1,23 @@
-document.getElementById("btnLog")
-    .onclick = function() {
+document.getElementById("btnAdm").onclick = function () {
+        location.href = "@{UsuarioR}";
+};
+
+document.getElementById("btnLog").onclick = function () {
         location.href = "@{LogoutR}";
-    };
+};
 
 L.mapbox.accessToken = 'pk.eyJ1IjoiZGFucG9jY2hpbmkiLCJhIjoiY2lvbmw0c245MDAwNXRybTZqY3BpNmh4eCJ9.Y7lbFO1q-PrNDlPBmbTb6w';
 
+var map = L.mapbox.map('map', 'danpocchini.07moajng', {
+  attributionControl: false,
+  tileLayer: {
+    maxNativeZoom: 19
+  }
+}).setView([-23.954863, -46.380008], 13)
 
-var color = '#' + [
-    (~~(Math.random() * 16))
-    .toString(16),
-    (~~(Math.random() * 16))
-    .toString(16),
-    (~~(Math.random() * 16))
-    .toString(16)].join('');
-
-var map = L.mapbox.map('map', 'danpocchini.07moajng');
-var usuario = #{toJSON(usuariosNome user)};
-var login =   #{toJSON(usuariosLogin user)};
 
 var firebase = new Firebase('https://sauipeexpress.firebaseio.com/');
 var markersRef = firebase.child('geolocalizacao/');
-var userRef = markersRef.child(login);
-var geoJSONRef = userRef.child('geoJSON/');
-var geometryRef = geoJSONRef.child('geometry/')
 var markers = {};
 
 function addPoint(uuid, position) {
@@ -64,31 +59,7 @@ function putPoint(uuid, position) {
         addPoint(uuid, position)
 }
 
-
-var watchPositionId;
 map.on('ready', function() {
-    function successCoords(position) {
-        if (!position.coords) return
-
-        userRef
-            .set({
-                usuario: usuario,
-                cor: color,
-                coords: {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                },
-                timestamp: Math.floor(Date.now() / 1000)
-            })
-
-    }
-
-    function errorCoords() {
-        console.log('Unable to get current position')
-    }
-
-    watchPositionId = navigator.geolocation.watchPosition(successCoords, errorCoords);
-
     markersRef.on('child_added', function(childSnapshot) {
         var uuid = childSnapshot.key()
         var position = childSnapshot.val()
@@ -127,3 +98,4 @@ setInterval(function() {
             })
         })
 }, 5000);
+
