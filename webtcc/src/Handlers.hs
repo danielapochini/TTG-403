@@ -109,9 +109,11 @@ getPerfilR uid = do
             addStylesheet $ StaticR css_principal_css
             addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
             addStylesheetRemote "https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css"
+            addStylesheetRemote "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css"
             addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
             addScriptRemote "https://cdn.firebase.com/js/client/2.2.1/firebase.js"
             addScriptRemote "https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js"
+            addScriptRemote "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.js"
             toWidget $(juliusFile "templates/julius/geolocalizacao.julius") 
             toWidget $(cassiusFile "templates/cassius/funcionario.cassius")
             toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
@@ -154,9 +156,11 @@ getAdminR = defaultLayout $ do
             addStylesheet $ StaticR css_principal_css
             addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
             addStylesheetRemote "https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css"
+            addStylesheetRemote "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css"
             addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
             addScriptRemote "https://cdn.firebase.com/js/client/2.2.1/firebase.js"
             addScriptRemote "https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js"
+            addScriptRemote "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.js"
             toWidget $(juliusFile "templates/julius/geoadmin.julius") 
             toWidget $(cassiusFile "templates/cassius/admin.cassius")
             toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
@@ -247,3 +251,25 @@ getContatoR = defaultLayout $ do
         toWidgetHead $(hamletFile "templates/hamlet/headcontato.hamlet")
         toWidget $(cassiusFile "templates/cassius/contato.cassius")
         toWidget $(whamletFile "templates/whamlet/contato.hamlet")
+
+{--         
+getListaR :: Handler Html
+getListaR = do
+        listaP <- runDB $ selectList [] [Asc UsuariosNome]
+        defaultLayout $ do 
+        setTitle "Sauípe Express|Lista"
+        addStylesheet $ StaticR css_bootstrap_css
+        addStylesheet $ StaticR css_fontawesomemin_css
+        addStylesheet $ StaticR css_main_css
+        addStylesheet $ StaticR css_principal_css
+        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
+        toWidget $(cassiusFile "templates/cassius/form.cassius")
+        toWidget $(whamletFile "templates/whamlet/lista.hamlet")
+
+postListaR :: UsuariosId -> Handler Html
+postListaR pid = do
+     runDB $ delete pid
+     redirect ListaR --}
+             

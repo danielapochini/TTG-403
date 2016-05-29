@@ -18,3 +18,6 @@ pRoutes = [parseRoutes|
    /sucesso SucessoR GET
    /static StaticR Static getStatic
 |]
+
+
+--   /lista ListaR GET POST

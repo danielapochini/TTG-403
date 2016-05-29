@@ -23,9 +23,23 @@ Usuarios json
    login Text
    senha Text
    deriving Show
+   
+
 |]
 
 {--
+Clientes json
+    nome Text
+    endereco Text
+    cidade Text
+    cep Text
+    deriving Show
+    
+Administradores json
+    nome text
+    login Text
+    senha Text
+
 Clientes  
     cpf Int 
     nome Text  
@@ -40,7 +54,7 @@ Clientes
 staticFiles "static" -- pasta static 
 
 
-mkMessage "SauipeExpress" "messages" "pt-br" -- linguagem default
+mkMessage "SauipeExpress" "messages" "pt-BR" -- linguagem default
 
 mkYesodData "SauipeExpress" pRoutes
 

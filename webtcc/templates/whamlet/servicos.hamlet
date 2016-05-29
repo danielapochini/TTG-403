@@ -10,82 +10,69 @@
                             <div ."collapse navbar-collapse" #"navbar-ex-collapse">
                                 <ul ."nav navbar-nav navbar-right">
                                     <li>
-                                        <a href=@{HomeR}>Home
+                                        <a href=@{HomeR}>_{MsgHome}
                                     <li>
-                                        <a href=@{QuemSomosR}>Quem Somos
+                                        <a href=@{QuemSomosR}>_{MsgQuemSomos}
                                     <li>
-                                        <a href=@{ServicosR}>Serviços
+                                        <a href=@{ServicosR}>_{MsgServicos}
                                     <li>
-                                        <a href=@{ContatoR}>Contato
+                                        <a href=@{ContatoR}>_{MsgContato}
                     <div ."section">
                         <header ."container">
                             <div ."row">
                                 <div ."col-md-6">
                                     <img src=@{StaticR imagens_logotipo10anos_png} ."img-responsive logotipo">
-                                    <p>Frete e entregas para todo o Brasil.
+                                    <p>_{MsgChamadaSite}
                                 <div ."links">
                                     <p>
-                                        <img src=@{StaticR imagens_icones_icone_tel_png} alt="Telefone para contato" title="Telefone para contato Sauípe Express"> Telefone:(13)3223-9211 ou 3224-5876
+                                        <img src=@{StaticR imagens_icones_icone_tel_png} alt="Telefone para contato" title="Telefone para contato Sauípe Express"> _{MsgTelefone}
                                     <p>
-                                        <img src=@{StaticR imagens_icones_icone_whatsapp_png} alt="Celular para contato" title="Celular para contato Sauípe Express"> Celular:(13)99747-7862
+                                        <img src=@{StaticR imagens_icones_icone_whatsapp_png} alt="Celular para contato" title="Celular para contato Sauípe Express"> _{MsgCelular}
                                     <p>
-                                        <img src=@{StaticR imagens_icones_icone_cel_png} alt="ID nextel" title="ID Nextel Sauípe Express"> Nextel(ID):129*20237
+                                        <img src=@{StaticR imagens_icones_icone_cel_png} alt="ID nextel" title="ID Nextel Sauípe Express"> _{MsgNextel}
                                     <p>
-                                        <a href="https://www.facebook.com/armando.barros.5661?fref=pb&amp;hc_location=profile_browser" title="página do facebook Sauípe Express"><img src=@{StaticR imagens_icones_icone_facebook_png} alt="página do facebook"> Curta nossa página no facebook
+                                        <a href="https://www.facebook.com/armando.barros.5661?fref=pb&amp;hc_location=profile_browser" title="página do facebook Sauípe Express"><img src=@{StaticR imagens_icones_icone_facebook_png} alt="página do facebook"> _{MsgFacebook}
                                     <p>
                                         <a href=@{ContatoR}><img src=@{StaticR imagens_icones_icone_email_png} alt="email para contato" title="Email para contato Sauípe Express"> contato@sauipeexpress.com.br
                     <div ."section">
                         <div ."container fundo1">
                             <div ."row">
                                 <div ."col-md-12">
-                                    <img ."hidden-xs lado1" src=@{StaticR imagens_motoLogo1_png}>
-                                    <h1>Serviços
-                                    <p>Ao contratar os nossos serviços você agilizará suas entregas e retiradas
-                                        de malotes, duplicatas, notas fiscais, serviços, bancários, pequenos e
-                                        médios volumes entre outros, com total rapidez e segurança, pois contamos
-                                        com uma equipe especializada para cada tipo de serviço, personalizando
-                                        o atendimento para a necessidade de cada cliente, em diversos segmentos
-                                        como:
-                                    <p>Indústrias, bancos, financeiras, consultórios, concessionárias, contabilidades,
-                                        advocacias, farmácias, restaurantes, deliverys , e todos estabelescimentos
-                                        ou empresas que buscam uma solução definitiva e econômica em transportes
-                                        urgentes.
-                                    <h2>Mensal
-                                    <p>Colocamos à disposição de sua empresa, um ou mais Motofretistas, uniformizados
-                                        e equipados com CELULAR ou RADIOCOMUNICAÇÃO que servirão a sua empresa
-                                        em qualquer tipo de serviço externo nos horários determinados em contrato.
-                                    <h3>Integral
-                                    <p>Segunda à sexta feira jornada de 8h/dia.
+                                    <img ."sv1 hidden-xs lado1" src=@{StaticR imagens_motoLogo1_png}>
+                                    <h1>_{MsgServicos}
+                                    <p> _{MsgServicos1}
+                                    <p> _{MsgServicos2}
+                                    <h2>_{MsgServicos3}
+                                    <p>_{MsgServicos4}
+                                    <h3>_{MsgServicos5}
+                                    <p>_{MsgServicos6}
                                     <img ."hidden-xs lado2" src=@{StaticR imagens_montanaLogo1_png}>
-                                    <h3>Meio Período(Manhã)
-                                    <p>Jornada de 4h/dia Obs.: Em caso de algum imprevisto a substituição do
-                                        condutor ou veículo será efetuada no maximo em 90 minutos.
-                                    <h2>Esporádico
-                                    <p>Serviços de entregas rápidas de encomendas leves de um ponto para o outro
-                                        da cidade, este serviço atende a pessoas físicas e jurídicas, com rapidez
-                                        e qualidade. O valor do serviço é definido previamente de acordo com a
-                                        tabela de localidades, em função da distância.
-                                    <p>
-                                        <a href=@{ContatoR}>Entre em contato conosco e veja os detalhes deste tipo de serviço
+                                    <h3>_{MsgServicos7}
+                                    <p>_{MsgServicos8}
+                                    <p>_{MsgServicos9}
+                                    <h2>_{MsgServicos10}
+                                    <p>_{MsgServicos11}
+                                    <p><a href=@{ContatoR}>_{MsgServicos12}
                     <div ."section">
                         <footer ."container">
                             <div ."vcard row">
                                 <div ."col-md-6">
                                     <h2 ."fn">Sauípe Express Transportes Rápidos Ltda.
-                                    <h3>Mapa do Site
-                                    <a href=@{HomeR}>Home|
-                                    <a href=@{QuemSomosR}>Quem Somos|
-                                    <a href=@{ServicosR}>Serviços|
-                                    <a href=@{ContatoR}>Contato
-                                <div ."adr">Endereço:
-                                    <br>
-                                    <span ."street-addresss">Av. Afonso Pena, 45 - Macuco,
-                                    <br>
-                                    <span ."locality">Santos-
-                                    <span ."region">SP
-                                    <br>
-                                    <span title="Celular Sauípe Express" ."tel">Celular: (13)99747-7862
-                                    <br>
-                                    <span ."tel" title="Telefone Sauípe Express">Telefone: (13)3223-9211 ou 3224-5876 <br>Nextel(ID):129*20237
-                                    <br>
-                                <a href=@{ContatoR} ."email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
+                                    <h3>_{MsgMapaSite}
+                                    <a href=@{HomeR}>_{MsgHome}|
+                                    <a href=@{QuemSomosR}>_{MsgQuemSomos}|
+                                    <a href=@{ServicosR}>_{MsgServicos}|
+                                    <a href=@{ContatoR}>_{MsgContato}
+                                <div ."col-md-6">
+                                    <div ."adr">_{MsgEndereco}
+                                        <br>
+                                        <span ."street-addresss">_{MsgAvenida}
+                                        <br>
+                                        <span ."locality">Santos-
+                                        <span ."region">SP
+                                        <br>
+                                        <span title="Celular Sauípe Express" ."tel">_{MsgCelular}
+                                        <br>
+                                        <span ."tel" title="Telefone Sauípe Express">_{MsgTelefone}
+                                        <br>
+                                    <a href=@{ContatoR} ."email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
