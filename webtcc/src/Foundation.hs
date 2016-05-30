@@ -26,31 +26,7 @@ Usuarios json
    
 
 |]
-
-{--
-Clientes json
-    nome Text
-    endereco Text
-    cidade Text
-    cep Text
-    deriving Show
-    
-Administradores json
-    nome text
-    login Text
-    senha Text
-
-Clientes  
-    cpf Int 
-    nome Text  
-    endereço Text
-    nascimento Text
-    email Text 
-    sexo Text 
-    ddd Text 
-    telefone Text 
---}
-
+ 
 staticFiles "static" -- pasta static 
 
 
@@ -73,7 +49,7 @@ instance Yesod SauipeExpress where
     isAuthorized ServicosR _  = return Authorized
     isAuthorized ContatoR _   = return Authorized 
     isAuthorized AdminR _     = isAdmin
-    isAuthorized UsuarioR _   = isAdmin
+    isAuthorized CadFuncionarioR _  = isAdmin
     isAuthorized _ _          = isUser
 
 --Autenticação do Admin
