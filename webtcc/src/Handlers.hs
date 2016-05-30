@@ -77,7 +77,11 @@ postLoginR = do
                        Just (Entity pid u) -> setSession "_ID" (pack $ show $ fromSqlKey pid) >> redirect (FuncionarioR)
                _ -> redirect ErroR --Em caso de erro, redirect para ErroR
            
-                    
+postPerfilR :: UsuariosId -> Handler Html
+postPerfilR pid = do
+     runDB $ delete pid
+     redirect ListFuncionarioR
+                          
 
 ---------------- Área Administrador -----------------------
             
@@ -117,7 +121,23 @@ getCadFuncionarioR = do
         toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
         toWidget $(whamletFile "templates/whamlet/cadusuario.hamlet") 
 
-
+-- Lista Funcionário Cadastrado 
+getListFuncionarioR :: Handler Html
+getListFuncionarioR = do
+        listaP <- runDB $ selectList [] [Asc UsuariosNome]
+        defaultLayout $ do 
+        setTitle "Sauípe Express|Lista"
+        addStylesheet $ StaticR css_bootstrap_css
+        addStylesheet $ StaticR css_fontawesomemin_css
+        addStylesheet $ StaticR css_main_css
+        addStylesheet $ StaticR css_principal_css
+        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
+        toWidget $(cassiusFile "templates/cassius/list.cassius") 
+        toWidget $(juliusFile "templates/julius/list.julius")
+        toWidget $(whamletFile "templates/whamlet/listfuncionario.hamlet")
+ 
 ---------------- Login, Logout -----------------------
 
 -- Página Login 

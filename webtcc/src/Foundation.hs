@@ -26,7 +26,8 @@ Usuarios json
    
 
 |]
- 
+
+
 staticFiles "static" -- pasta static 
 
 
@@ -50,6 +51,7 @@ instance Yesod SauipeExpress where
     isAuthorized ContatoR _   = return Authorized 
     isAuthorized AdminR _     = isAdmin
     isAuthorized CadFuncionarioR _  = isAdmin
+    isAuthorized ListFuncionarioR _  = isAdmin
     isAuthorized _ _          = isUser
 
 --Autenticação do Admin

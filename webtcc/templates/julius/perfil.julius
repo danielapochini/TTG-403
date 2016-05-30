@@ -1,0 +1,3 @@
+document.getElementById("btnVoltar").onclick = function () {
+        location.href = "@{ListFuncionarioR}";
+};

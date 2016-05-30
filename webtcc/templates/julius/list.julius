@@ -1,0 +1,3 @@
+document.getElementById("btnVoltarAdmin").onclick = function () {
+        location.href = "@{AdminR}";
+};

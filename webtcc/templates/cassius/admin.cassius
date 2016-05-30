@@ -2,5 +2,5 @@
   height:25em; 
   margin:0; 
   padding:0;
-h3 
+.txtadmin
   color: #000000;

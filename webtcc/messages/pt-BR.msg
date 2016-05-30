@@ -2,11 +2,13 @@ Admin1: Cadastro de Cliente
 Admin2: Cadastro de Funcionário
 Admin3: Cadastro de Administrador
 Admin4: Adicionar
+Admin5: Lista de Funcionários
+Admin6: Ir
 Admin: Área do Administrador
 Avenida: Av. Afonso Pena, 45 - Macuco,
 BemVindo: Seja Bem Vindo ao nosso site!
-CadastroFunc1: Cadastrar
-CadastroFunc: Preencha o cadastro.
+Cadastro: Preencha o cadastro.
+CadastroBtn: Cadastrar
 Celular: Celular: (13) 99747-7862
 ChamadaSite: Frete e entregas para todo o Brasil.
 Contato10: Digite sua mensagem
@@ -22,6 +24,7 @@ Contato7: Digite seu nome
 Contato8: Digite seu email
 Contato9: Digite o assunto
 Contato: Contato
+DeletarBtn: Deletar 
 Endereco: Endereço:
 Erro1: A página que você digitou não existe ou está fora do ar.
 Erro2: Por favor aguarde alguns segundos, você será redirecionado para nossa página principal.
@@ -29,6 +32,10 @@ Erro3: Obrigada!
 Erro: Desculpe,
 Estado: SP
 Facebook: Curta nossa página no facebook
+Form: Cadastro de 
+Form1: Cliente 
+Form2: Funcionário 
+Form3: Administrador  
 Funcionario1: Perfil de
 Funcionario2: Você está logado como
 Funcionario: Área do Funcionário
@@ -42,7 +49,11 @@ Logout: Sair
 LogoutTxt: Você foi deslogado com sucesso.
 MapaSite: Mapa do Site
 Navegacao: Navigacao
-Nextel: Nextel(ID): 129*20237
+Nextel: Nextel(ID): 129*20237  
+Perfil: Perfil do Usuário 
+Perfil1: Perfil de
+Perfil2: Login 
+Perfil3: Senha 
 QuemSomos1: A SAUÍPE EXPRESS é uma empresa especializada em serviços de transportes, coletas e distribuição, que atua na Baixada Santista e Grande São Paulo e também em todo território nacional, com uma experiência de mais de 10 anos atendendo pequenas, médias e grandes empresas, dos mais diversos segmentos da economia.
 QuemSomos2: Missão da Empresa
 QuemSomos3: Nosso objetivo é atender empresas e particulares de todo porte, que precisam de agilidade e confiança no transporte de documentos e encomendas com motoboy 24 horas, 7 dias semanais para que suas entregas e distribuições cheguem ao destino final de forma segura, rápida e eficiente, facilitando assim a vida do nosso cliente.
@@ -65,3 +76,4 @@ Servicos9: Obs.: Em caso de algum imprevisto, a substituição do condutor ou ve
 Servicos: Serviços
 Sucesso: Cadastrado com sucesso!
 Telefone: Telefone: (13) 3223-9211 ou 3224-5876
+Voltar: Voltar

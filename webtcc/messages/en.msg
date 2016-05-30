@@ -2,11 +2,13 @@ Admin1: Customer Registration
 Admin2: Employee Registration
 Admin3: Admin Registration
 Admin4: Add
+Admin5: Employee List
+Admin6: Go
 Admin: Admin Area
 Avenida: 45 Afonso Pena ave, Macuco
 BemVindo: Welcome to our site!
-CadastroFunc1: Sign Up
-CadastroFunc: Fill in the registration
+Cadastro: Fill in the registration
+CadastroBtn: Sign Up
 Celular: Cell Phone: +55 13 997477862
 ChamadaSite: Shipping and deliveries throughout Brazil.
 Contato10: Type your message here.
@@ -22,6 +24,7 @@ Contato7: Your name
 Contato8: user@mydomain.com
 Contato9: Subject
 Contato: Contact
+DeletarBtn: Delete
 Endereco: Adress:
 Erro1: The page you are looking for cannot be found.
 Erro2: Please wait a few seconds. You will be redirected to our main page.
@@ -29,6 +32,10 @@ Erro3: Thank you!
 Erro: Sorry,
 Estado: Sao Paulo
 Facebook: Like our page on Facebook
+Form: Registration
+Form1: Customer  
+Form2: Employee  
+Form3: Admin  
 Funcionario1: Profile of
 Funcionario2: You're logged as
 Funcionario: Employee Area
@@ -43,6 +50,10 @@ LogoutTxt: You have been logged out successfully.
 MapaSite: Site Map
 Navegacao: Navigation
 Nextel: Nextel(ID): 129*20237
+Perfil: User Profile 
+Perfil1: Profile of
+Perfil2: Login  
+Perfil3: Password
 QuemSomos1: SAUÍPE EXPRESS is a transportation, pick-up and distribution services company acting in Baixada Santista, Grande São Paulo and nationwide, with 10+ experience helping small, medium and big business from all economy sectors.
 QuemSomos2: Our Mission
 QuemSomos3: Our goal is to help all-sized business in need of agility and reliability regarding orders and documents transportation through a 24/7 motorcycle delivery, so that packages are delivered safely, quickly and efficiently to their final destination.
@@ -65,3 +76,4 @@ Servicos9: P.S.: In case of unforeseen circumstances, replacement of the driver 
 Servicos: Business
 Sucesso: Registered with sucess!
 Telefone: Phone:+55 13 32239211 or +55 13 32245876
+Voltar: Go Back

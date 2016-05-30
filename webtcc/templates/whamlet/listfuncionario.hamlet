@@ -1,26 +1,16 @@
-                    <div ."section">
-                        <div ."container fundo1">
-                            <div ."row"> 
-                                <div ."col-md-12 text-center">
-                                    <h1>_{MsgAdmin}
-                                <div ."col-md-4 text-center">
-                                    <h3 ."txtadmin"> _{MsgAdmin1}
-                                    <button type="button" ."btn btn-primary btn-lg" #"btnAdm">_{MsgAdmin4}
-                                <div ."col-md-4 text-center">
-                                    <h3 ."txtadmin"> _{MsgAdmin2}
-                                    <button type="button" ."btn btn-primary btn-lg" #"btnCadFunc">_{MsgAdmin4}
-                                    <h3 ."txtadmin"> _{MsgAdmin5}
-                                    <button type="button" ."btn btn-primary btn-lg" #"btnListFunc">_{MsgAdmin6}
-                                <div ."col-md-4 text-center">
-                                    <h3 ."txtadmin"> _{MsgAdmin3}
-                                    <button type="button" ."btn btn-primary btn-lg" #"btnCli">_{MsgAdmin4}
-                                <div ."col-md-12 text-center">
-                                    <h1>Localização Atual: 
-                                    <div #"map">
-                                    <br>
-                                    <button type="button" ."btn btn-primary btn-lg" #"btnLog">_{MsgLogout}
-                                    <br>
-                                    
+                <div ."section">
+                    <header ."container">
+                        <div ."row">
+                            <div ."col-md-6">
+                                <h2 ."central">_{MsgAdmin5}
+                                <img src=@{StaticR imagens_logotipo10anos_png} ."img-responsive logotipo">
+                            <div ."col-md-6">
+                                <h3 ."txtadmin"> Funcionários Cadastrados: <br>
+                                 $forall Entity pid usuario <- listaP
+                                     <a href=@{PerfilR pid}> #{usuariosNome usuario} 
+                                     <form method=post action=@{PerfilR pid}> 
+                                         <input ."btn btn-primary" type="submit" value="_{MsgDeletarBtn}" #"deletar"><br>
+                            <button type="button" ."btn btn-primary btn-lg center-block" #"btnVoltarAdmin">_{MsgVoltar}
                     <div ."section">
                         <footer ."container">
                             <div ."vcard row">

@@ -1,5 +1,9 @@
-document.getElementById("btnAdm").onclick = function () {
-        location.href = "@{UsuarioR}";
+document.getElementById("btnCadFunc").onclick = function () {
+        location.href = "@{CadFuncionarioR}";
+};
+
+document.getElementById("btnListFunc").onclick = function () {
+        location.href = "@{ListFuncionarioR}";
 };
 
 document.getElementById("btnLog").onclick = function () {
