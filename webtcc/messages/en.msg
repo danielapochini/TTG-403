@@ -6,6 +6,7 @@ Admin5: Employee List
 Admin6: Go
 Admin: Admin Area
 Avenida: 45 Afonso Pena ave, Macuco
+Avenida2: 45 Afonso Pena ave, Macuco - Santos/SP 
 BemVindo: Welcome to our site!
 Cadastro: Fill in the registration
 CadastroBtn: Sign Up
@@ -25,7 +26,7 @@ Contato8: user@mydomain.com
 Contato9: Subject
 Contato: Contact
 DeletarBtn: Delete
-Endereco: Adress:
+Endereco: Address:
 Erro1: The page you are looking for cannot be found.
 Erro2: Please wait a few seconds. You will be redirected to our main page.
 Erro3: Thank you!
@@ -35,17 +36,17 @@ Facebook: Like our page on Facebook
 Form: Registration
 Form1: Customer  
 Form2: Employee  
-Form3: Admin  
+Form3: Admin
 Funcionario1: Profile of
 Funcionario2: You're logged as
 Funcionario: Employee Area
-Home1: In the year we make our 10th anniversary, we redesigned our website to better serve you.
-Home2: Now with a fully responsive website, facilitating your access through the PC, Notebook, Tablet, mobile phone and other devices.
+Home1: In the year of our 10th anniversary, we redesigned our website to serve you better.
+Home2: Now with a fully responsive website to make it easy for you to access on PC, Notebook, Tablet, mobile phone and other devices.
 Home: Home
 Localizacao: Location
 Login1: Fill in the fields below:
 Login: Authorized Personnel Only
-Logout: Sair
+Logout: Logout
 LogoutTxt: You have been logged out successfully.
 MapaSite: Site Map
 Navegacao: Navigation
@@ -75,5 +76,9 @@ Servicos8: 4h/day
 Servicos9: P.S.: In case of unforeseen circumstances, replacement of the driver or vehicle will be arranged at most within 90 minutes.
 Servicos: Business
 Sucesso: Registered with sucess!
+TxtNome: Name: 
+TxtLogin: Login: 
+TxtSenha: Password: 
 Telefone: Phone:+55 13 32239211 or +55 13 32245876
+Telefone2: Contact number:
 Voltar: Go Back

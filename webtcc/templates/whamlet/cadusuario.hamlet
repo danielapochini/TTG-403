@@ -2,10 +2,9 @@
                     <header ."container">
                         <div ."row">
                             <div ."col-md-6">
-                                <h2 ."central">_{MsgAdmin2}
                                 <img src=@{StaticR imagens_logotipo10anos_png} ."img-responsive logotipo">
                             <div ."col-md-6">
-                                ^{widgetForm CadFuncionarioR enctype widget "Funcionários"} 
+                                ^{widgetForm CadFuncionarioR enctype widget funcWid} 
                                      
                     <div ."section">
                         <footer ."container">

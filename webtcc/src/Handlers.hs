@@ -20,13 +20,26 @@ import Database.Persist.Postgresql
 mkYesodDispatch "SauipeExpress" pRoutes
 
 
------------------------ FORMULARIOS ------------------------------
+----------------------- WIDGETS PERSONALIZADAS / FORMULARIO GENÉRICO + INTERNACIONALIZAÇÃO  ------------------------------
+cliWid :: Widget
+cliWid = [whamlet| 
+    _{MsgAdmin1} 
+|]
 
-widgetForm :: Route SauipeExpress -> Enctype -> Widget -> Text -> Widget
+funcWid :: Widget
+funcWid = [whamlet| 
+    _{MsgAdmin2} 
+|]
+
+admWid :: Widget
+admWid = [whamlet| 
+    _{MsgAdmin3} 
+|]
+widgetForm :: Route SauipeExpress -> Enctype -> Widget -> Widget -> Widget
 -- função que gera formulários em forma genérica 
-widgetForm x enctype widget y = [whamlet|
+widgetForm x enctype widget novaWidget = [whamlet|
             <h1>
-                _{MsgForm} #{y}
+                ^{novaWidget}
             <form method=post action=@{x} enctype=#{enctype}>
                 ^{widget}
                 <input ."btn btn-primary" type="submit" value="_{MsgCadastroBtn}" #"cadastrar">
@@ -37,18 +50,18 @@ widgetForm x enctype widget y = [whamlet|
 funcionarioForm :: Form Usuarios 
 funcionarioForm = renderDivs $ Usuarios <$>  -- coloca Usuarios pra dentro da Monad Form 
        --renderDivs: encapsular cada entidade do formulario dentro de uma div
-       areq textField "Nome: " Nothing <*> 
+       areq textField (fieldSettingsLabel MsgTxtNome) Nothing <*> 
        -- <*> pq é uma função areq joga tudo pra dentro de Form
-       areq textField "Login: " Nothing <*>
+       areq textField (fieldSettingsLabel MsgTxtLogin) Nothing <*>
         -- Nothing pq o campo começa vazio
-       areq passwordField "Senha: " Nothing  
+       areq passwordField (fieldSettingsLabel MsgTxtSenha) Nothing  
 
 --Abaixo, criamos o Form com uma Tupla de dois Text, pois queremos acessar apenas os campos Login e Senha de usuarios,
 --Mas NÃO queremos o campo Nome (Senão bastaria usar o formfuncionario abaixo) 
 loginForm :: Form (Text,Text)
 loginForm = renderDivs $ (,) <$>
-           areq textField "Login: " Nothing <*>
-           areq passwordField "Senha: " Nothing
+           areq textField (fieldSettingsLabel MsgTxtLogin) Nothing <*>
+           areq passwordField (fieldSettingsLabel MsgTxtSenha) Nothing
   
 --------------------- METODOS POST -----------------------------
 
@@ -92,7 +105,7 @@ getAdminR = defaultLayout $ do
             addStylesheet $ StaticR css_bootstrap_css
             addStylesheet $ StaticR css_fontawesomemin_css
             addStylesheet $ StaticR css_main_css
-            addStylesheet $ StaticR css_principal_css
+            -- addStylesheet $ StaticR css_principal_css
             addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
             addStylesheetRemote "https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css"
             addStylesheetRemote "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css"
@@ -100,6 +113,7 @@ getAdminR = defaultLayout $ do
             addScriptRemote "https://cdn.firebase.com/js/client/2.2.1/firebase.js"
             addScriptRemote "https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js"
             addScriptRemote "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.js"
+            toWidget $(luciusFile "templates/lucius/principal.lucius") 
             toWidget $(juliusFile "templates/julius/geoadmin.julius") 
             toWidget $(cassiusFile "templates/cassius/admin.cassius")
             toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
@@ -114,9 +128,10 @@ getCadFuncionarioR = do
         addStylesheet $ StaticR css_bootstrap_css
         addStylesheet $ StaticR css_fontawesomemin_css
         addStylesheet $ StaticR css_main_css
-        addStylesheet $ StaticR css_principal_css
+        -- addStylesheet $ StaticR css_principal_css
         addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
         addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        toWidget $(luciusFile "templates/lucius/principal.lucius") 
         toWidget $(cassiusFile "templates/cassius/form.cassius")
         toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
         toWidget $(whamletFile "templates/whamlet/cadusuario.hamlet") 
@@ -130,10 +145,11 @@ getListFuncionarioR = do
         addStylesheet $ StaticR css_bootstrap_css
         addStylesheet $ StaticR css_fontawesomemin_css
         addStylesheet $ StaticR css_main_css
-        addStylesheet $ StaticR css_principal_css
+        -- addStylesheet $ StaticR css_principal_css
         addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
         addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
         toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
+        toWidget $(luciusFile "templates/lucius/principal.lucius") 
         toWidget $(cassiusFile "templates/cassius/list.cassius") 
         toWidget $(juliusFile "templates/julius/list.julius")
         toWidget $(whamletFile "templates/whamlet/listfuncionario.hamlet")
@@ -149,9 +165,10 @@ getLoginR = do
         addStylesheet $ StaticR css_bootstrap_css
         addStylesheet $ StaticR css_fontawesomemin_css
         addStylesheet $ StaticR css_main_css
-        addStylesheet $ StaticR css_principal_css
+        -- addStylesheet $ StaticR css_principal_css
         addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
         addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        toWidget $(luciusFile "templates/lucius/principal.lucius") 
         toWidget $(cassiusFile "templates/cassius/form.cassius")
         toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
         toWidget $(whamletFile "templates/whamlet/login.hamlet")    
@@ -166,10 +183,11 @@ getLogoutR = do
             addStylesheet $ StaticR css_bootstrap_css
             addStylesheet $ StaticR css_fontawesomemin_css
             addStylesheet $ StaticR css_main_css
-            addStylesheet $ StaticR css_principal_css
+            --addStylesheet $ StaticR css_principal_css
             addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
             addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
             toWidgetHead $(hamletFile "templates/hamlet/headhome.hamlet")
+            toWidget $(luciusFile "templates/lucius/principal.lucius") 
             toWidget $(whamletFile "templates/whamlet/logout.hamlet") 
        
         
@@ -183,10 +201,11 @@ getPerfilR uid = do
             addStylesheet $ StaticR css_bootstrap_css
             addStylesheet $ StaticR css_fontawesomemin_css
             addStylesheet $ StaticR css_main_css
-            addStylesheet $ StaticR css_principal_css
+            -- addStylesheet $ StaticR css_principal_css
             addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" 
             addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"    
             toWidgetHead $(hamletFile "templates/hamlet/head.hamlet") 
+            toWidget $(luciusFile "templates/lucius/principal.lucius") 
             toWidget $(juliusFile "templates/julius/perfil.julius") 
             toWidget $(whamletFile "templates/whamlet/perfil.hamlet") 
     
@@ -208,7 +227,7 @@ getFuncionarioR = do
             addStylesheet $ StaticR css_bootstrap_css
             addStylesheet $ StaticR css_fontawesomemin_css
             addStylesheet $ StaticR css_main_css
-            addStylesheet $ StaticR css_principal_css
+            --addStylesheet $ StaticR css_principal_css
             addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
             addStylesheetRemote "https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css"
             addStylesheetRemote "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css"
@@ -217,6 +236,7 @@ getFuncionarioR = do
             addScriptRemote "https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js"
             addScriptRemote "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.js"
             toWidget $(juliusFile "templates/julius/geolocalizacao.julius") 
+            toWidget $(luciusFile "templates/lucius/principal.lucius") 
             toWidget $(cassiusFile "templates/cassius/funcionario.cassius")
             toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
             toWidget $(whamletFile "templates/whamlet/funcionario.hamlet") 
@@ -230,11 +250,12 @@ getHomeR = defaultLayout $ do
             setTitle "Sauípe Express|Home"
             addStylesheet $ StaticR css_bootstrap_css
             addStylesheet $ StaticR css_fontawesomemin_css
-            addStylesheet $ StaticR css_main_css
-            addStylesheet $ StaticR css_principal_css
+            addStylesheet $ StaticR css_main_css 
+            --addStylesheet $ StaticR css_principal_css
             addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
             addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
             toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
+            toWidget $(luciusFile "templates/lucius/principal.lucius") 
             toWidget $(whamletFile "templates/whamlet/home.hamlet") 
 
 getQuemSomosR :: Handler Html
@@ -243,10 +264,12 @@ getQuemSomosR = defaultLayout $ do
         addStylesheet $ StaticR css_bootstrap_css
         addStylesheet $ StaticR css_fontawesomemin_css
         addStylesheet $ StaticR css_main_css
-        addStylesheet $ StaticR css_principal_css
+        --addStylesheet $ StaticR css_principal_css
         addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
         addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
         toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
+        toWidget $(luciusFile "templates/lucius/principal.lucius") 
+        toWidget $(cassiusFile "templates/cassius/contato.cassius") 
         toWidget $(whamletFile "templates/whamlet/quemsomos.hamlet")
 
 getServicosR :: Handler Html
@@ -255,10 +278,11 @@ getServicosR = defaultLayout $ do
         addStylesheet $ StaticR css_bootstrap_css
         addStylesheet $ StaticR css_fontawesomemin_css
         addStylesheet $ StaticR css_main_css
-        addStylesheet $ StaticR css_principal_css
+        --addStylesheet $ StaticR css_principal_css
         addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
         addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
         toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
+        toWidget $(luciusFile "templates/lucius/principal.lucius") 
         toWidget $(whamletFile "templates/whamlet/servicos.hamlet")
 
 getContatoR :: Handler Html
@@ -267,10 +291,11 @@ getContatoR = defaultLayout $ do
         addStylesheet $ StaticR css_bootstrap_css
         addStylesheet $ StaticR css_fontawesomemin_css
         addStylesheet $ StaticR css_main_css
-        addStylesheet $ StaticR css_principal_css
+        --addStylesheet $ StaticR css_principal_css
         addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
         addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
         toWidgetHead $(hamletFile "templates/hamlet/headcontato.hamlet")
+        toWidget $(luciusFile "templates/lucius/principal.lucius") 
         toWidget $(cassiusFile "templates/cassius/contato.cassius")
         toWidget $(whamletFile "templates/whamlet/contato.hamlet")
          
@@ -283,10 +308,11 @@ getErroR = defaultLayout $ do
             addStylesheet $ StaticR css_bootstrap_css
             addStylesheet $ StaticR css_fontawesomemin_css
             addStylesheet $ StaticR css_main_css
-            addStylesheet $ StaticR css_principal_css
+            --addStylesheet $ StaticR css_principal_css
             addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
             addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
             toWidgetHead $(hamletFile "templates/hamlet/headhome.hamlet")
+            toWidget $(luciusFile "templates/lucius/principal.lucius") 
             toWidget $(whamletFile "templates/whamlet/error.hamlet") 
 
 -- Pagina de Sucesso 
@@ -296,9 +322,10 @@ getSucessoR = defaultLayout $ do
             addStylesheet $ StaticR css_bootstrap_css
             addStylesheet $ StaticR css_fontawesomemin_css
             addStylesheet $ StaticR css_main_css
-            addStylesheet $ StaticR css_principal_css
+            --addStylesheet $ StaticR css_principal_css
             addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
             addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
             toWidgetHead $(hamletFile "templates/hamlet/headadmin.hamlet")
+            toWidget $(luciusFile "templates/lucius/principal.lucius") 
             toWidget $(whamletFile "templates/whamlet/sucesso.hamlet") 
 

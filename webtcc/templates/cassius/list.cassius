@@ -1,5 +1,5 @@
     form  
-        display:inline; 
+        display:inline 
     .txtadmin
-        color: #000000;
+        color: #000000
     

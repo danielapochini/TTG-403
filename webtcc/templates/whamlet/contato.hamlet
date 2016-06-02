@@ -68,6 +68,16 @@
                                             <div ."col-sm-10 col-sm-offset-2 text-right">
                                                 <input ."btn btn-primary" type="submit" value="_{MsgContato11}">
                                                 <input ."btn btn-primary" type="reset" value="_{MsgContato12}">
+                                <div ."col-md-12">
+                                    <div ."col-md-5">
+                                        <h2>_{MsgEndereco}
+                                        _{MsgAvenida2}
+                                    <div ."col-md-7">
+                                        <h2> _{MsgTelefone2}<br>
+                                        <p>Celular: (13)99747-7862<br>
+                                        _{MsgTelefone}<br>
+                                        _{MsgNextel}
+                    <div ."section">                                                
                     <div ."section">
                         <footer ."container">
                             <div ."vcard row">

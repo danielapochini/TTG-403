@@ -12,7 +12,7 @@ document.getElementById("btnLog").onclick = function () {
 
 L.mapbox.accessToken = 'pk.eyJ1IjoiZGFucG9jY2hpbmkiLCJhIjoiY2lvbmw0c245MDAwNXRybTZqY3BpNmh4eCJ9.Y7lbFO1q-PrNDlPBmbTb6w';
 
-var map = L.mapbox.map('map', 'danpocchini.07moajng', {
+var mapa = L.mapbox.map('map', 'danpocchini.07moajng', {
   attributionControl: false,
   tileLayer: {
     maxNativeZoom: 19
@@ -21,73 +21,74 @@ var map = L.mapbox.map('map', 'danpocchini.07moajng', {
 
 
 var firebase = new Firebase('https://sauipeexpress.firebaseio.com/');
-var markersRef = firebase.child('geolocalizacao/');
-var markers = {};
+var marcadorRef = firebase.child('geolocalizacao/');
+var marcadores = {};
 
-function addPoint(uuid, position) {
-    var marker = L.marker([position.coords.latitude, position.coords.longitude], {
+function adicionaMarcador(uuid, usuario) {
+    var marcador = L.marker([usuario.coordenadas.latitude, usuario.coordenadas.longitude], {
         icon: L.mapbox.marker.icon({
             'marker-size': 'large',
             'marker-symbol': 'scooter',
-            'marker-color': position.cor
+            'marker-color': usuario.cor
         })
-    })
-    marker.addTo(map);
-    marker.bindLabel(position.usuario, { noHide: true });
-    marker.addTo(map);
-    marker.showLabel();
+    }) 
+    marcador.bindLabel(usuario.nome, { noHide: true });
+    marcador.addTo(mapa);
+    marcador.showLabel();
 
-    markers[uuid] = marker;
+    marcadores[uuid] = marcador;
 
-    map.fitBounds(Object.keys(markers)
+    mapa.fitBounds(Object.keys(marcadores)
         .map(function(uuid) {
-            return markers[uuid].getLatLng()
+            return marcadores[uuid].getLatLng()
         }))
 
 }
 
-function removePoint(uuid) {
-    map.removeLayer(markers[uuid])
+function deletaMarcador(uuid) {
+    mapa.removeLayer(marcadores[uuid])
 }
 
-function updatePoint(uuid, position) {
-    var marker = markers[uuid]
-    marker.setLatLng([position.coords.latitude, position.coords.longitude]);
+function atualizaMarcador(uuid, usuario) {
+    var marcador = marcadores[uuid]
+    marcador.setLatLng([usuario.coordenadas.latitude, usuario.coordenadas.longitude]);
     
 }
 
-function putPoint(uuid, position) {
-    if (markers[uuid])
-        updatePoint(uuid, position)
+function colocaMarcador(uuid, usuario) {
+    if (marcadores[uuid])
+        atualizaMarcador(uuid, usuario)
     else
-        addPoint(uuid, position)
+        adicionaMarcador(uuid, usuario)
 }
 
-map.on('ready', function() {
-    markersRef.on('child_added', function(childSnapshot) {
+
+
+mapa.on('ready', function() {
+    marcadorRef.on('child_added', function(childSnapshot) {
         var uuid = childSnapshot.key()
-        var position = childSnapshot.val()
+        var usuario = childSnapshot.val()
         
 
-        addPoint(uuid, position)
+        adicionaMarcador(uuid, usuario)
     })
 
-    markersRef.on('child_changed', function(childSnapshot) {
+    marcadorRef.on('child_changed', function(childSnapshot) {
         var uuid = childSnapshot.key()
-        var position = childSnapshot.val()
+        var usuario = childSnapshot.val()
 
-        putPoint(uuid, position)
+        colocaMarcador(uuid, usuario)
     })
 
-    markersRef.on('child_removed', function(oldChildSnapshot) {
+    marcadorRef.on('child_removed', function(oldChildSnapshot) {
         var uuid = oldChildSnapshot.key()
 
-        removePoint(uuid)
+        deletaMarcador(uuid)
     })
 });
 
 setInterval(function() {
-    markersRef.limitToFirst(200)
+    marcadorRef.limitToFirst(200)
         .once('value', function(snap) {
             var now = Math.floor(Date.now() / 1000)
 
@@ -95,11 +96,10 @@ setInterval(function() {
                 var uuid = childSnapshot.key()
                 if (childSnapshot.val()
                     .timestamp < now - 60 * 30) {
-                    markersRef.child(uuid)
+                    marcadorRef.child(uuid)
                         .set(null)
-                        //markers[uuid] = null
+                        //marcadores[uuid] = null
                 }
             })
         })
 }, 5000);
-

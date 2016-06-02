@@ -6,6 +6,7 @@ Admin5: Lista de Funcionários
 Admin6: Ir
 Admin: Área do Administrador
 Avenida: Av. Afonso Pena, 45 - Macuco,
+Avenida2: Av. Afonso Pena, 45 - Macuco, Santos - SP
 BemVindo: Seja Bem Vindo ao nosso site!
 Cadastro: Preencha o cadastro.
 CadastroBtn: Cadastrar
@@ -76,4 +77,8 @@ Servicos9: Obs.: Em caso de algum imprevisto, a substituição do condutor ou ve
 Servicos: Serviços
 Sucesso: Cadastrado com sucesso!
 Telefone: Telefone: (13) 3223-9211 ou 3224-5876
+Telefone2: Telefones para contato:
+TxtNome: Nome: 
+TxtLogin: Login: 
+TxtSenha: Senha: 
 Voltar: Voltar

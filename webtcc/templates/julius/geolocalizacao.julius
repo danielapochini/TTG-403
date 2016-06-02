@@ -6,7 +6,7 @@ document.getElementById("btnLog")
 L.mapbox.accessToken = 'pk.eyJ1IjoiZGFucG9jY2hpbmkiLCJhIjoiY2lvbmw0c245MDAwNXRybTZqY3BpNmh4eCJ9.Y7lbFO1q-PrNDlPBmbTb6w';
 
 
-var color = '#' + [
+var corMarcador = '#' + [
     (~~(Math.random() * 16))
     .toString(16),
     (~~(Math.random() * 16))
@@ -14,105 +14,101 @@ var color = '#' + [
     (~~(Math.random() * 16))
     .toString(16)].join('');
 
-var map = L.mapbox.map('map', 'danpocchini.07moajng');
-var usuario = #{toJSON(usuariosNome user)};
-var login =   #{toJSON(usuariosLogin user)};
+var mapa = L.mapbox.map('map', 'danpocchini.07moajng');
+var nomeUsuario = #{toJSON(usuariosNome user)};
+var loginUsuario = #{toJSON(usuariosLogin user)};
 
 var firebase = new Firebase('https://sauipeexpress.firebaseio.com/');
-var markersRef = firebase.child('geolocalizacao/');
-var userRef = markersRef.child(login);
-var geoJSONRef = userRef.child('geoJSON/');
-var geometryRef = geoJSONRef.child('geometry/')
-var markers = {};
+var marcadorRef  = firebase.child('geolocalizacao/');
+var loginRef = marcadorRef.child(loginUsuario);  
+var marcadores = {};
 
-function addPoint(uuid, position) {
-    var marker = L.marker([position.coords.latitude, position.coords.longitude], {
+function adicionaMarcador(uuid, usuario) {
+    var marcador = L.marker([usuario.coordenadas.latitude, usuario.coordenadas.longitude], {
         icon: L.mapbox.marker.icon({
             'marker-size': 'large',
             'marker-symbol': 'scooter',
-            'marker-color': position.cor
+            'marker-color': usuario.cor
         })
-    })
-    marker.addTo(map);
-    marker.bindLabel(position.usuario, { noHide: true });
-    marker.addTo(map);
-    marker.showLabel();
+    }) 
+    marcador.bindLabel(usuario.nome, { noHide: true });
+    marcador.addTo(mapa);
+    marcador.showLabel();
 
-    markers[uuid] = marker;
+    marcadores[uuid] = marcador;
 
-    map.fitBounds(Object.keys(markers)
+    mapa.fitBounds(Object.keys(marcadores)
         .map(function(uuid) {
-            return markers[uuid].getLatLng()
+            return marcadores[uuid].getLatLng()
         }))
 
 }
 
-function removePoint(uuid) {
-    map.removeLayer(markers[uuid])
+function deletaMarcador(uuid) {
+    mapa.removeLayer(marcadores[uuid])
 }
 
-function updatePoint(uuid, position) {
-    var marker = markers[uuid]
-    marker.setLatLng([position.coords.latitude, position.coords.longitude]);
+function atualizaMarcador(uuid, usuario) {
+    var marcador = marcadores[uuid]
+    marcador.setLatLng([usuario.coordenadas.latitude, usuario.coordenadas.longitude]);
     
 }
 
-function putPoint(uuid, position) {
-    if (markers[uuid])
-        updatePoint(uuid, position)
+function colocaMarcador(uuid, usuario) {
+    if (marcadores[uuid])
+        atualizaMarcador(uuid, usuario)
     else
-        addPoint(uuid, position)
+        adicionaMarcador(uuid, usuario)
 }
 
 
-var watchPositionId;
-map.on('ready', function() {
-    function successCoords(position) {
+var mostraPosicao;
+mapa.on('ready', function() {
+    function sucesso(position) {
         if (!position.coords) return
 
-        userRef
+        loginRef
             .set({
-                usuario: usuario,
-                cor: color,
-                coords: {
+                "nome": nomeUsuario,
+                "cor": corMarcador,
+                "coordenadas": {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                 },
-                timestamp: Math.floor(Date.now() / 1000)
+                "timestamp" : Math.floor(Date.now() / 1000)
             })
 
     }
-
-    function errorCoords() {
-        console.log('Unable to get current position')
+    function erro() {
+        console.log('Não foi possível obter a localização.')
     }
+ 
+    mostraPosicao = navigator.geolocation.watchPosition(sucesso, erro);
 
-    watchPositionId = navigator.geolocation.watchPosition(successCoords, errorCoords);
-
-    markersRef.on('child_added', function(childSnapshot) {
+    marcadorRef.on('child_added', function(childSnapshot) {
         var uuid = childSnapshot.key()
-        var position = childSnapshot.val()
+        var usuario = childSnapshot.val()
         
 
-        addPoint(uuid, position)
+        adicionaMarcador(uuid, usuario)
     })
 
-    markersRef.on('child_changed', function(childSnapshot) {
+    marcadorRef.on('child_changed', function(childSnapshot) {
         var uuid = childSnapshot.key()
-        var position = childSnapshot.val()
+        var usuario = childSnapshot.val()
 
-        putPoint(uuid, position)
+        colocaMarcador(uuid, usuario)
     })
 
-    markersRef.on('child_removed', function(oldChildSnapshot) {
+    marcadorRef.on('child_removed', function(oldChildSnapshot) {
         var uuid = oldChildSnapshot.key()
 
-        removePoint(uuid)
+        deletaMarcador(uuid)
     })
 });
 
 setInterval(function() {
-    markersRef.limitToFirst(200)
+    marcadorRef.limitToFirst(200)
         .once('value', function(snap) {
             var now = Math.floor(Date.now() / 1000)
 
@@ -120,9 +116,9 @@ setInterval(function() {
                 var uuid = childSnapshot.key()
                 if (childSnapshot.val()
                     .timestamp < now - 60 * 30) {
-                    markersRef.child(uuid)
+                    marcadorRef.child(uuid)
                         .set(null)
-                        //markers[uuid] = null
+                        //marcadores[uuid] = null
                 }
             })
         })
