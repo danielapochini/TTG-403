@@ -37,6 +37,7 @@ Form: Cadastro de
 Form1: Cliente 
 Form2: Funcionário 
 Form3: Administrador  
+Form4: Tipo
 Funcionario1: Perfil de
 Funcionario2: Você está logado como
 Funcionario: Área do Funcionário

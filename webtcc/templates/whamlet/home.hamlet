@@ -1,39 +1,4 @@
-                    <nav ."navbar navbar-default navbar-static-top menu cor1"> 
-                        <div ."container">
-                            <div ."navbar-header">
-                                <button type="button" ."navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
-                                    <span ."sr-only">Navegação
-                                    <span ."icon-bar">
-                                    <span ."icon-bar">
-                                    <span ."icon-bar">
-                                <a ."navbar-brand" href=@{HomeR}>Sauípe Express
-                            <div ."collapse navbar-collapse" #"navbar-ex-collapse">
-                                <ul ."nav navbar-nav navbar-right">
-                                    <li>
-                                        <a href=@{HomeR}>_{MsgHome}
-                                    <li>
-                                        <a href=@{QuemSomosR}>_{MsgQuemSomos}
-                                    <li>
-                                        <a href=@{ServicosR}>_{MsgServicos}
-                                    <li>
-                                        <a href=@{ContatoR}>_{MsgContato}
-                    <div ."section">
-                        <header ."container">
-                            <div ."row">
-                                <div ."col-md-6">
-                                    <img src=@{StaticR imagens_logotipo10anos_png} ."img-responsive logotipo">
-                                    <p>_{MsgChamadaSite}
-                                <div ."links">
-                                    <p>
-                                        <img src=@{StaticR imagens_icones_icone_tel_png} alt="Telefone para contato" title="Telefone para contato Sauípe Express"> _{MsgTelefone}
-                                    <p>
-                                        <img src=@{StaticR imagens_icones_icone_whatsapp_png} alt="Celular para contato" title="Celular para contato Sauípe Express"> _{MsgCelular}
-                                    <p>
-                                        <img src=@{StaticR imagens_icones_icone_cel_png} alt="ID nextel" title="ID Nextel Sauípe Express"> _{MsgNextel}
-                                    <p>
-                                        <a href="https://www.facebook.com/armando.barros.5661?fref=pb&amp;hc_location=profile_browser" title="página do facebook Sauípe Express"><img src=@{StaticR imagens_icones_icone_facebook_png} alt="página do facebook"> _{MsgFacebook}
-                                    <p>
-                                        <a href=@{ContatoR}><img src=@{StaticR imagens_icones_icone_email_png} alt="email para contato" title="Email para contato Sauípe Express"> contato@sauipeexpress.com.br
+^{header}
                     <div ."section">
                         <div ."container fundo1">
                             <div ."row">
@@ -42,26 +7,4 @@
                                     <p>_{MsgHome1}
                                     <img src=@{StaticR imagens_designResponsivoLogo_png} alt="Dispositivos móveis(Design Responsivo)" title="Dispositivos móveis(Design Responsivo)" ."center-block hidden-xs">
                                     <p>_{MsgHome2}
-                    <div ."section">
-                        <footer ."container">
-                            <div ."vcard row">
-                                <div ."col-md-6">
-                                    <h2 ."fn">Sauípe Express Transportes Rápidos Ltda.
-                                    <h3>_{MsgMapaSite}
-                                    <a href=@{HomeR}>_{MsgHome}|
-                                    <a href=@{QuemSomosR}>_{MsgQuemSomos}|
-                                    <a href=@{ServicosR}>_{MsgServicos}|
-                                    <a href=@{ContatoR}>_{MsgContato}
-                                <div ."col-md-6">
-                                    <div ."adr">_{MsgEndereco}
-                                        <br>
-                                        <span ."street-addresss">_{MsgAvenida}
-                                        <br>
-                                        <span ."locality">Santos-
-                                        <span ."region">SP
-                                        <br>
-                                        <span title="Celular Sauípe Express" ."tel">_{MsgCelular}
-                                        <br>
-                                        <span ."tel" title="Telefone Sauípe Express">_{MsgTelefone}
-                                        <br>
-                                    <a href=@{ContatoR} ."email" alt="Email Sauípe Express" title="Link para página de contato"> contato@sauipeexpress.com.br
+^{footer}

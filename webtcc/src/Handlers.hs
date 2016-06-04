@@ -35,6 +35,21 @@ admWid :: Widget
 admWid = [whamlet| 
     _{MsgAdmin3} 
 |]
+
+logWid :: Widget
+logWid = [whamlet| 
+    _{MsgLogin1} 
+|]
+
+------------------ ESTRUTURA DO SITE: HEADER/NAVEGAÇÃO/FOOTER---------------------
+header :: Widget
+header = $(whamletFile "templates/widgets/header.hamlet") 
+{-- as informações de header e footer são as mesmas em todas as páginas, para não ter
+retrabalho em escreeve-las em cada página nova, é só importar o widget 
+usando ^{header} ou ^{footer} dentro da pagina html --}
+footer :: Widget
+footer = $(whamletFile "templates/widgets/footer.hamlet")   
+
 widgetForm :: Route SauipeExpress -> Enctype -> Widget -> Widget -> Widget
 -- função que gera formulários em forma genérica 
 widgetForm x enctype widget novaWidget = [whamlet|
@@ -48,14 +63,13 @@ widgetForm x enctype widget novaWidget = [whamlet|
 
 -- formulário Funcionario 
 funcionarioForm :: Form Usuarios 
-funcionarioForm = renderDivs $ Usuarios <$>  -- coloca Usuarios pra dentro da Monad Form 
-       --renderDivs: encapsular cada entidade do formulario dentro de uma div
-       areq textField (fieldSettingsLabel MsgTxtNome) Nothing <*> 
-       -- <*> pq é uma função areq joga tudo pra dentro de Form
-       areq textField (fieldSettingsLabel MsgTxtLogin) Nothing <*>
-        -- Nothing pq o campo começa vazio
-       areq passwordField (fieldSettingsLabel MsgTxtSenha) Nothing  
+funcionarioForm = renderDivs $ Usuarios <$>   
+       areq textField (fieldSettingsLabel MsgTxtNome) Nothing <*>  
+       areq textField (fieldSettingsLabel MsgTxtLogin) Nothing <*> 
+       areq passwordField (fieldSettingsLabel MsgTxtSenha) Nothing <*>
+       areq (selectField $ optionsPairs [(MsgForm3, "Administrador"),(MsgForm2, "Funcionário")]) (fieldSettingsLabel MsgForm4) Nothing
 
+       
 --Abaixo, criamos o Form com uma Tupla de dois Text, pois queremos acessar apenas os campos Login e Senha de usuarios,
 --Mas NÃO queremos o campo Nome (Senão bastaria usar o formfuncionario abaixo) 
 loginForm :: Form (Text,Text)
@@ -77,18 +91,19 @@ postLoginR = do
            ((result, _), _) <- runFormPost loginForm
            case result of 
                --Caso seja Admin:
-               FormSuccess ("admin","admin") -> setSession "_ID" "admin" >> redirect AdminR
+                FormSuccess ("admin","admin") -> setSession "_ID" "Administrador" >> redirect AdminR
                --Caso seja Usuário Comum:
-               FormSuccess (login,senha) -> do 
+                FormSuccess (login,senha) -> do 
                    user <- runDB $ selectFirst [UsuariosLogin ==. login, UsuariosSenha ==. senha] []
-                   case user of
+                   case user of 
                        --Caso o User venha 'vazio'            
                        Nothing -> redirect LoginR
                        --Caso o user seja retornado com sucesso, setamos a sessão e redirecionamos para FuncionarioR
                        --Abaixo: "pid" é o ID, e "u" contém todos os outros campos do registro
                        --A session é setada com o id do usuário
                        Just (Entity pid u) -> setSession "_ID" (pack $ show $ fromSqlKey pid) >> redirect (FuncionarioR)
-               _ -> redirect ErroR --Em caso de erro, redirect para ErroR
+                _ -> redirect ErroR --Em caso de erro, redirect para ErroR
+    
            
 postPerfilR :: UsuariosId -> Handler Html
 postPerfilR pid = do

@@ -37,6 +37,7 @@ Form: Registration
 Form1: Customer  
 Form2: Employee  
 Form3: Admin
+Form4: Type
 Funcionario1: Profile of
 Funcionario2: You're logged as
 Funcionario: Employee Area
