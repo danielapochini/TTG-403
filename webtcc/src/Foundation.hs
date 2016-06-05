@@ -6,7 +6,10 @@ module Foundation where
 import Routes
 import Yesod
 import Yesod.Static
+import Data.Time
+import qualified Data.Text as T
 import Data.Text
+import Yesod.Form.Jquery
 import Database.Persist.Postgresql
     ( ConnectionPool, SqlBackend, runSqlPool, runMigration )
     
@@ -18,12 +21,35 @@ data SauipeExpress = SauipeExpress {getStatic :: Static, connPool :: ConnectionP
 
 -- tabela BD 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
-Usuarios json
+Usuarios 
    nome Text 
    login Text
-   senha Text
+   senha Text 
+   tipo Text
    deriving Show
    
+Filial
+    nome Text 
+    cnpj Text sqltype=varchar(14)
+    endereco Text 
+    cidade Text
+   
+Cliente
+    nome Text  
+    cpf Text sqltype=varchar(11)
+    nascimento Day
+    email Text   
+    endereco Text
+    cidade Text
+    telefone Text sqltype=varchar(11)
+ 
+Entrega
+    filialId FilialId 
+    funcionarioId  UsuariosId
+    clienteId ClienteId
+    data UTCTime default=now()
+    processado Bool
+    UniqueFilFunCli filialId funcionarioId clienteId 
 
 |]
 
@@ -50,8 +76,14 @@ instance Yesod SauipeExpress where
     isAuthorized ServicosR _  = return Authorized
     isAuthorized ContatoR _   = return Authorized 
     isAuthorized AdminR _     = isAdmin
-    isAuthorized CadFuncionarioR _  = isAdmin
-    isAuthorized ListFuncionarioR _  = isAdmin
+    isAuthorized CadFilialR _  = isAdmin
+    isAuthorized ListFilialR _  = isAdmin
+    isAuthorized CadClienteR _  = isAdmin
+    isAuthorized ListClienteR _  = isAdmin
+    isAuthorized CadEntregaR _  = isAdmin
+    isAuthorized ListEntregaR _  = isAdmin
+    isAuthorized CadUsuarioR _  = isAdmin
+    isAuthorized ListUsuarioR _  = isAdmin
     isAuthorized _ _          = isUser
 
 --Autenticação do Admin
@@ -59,7 +91,7 @@ isAdmin = do
     mu <- lookupSession "_ID"
     return $ case mu of
         Nothing      -> AuthenticationRequired
-        Just "admin" -> Authorized
+        Just "Administrador" -> Authorized
         Just _       -> Unauthorized "Você precisa ser Admin para ter acesso a essa área!"
 
 --A função isUser faz a autenticação do Usuário
@@ -88,3 +120,5 @@ instance RenderMessage SauipeExpress FormMessage where
     renderMessage _ _ = defaultFormMessage
     
 type Form a = Html -> MForm Handler (FormResult a, Widget)
+
+instance YesodJquery SauipeExpress where
