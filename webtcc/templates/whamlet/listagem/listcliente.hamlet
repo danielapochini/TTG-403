@@ -1,0 +1,20 @@
+                <div ."section">
+                    <header ."container">
+                        <div ."row">
+                            <div ."col-md-6">
+                                <h2 ."central">_{MsgAdmin7}
+                                <img src=@{StaticR imagens_logotipo10anos_png} ."img-responsive logotipo">
+                            <div ."col-md-6">
+                                <h3 ."txtadmin"> _{MsgCadastro2} <br>
+                                <table border="1">
+                                    <tr>
+                                        <th>_{MsgTxtNome}  
+                                        <th>_{MsgTxtAcao}                                   
+                                 $forall Entity cid cent <- cliente
+                                     <tr>
+                                         <td><a href=@{PerfilClienteR cid}> #{clienteNome cent}  
+                                         <td>
+                                             <form method=post action=@{PerfilClienteR cid}> 
+                                                <input ."btn btn-primary" type="submit" value="_{MsgDeletarBtn}" #"deletar"><br>
+                            <button type="button" ."btn btn-primary btn-lg center-block" #"btnVoltarAdmin">_{MsgVoltar}
+^{footer}

@@ -1,0 +1,22 @@
+                <div ."section">
+                    <header ."container">
+                        <div ."row">
+                            <div ."col-md-6">
+                                <h2 ."central">_{MsgAdmin8}
+                                <img src=@{StaticR imagens_logotipo10anos_png} ."img-responsive logotipo">
+                            <div ."col-md-6">
+                                <h3 ."txtadmin"> _{MsgCadastro3} <br>
+                                <table border="1">
+                                    <tr>
+                                        <th>_{MsgTxtFilial}
+                                        <th>_{MsgTxtCnpj} 
+                                        <th>_{MsgTxtAcao} 
+                                 $forall Entity fid fent <- filial
+                                     <tr>
+                                         <td><a href=@{PerfilFilialR fid}> #{filialNome fent}  
+                                         <td>#{filialCnpj fent}
+                                         <td>
+                                             <form method=post action=@{PerfilFilialR fid}> 
+                                                <input ."btn btn-primary" type="submit" value="_{MsgDeletarBtn}" #"deletar"><br>
+                            <button type="button" ."btn btn-primary btn-lg center-block" #"btnVoltarAdmin">_{MsgVoltar}
+^{footer}
