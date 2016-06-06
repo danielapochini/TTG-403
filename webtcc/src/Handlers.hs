@@ -15,6 +15,7 @@ import Data.Time
 import qualified Data.Text as T
 import Text.Julius
 import Text.Lucius 
+import qualified Network.Mail.Mime as Mail
 import Text.Hamlet
 import Text.Cassius 
 import Yesod.Form.Jquery
@@ -24,7 +25,7 @@ import Database.Persist.Postgresql
 
 
 mkYesodDispatch "SauipeExpress" pRoutes
-
+ 
 
 ----------------------- WIDGETS PERSONALIZADAS / FORMULARIO GENÉRICO + INTERNACIONALIZAÇÃO  ------------------------------
 cliWid :: Widget
@@ -49,7 +50,7 @@ filWid = [whamlet|
 
 logWid :: Widget
 logWid = [whamlet| 
-    _{MsgLogin1} 
+    _{MsgLogin1}
 |]
 
 ------------------ ESTRUTURA DO SITE: HEADER/NAVEGAÇÃO/FOOTER---------------------
@@ -519,9 +520,10 @@ getServicosR = defaultLayout $ do
         toWidget $(luciusFile "templates/lucius/principal.lucius") 
         toWidget $(whamletFile "templates/whamlet/servicos.hamlet")
 
-getContatoR :: Handler Html
-getContatoR = defaultLayout $ do
-        setTitle "Sauípe Express|Contato"
+getContatoR :: Handler Html  
+getContatoR = do  
+        defaultLayout $ do
+        setTitle "Sauípe Express|Contato" 
         addStylesheet $ StaticR css_bootstrap_css
         addStylesheet $ StaticR css_fontawesomemin_css
         addStylesheet $ StaticR css_main_css
@@ -563,3 +565,4 @@ getSucessoR = defaultLayout $ do
             toWidget $(luciusFile "templates/lucius/principal.lucius") 
             toWidget $(whamletFile "templates/whamlet/sucesso.hamlet") 
 
+ 

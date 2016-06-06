@@ -16,8 +16,8 @@ Cadastro1: Registered Users:
 Cadastro2: Registered Customers:
 Cadastro3: Registered Branches:
 Cadastro4: Registered Deliveries:
-Cadastro: Fill in the registration
-CadastroBtn: Sign Up
+Cadastro: Fill in the fields
+CadastroBtn: Send
 Celular: Cell Phone: +55 13 997477862
 ChamadaSite: Shipping and deliveries throughout Brazil.
 Contato10: Type your message here.
@@ -35,12 +35,14 @@ Contato9: Subject
 Contato: Contact
 DeletarBtn: Delete
 Endereco: Address:
+Entrega: Deliveries
 Erro1: The page you are looking for cannot be found.
 Erro2: Please wait a few seconds. You will be redirected to our main page.
 Erro3: Thank you!
 Erro: Sorry,
 Estado: Sao Paulo
 Facebook: Like our page on Facebook
+Filial: Branches
 Form1: Customer
 Form2: Employee
 Form3: Admin
@@ -53,7 +55,7 @@ Home1: In the year of our 10th anniversary, we redesigned our website to serve y
 Home2: Now with a fully responsive website to make it easy for you to access on PC, Notebook, Tablet, mobile phone and other devices.
 Home: Home
 Localizacao: Location
-Login1: Fill in the fields below:
+Login1: Login Area
 Login: Authorized Personnel Only
 Logout: Logout
 LogoutTxt: You have been logged out successfully.

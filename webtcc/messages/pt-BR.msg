@@ -16,8 +16,8 @@ Cadastro1: Usuários Cadastrados:
 Cadastro2: Clientes Cadastrados:
 Cadastro3: Filiais Cadastradas:
 Cadastro4: Entregas Cadastradas:
-Cadastro: Preencha o cadastro.
-CadastroBtn: Cadastrar
+Cadastro: Preencha os campos.
+CadastroBtn: Enviar
 Celular: Celular: (13) 99747-7862
 ChamadaSite: Frete e entregas para todo o Brasil.
 Contato10: Digite sua mensagem
@@ -35,14 +35,14 @@ Contato9: Digite o assunto
 Contato: Contato
 DeletarBtn: Deletar
 Endereco: Endereço:
-Entrega: Entrega
+Entrega: Entregas
 Erro1: A página que você digitou não existe ou está fora do ar.
 Erro2: Por favor aguarde alguns segundos, você será redirecionado para nossa página principal.
 Erro3: Obrigada!
 Erro: Desculpe,
 Estado: SP
 Facebook: Curta nossa página no facebook
-Filial: Filial
+Filial: Filiais
 Form1: Cliente
 Form2: Funcionário
 Form3: Administrador
@@ -55,7 +55,7 @@ Home1: No ano que fazemos nosso aniversário de 10 anos, reformulamos nosso site
 Home2: Agora com o site totalmente responsivo, facilitando seu acesso através do Computador, Notebook, Tablet, celular e demais dispositivos móveis
 Home: Início
 Localizacao: Localização
-Login1: Preencha os campos abaixo:
+Login1: Área de Login
 Login: Acesso Restrito
 Logout: Sair
 LogoutTxt: Você foi deslogado com sucesso.
