@@ -10,3 +10,6 @@ h1
     text-align: center
     font-weight: bold
     font: 30px "typewriter", sans-serif
+
+select
+    margin-top: 20px

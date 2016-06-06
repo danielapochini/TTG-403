@@ -1,3 +1,11 @@
 document.getElementById("btnVoltar").onclick = function () {
-        location.href = "@{ListFuncionarioR}";
+        location.href = "@{ListUsuarioR}";
+};
+
+document.getElementById("btnFil").onclick = function () {
+        location.href = "@{ListFilialR}";
+};
+
+document.getElementById("btnCli").onclick = function () {
+        location.href = "@{ListClienteR}";
 };
