@@ -6,7 +6,7 @@
                                 <img src=@{StaticR imagens_logotipo10anos_png} ."img-responsive logotipo">
                             <div ."col-md-6">
                                 <h3 ."txtadmin"> _{MsgCadastro4} <br>
-                                <table border="1">
+                                <table style="width:100%">
                                     <tr>
                                         <th>ID
                                         <th>_{MsgTxtData}  

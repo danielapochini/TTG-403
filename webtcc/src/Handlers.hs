@@ -14,8 +14,7 @@ import Data.Text
 import Data.Time
 import qualified Data.Text as T
 import Text.Julius
-import Text.Lucius 
-import qualified Network.Mail.Mime as Mail
+import Text.Lucius  
 import Text.Hamlet
 import Text.Cassius 
 import Yesod.Form.Jquery

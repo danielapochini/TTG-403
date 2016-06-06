@@ -2,10 +2,10 @@ document.getElementById("btnVoltar").onclick = function () {
         location.href = "@{ListUsuarioR}";
 };
 
-document.getElementById("btnFil").onclick = function () {
+document.getElementById("filBtn").onclick = function () {
         location.href = "@{ListFilialR}";
 };
 
-document.getElementById("btnCli").onclick = function () {
+document.getElementById("cliBtn").onclick = function () {
         location.href = "@{ListClienteR}";
 };

@@ -65,6 +65,8 @@ Nextel: Nextel(ID): 129*20237
 Perfil1: Perfil de
 Perfil2: Login
 Perfil3: Senha
+Perfil4: Perfil Filial 
+Perfil5: Perfil Cliente
 Perfil: Perfil do Usuário
 QuemSomos1: A SAUÍPE EXPRESS é uma empresa especializada em serviços de transportes, coletas e distribuição, que atua na Baixada Santista e Grande São Paulo e também em todo território nacional, com uma experiência de mais de 10 anos atendendo pequenas, médias e grandes empresas, dos mais diversos segmentos da economia.
 QuemSomos2: Missão da Empresa

@@ -1,8 +1,8 @@
                     <div ."section">
                         <div ."container fundo1">
                             <div ."row"> 
-                                <div ."col-md-12 text-clienteer">
-                                    <h1> _{MsgPerfil}
+                                <div ."col-md-12 text-center">
+                                    <h1> _{MsgPerfil5}
                                     <p> _{MsgTxtNome} #{clienteNome cliente} 
                                     <p> _{MsgTxtCpf} #{clienteCpf cliente}  
                                     <p> _{MsgTxtEmail} #{clienteEmail cliente}
@@ -10,6 +10,6 @@
                                     <p> _{MsgTxtCidade} #{clienteCidade cliente} 
                                     <p> _{MsgTxtTelefone} #{clienteTelefone cliente} 
                                     <p> _{MsgTxtEndereco} #{clienteEndereco cliente}  
-                                    <button type="button" ."btn btn-primary btn-lg" #"btnCli">_{MsgVoltar}
+                                    <button type="button" ."btn btn-primary btn-lg" #"cliBtn">_{MsgVoltar}
                     
 ^{footer}

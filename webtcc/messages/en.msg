@@ -65,6 +65,8 @@ Nextel: Nextel(ID): 129*20237
 Perfil1: Profile of
 Perfil2: Login
 Perfil3: Password
+Perfil4: Branch Profile
+Perfil5: Customer Profile
 Perfil: User Profile
 QuemSomos1: SAUÍPE EXPRESS is a transportation, pick-up and distribution services company acting in Baixada Santista, Grande São Paulo and nationwide, with 10+ experience helping small, medium and big business from all economy sectors.
 QuemSomos2: Our Mission
