@@ -1,0 +1,15 @@
+                    <div ."section">
+                        <div ."container fundo1">
+                            <div ."row"> 
+                                <div ."col-md-12 text-clienteer">
+                                    <h1> _{MsgPerfil}
+                                    <p> _{MsgTxtNome} #{clienteNome cliente} 
+                                    <p> _{MsgTxtCpf} #{clienteCpf cliente}  
+                                    <p> _{MsgTxtEmail} #{clienteEmail cliente}
+                                    <p> _{MsgTxtEndereco} #{clienteEndereco cliente} 
+                                    <p> _{MsgTxtCidade} #{clienteCidade cliente} 
+                                    <p> _{MsgTxtTelefone} #{clienteTelefone cliente} 
+                                    <p> _{MsgTxtEndereco} #{clienteEndereco cliente}  
+                                    <button type="button" ."btn btn-primary btn-lg" #"btnCli">_{MsgVoltar}
+                    
+^{footer}
