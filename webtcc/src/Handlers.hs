@@ -129,7 +129,6 @@ func = do
        entidades <- runDB $ selectList [UsuariosTipo ==. "Funcionário"] [Asc UsuariosNome]
        optionsPairs $ fmap (\ent -> (usuariosNome $ entityVal ent, entityKey ent)) entidades  
 --------------------- METODOS POST -----------------------------
-
 postCadClienteR :: Handler Html
 postCadClienteR = do
            ((result, _), _) <- runFormPost clienteForm
@@ -318,6 +317,23 @@ getListEntregaR = do
         toWidget $(juliusFile "templates/julius/list.julius")
         toWidget $(whamletFile "templates/whamlet/listagem/listentrega.hamlet") 
 
+-- Página Cadastro de Funcionário 
+getCadUsuarioR :: Handler Html
+getCadUsuarioR = do  
+        (widget, enctype) <- generateFormPost usuarioForm
+        defaultLayout $ do 
+        setTitle "Sauípe Express| Cadastro Funcionário"
+        addStylesheet $ StaticR css_bootstrap_css
+        addStylesheet $ StaticR css_fontawesomemin_css
+        addStylesheet $ StaticR css_main_css
+        -- addStylesheet $ StaticR css_principal_css
+        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        toWidget $(luciusFile "templates/lucius/principal.lucius") 
+        toWidget $(cassiusFile "templates/cassius/form.cassius")
+        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
+        toWidget $(whamletFile "templates/whamlet/cadastro/cadusuario.hamlet") 
+
 -- Lista Funcionário Cadastrado 
 getListUsuarioR :: Handler Html
 getListUsuarioR = do
@@ -334,7 +350,7 @@ getListUsuarioR = do
         toWidget $(luciusFile "templates/lucius/principal.lucius") 
         toWidget $(cassiusFile "templates/cassius/list.cassius") 
         toWidget $(juliusFile "templates/julius/list.julius")
-        toWidget $(whamletFile "templates/whamlet/listusuario.hamlet")
+        toWidget $(whamletFile "templates/whamlet/listagem/listusuario.hamlet")
  
 ---------------- Login, Logout -----------------------
 
@@ -391,6 +407,42 @@ getPerfilR uid = do
             toWidget $(juliusFile "templates/julius/perfil.julius") 
             toWidget $(whamletFile "templates/whamlet/perfil/perfil.hamlet") 
     
+----------- PERFIL Cliente -------------      
+
+getPerfilClienteR :: ClienteId -> Handler Html
+getPerfilClienteR uid = do
+      cliente <- runDB $ get404 uid
+      defaultLayout $ do 
+            setTitle "Sauípe Express|Cliente"
+            addStylesheet $ StaticR css_bootstrap_css
+            addStylesheet $ StaticR css_fontawesomemin_css
+            addStylesheet $ StaticR css_main_css
+            -- addStylesheet $ StaticR css_principal_css
+            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" 
+            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"    
+            toWidgetHead $(hamletFile "templates/hamlet/head.hamlet") 
+            toWidget $(luciusFile "templates/lucius/principal.lucius") 
+            toWidget $(juliusFile "templates/julius/perfil.julius") 
+            toWidget $(whamletFile "templates/whamlet/perfil/cliente.hamlet")     
+
+----------- PERFIL Filial -------------      
+
+getPerfilFilialR :: FilialId -> Handler Html
+getPerfilFilialR uid = do
+      filial <- runDB $ get404 uid
+      defaultLayout $ do 
+            setTitle "Sauípe Express|Filial"
+            addStylesheet $ StaticR css_bootstrap_css
+            addStylesheet $ StaticR css_fontawesomemin_css
+            addStylesheet $ StaticR css_main_css
+            -- addStylesheet $ StaticR css_principal_css
+            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" 
+            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"    
+            toWidgetHead $(hamletFile "templates/hamlet/head.hamlet") 
+            toWidget $(luciusFile "templates/lucius/principal.lucius") 
+            toWidget $(juliusFile "templates/julius/perfil.julius") 
+            toWidget $(whamletFile "templates/whamlet/perfil/filial.hamlet")     
+        
 --------------------------- FUNCIONARIO  --------------------
 getFuncionarioR :: Handler Html
 getFuncionarioR = do
