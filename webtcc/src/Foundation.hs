@@ -49,7 +49,7 @@ Entrega
     clienteId ClienteId
     data UTCTime default=now()
     processado Bool
-    UniqueFilFunCli filialId funcionarioId clienteId 
+    UniqueFilFun filialId funcionarioId 
 
 |]
 

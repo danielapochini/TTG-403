@@ -1,17 +1,23 @@
-{-# LANGUAGE OverloadedStrings, QuasiQuotes,
-             TemplateHaskell #-}
+{-# LANGUAGE OverloadedStrings, TypeFamilies, QuasiQuotes,
+             TemplateHaskell, GADTs, FlexibleContexts,
+             MultiParamTypeClasses, DeriveDataTypeable,
+             GeneralizedNewtypeDeriving, EmptyDataDecls, ViewPatterns #-}
  
 module Handlers where
 import Routes
 import Yesod
+import Database.Persist.Postgresql
 import Foundation
 import Control.Monad.Logger (runStdoutLoggingT)
 import Control.Applicative
 import Data.Text
+import Data.Time
+import qualified Data.Text as T
 import Text.Julius
 import Text.Lucius 
 import Text.Hamlet
 import Text.Cassius 
+import Yesod.Form.Jquery
 import Yesod.Static
 
 import Database.Persist.Postgresql
@@ -31,9 +37,14 @@ funcWid = [whamlet|
     _{MsgAdmin2} 
 |]
 
-admWid :: Widget
-admWid = [whamlet| 
-    _{MsgAdmin3} 
+entWid :: Widget
+entWid = [whamlet| 
+    _{MsgEntrega} 
+|]
+
+filWid :: Widget
+filWid = [whamlet| 
+    _{MsgFilial} 
 |]
 
 logWid :: Widget
@@ -61,27 +72,67 @@ widgetForm x enctype widget novaWidget = [whamlet|
             <h3>_{MsgCadastro}
 |]
 
--- formulário Funcionario 
-funcionarioForm :: Form Usuarios 
-funcionarioForm = renderDivs $ Usuarios <$>   
+-- formulário Filial
+filialForm :: Form Filial 
+filialForm = renderDivs $ Filial <$>   
+       areq textField (fieldSettingsLabel MsgTxtNome) Nothing <*>  
+       areq textField (fieldSettingsLabel MsgTxtCnpj) {fsAttrs = [("maxlength","14")]} Nothing <*> 
+       areq textField (fieldSettingsLabel MsgTxtEndereco) Nothing <*> 
+       areq textField (fieldSettingsLabel MsgTxtCidade) Nothing 
+       
+-- formulário Cliente 
+clienteForm :: Form Cliente
+clienteForm = renderDivs $ Cliente <$>   
+       areq textField (fieldSettingsLabel MsgTxtNome) Nothing <*>  
+       areq textField (fieldSettingsLabel MsgTxtCpf) {fsAttrs=[("maxlength","11")]} Nothing <*> 
+       areq (jqueryDayField def { jdsChangeYear = True  
+                 , jdsYearRange = "1900:1998"  
+                  }) (fieldSettingsLabel MsgTxtNascimento) Nothing <*>       
+       areq emailField (fieldSettingsLabel MsgTxtEmail) Nothing <*>
+       areq textField (fieldSettingsLabel MsgTxtEndereco) Nothing <*> 
+       areq textField (fieldSettingsLabel MsgTxtCidade) Nothing <*>          
+       areq textField (fieldSettingsLabel MsgTxtTelefone) {fsAttrs=[("maxlength","11")]} Nothing      
+
+-- formulário Entrega
+entregaForm :: Form Entrega
+entregaForm = renderDivs $ Entrega <$>   
+       areq (selectField fili) (fieldSettingsLabel MsgTxtFilial) Nothing <*> 
+       areq (selectField func) (fieldSettingsLabel MsgForm2) Nothing <*>
+       areq (selectField cli) (fieldSettingsLabel MsgTxtCliente) Nothing <*>
+       lift (liftIO getCurrentTime) <*>
+       lift (liftIO $ return False)
+       
+-- formulário Usuarios
+usuarioForm :: Form Usuarios 
+usuarioForm = renderDivs $ Usuarios <$>   
        areq textField (fieldSettingsLabel MsgTxtNome) Nothing <*>  
        areq textField (fieldSettingsLabel MsgTxtLogin) Nothing <*> 
        areq passwordField (fieldSettingsLabel MsgTxtSenha) Nothing <*>
        areq (selectField $ optionsPairs [(MsgForm3, "Administrador"),(MsgForm2, "Funcionário")]) (fieldSettingsLabel MsgForm4) Nothing
 
-       
 --Abaixo, criamos o Form com uma Tupla de dois Text, pois queremos acessar apenas os campos Login e Senha de usuarios,
---Mas NÃO queremos o campo Nome (Senão bastaria usar o formfuncionario abaixo) 
+--Mas NÃO queremos o campo Nome (Senão bastaria usar o formusuario acima) 
 loginForm :: Form (Text,Text)
 loginForm = renderDivs $ (,) <$>
            areq textField (fieldSettingsLabel MsgTxtLogin) Nothing <*>
            areq passwordField (fieldSettingsLabel MsgTxtSenha) Nothing
-  
+----------------------------------------------------
+fili = do
+       entidades <- runDB $ selectList [] [Asc FilialNome] 
+       optionsPairs $ fmap (\ent -> (filialNome $ entityVal ent, entityKey ent)) entidades
+
+cli = do
+       entidades <- runDB $ selectList [] [Asc ClienteNome] 
+       optionsPairs $ fmap (\ent -> (clienteNome $ entityVal ent, entityKey ent)) entidades
+
+func = do
+       entidades <- runDB $ selectList [UsuariosTipo ==. "Funcionário"] [Asc UsuariosNome]
+       optionsPairs $ fmap (\ent -> (usuariosNome $ entityVal ent, entityKey ent)) entidades  
 --------------------- METODOS POST -----------------------------
 
-postCadFuncionarioR :: Handler Html
-postCadFuncionarioR = do
-           ((result, _), _) <- runFormPost funcionarioForm
+postCadUsuarioR :: Handler Html
+postCadUsuarioR = do
+           ((result, _), _) <- runFormPost usuarioForm
            case result of 
                FormSuccess user -> (runDB $ insert user) >> redirect SucessoR
                _ -> redirect ErroR
@@ -96,6 +147,9 @@ postLoginR = do
                 FormSuccess (login,senha) -> do 
                    user <- runDB $ selectFirst [UsuariosLogin ==. login, UsuariosSenha ==. senha] []
                    case user of 
+                       {--UsuariosTipo == "Administrador" -> setSession "_ID" "Administrador" >> redirect (AdminR)
+                       UsuariosTipo == "Funcionário" -> setSession "_ID" "Funcionário" >> redirect (FuncionarioR) --}
+                       
                        --Caso o User venha 'vazio'            
                        Nothing -> redirect LoginR
                        --Caso o user seja retornado com sucesso, setamos a sessão e redirecionamos para FuncionarioR
@@ -108,8 +162,9 @@ postLoginR = do
 postPerfilR :: UsuariosId -> Handler Html
 postPerfilR pid = do
      runDB $ delete pid
-     redirect ListFuncionarioR
+     redirect ListUsuarioR
                           
+           
 
 ---------------- Área Administrador -----------------------
             
@@ -133,11 +188,12 @@ getAdminR = defaultLayout $ do
             toWidget $(cassiusFile "templates/cassius/admin.cassius")
             toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
             toWidget $(whamletFile "templates/whamlet/admin.hamlet")  
- 
+
+
 -- Página Cadastro de Funcionário 
-getCadFuncionarioR :: Handler Html
-getCadFuncionarioR = do  
-        (widget, enctype) <- generateFormPost funcionarioForm
+getCadUsuarioR :: Handler Html
+getCadUsuarioR = do  
+        (widget, enctype) <- generateFormPost usuarioForm
         defaultLayout $ do 
         setTitle "Sauípe Express| Cadastro Funcionário"
         addStylesheet $ StaticR css_bootstrap_css
@@ -152,8 +208,8 @@ getCadFuncionarioR = do
         toWidget $(whamletFile "templates/whamlet/cadusuario.hamlet") 
 
 -- Lista Funcionário Cadastrado 
-getListFuncionarioR :: Handler Html
-getListFuncionarioR = do
+getListUsuarioR :: Handler Html
+getListUsuarioR = do
         listaP <- runDB $ selectList [] [Asc UsuariosNome]
         defaultLayout $ do 
         setTitle "Sauípe Express|Lista"
@@ -167,7 +223,7 @@ getListFuncionarioR = do
         toWidget $(luciusFile "templates/lucius/principal.lucius") 
         toWidget $(cassiusFile "templates/cassius/list.cassius") 
         toWidget $(juliusFile "templates/julius/list.julius")
-        toWidget $(whamletFile "templates/whamlet/listfuncionario.hamlet")
+        toWidget $(whamletFile "templates/whamlet/listusuario.hamlet")
  
 ---------------- Login, Logout -----------------------
 
