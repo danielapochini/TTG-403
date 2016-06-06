@@ -3,17 +3,26 @@
                             <div ."row"> 
                                 <div ."col-md-12 text-center">
                                     <h1>_{MsgAdmin}
-                                <div ."col-md-4 text-center">
-                                    <h3 ."txtadmin"> _{MsgAdmin1}
-                                    <button type="button" ."btn btn-primary btn-lg" #"btnAdm">_{MsgAdmin4}
-                                <div ."col-md-4 text-center">
+                                <div ."col-md-3 text-center">
                                     <h3 ."txtadmin"> _{MsgAdmin2}
                                     <button type="button" ."btn btn-primary btn-lg" #"btnCadFunc">_{MsgAdmin4}
                                     <h3 ."txtadmin"> _{MsgAdmin5}
                                     <button type="button" ."btn btn-primary btn-lg" #"btnListFunc">_{MsgAdmin6}
-                                <div ."col-md-4 text-center">
+                                <div ."col-md-3 text-center">
+                                    <h3 ."txtadmin"> _{MsgAdmin1}
+                                    <button type="button" ."btn btn-primary btn-lg" #"btnCadCli">_{MsgAdmin4}
+                                    <h3 ."txtadmin"> _{MsgAdmin7}
+                                    <button type="button" ."btn btn-primary btn-lg" #"btnListCli">_{MsgAdmin6}
+                                <div ."col-md-3 text-center">
                                     <h3 ."txtadmin"> _{MsgAdmin3}
-                                    <button type="button" ."btn btn-primary btn-lg" #"btnCli">_{MsgAdmin4}
+                                    <button type="button" ."btn btn-primary btn-lg" #"btnCadFil">_{MsgAdmin4}
+                                    <h3 ."txtadmin"> _{MsgAdmin8}
+                                    <button type="button" ."btn btn-primary btn-lg" #"btnListFil">_{MsgAdmin6}
+                                <div ."col-md-3 text-center">
+                                    <h3 ."txtadmin"> _{MsgAdmin9}
+                                    <button type="button" ."btn btn-primary btn-lg" #"btnCadEnt">_{MsgAdmin4}
+                                    <h3 ."txtadmin"> _{MsgAdmin10}
+                                    <button type="button" ."btn btn-primary btn-lg" #"btnListEnt">_{MsgAdmin6}
                                 <div ."col-md-12 text-center">
                                     <h1>Localização Atual: 
                                     <div #"map">

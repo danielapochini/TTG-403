@@ -1,11 +1,34 @@
 document.getElementById("btnCadFunc").onclick = function () {
-        location.href = "@{CadFuncionarioR}";
+        location.href = "@{CadUsuarioR}";
 };
 
 document.getElementById("btnListFunc").onclick = function () {
-        location.href = "@{ListFuncionarioR}";
+        location.href = "@{ListUsuarioR}";
 };
 
+document.getElementById("btnCadCli").onclick = function () {
+        location.href = "@{CadClienteR}";
+};
+
+document.getElementById("btnListCli").onclick = function () {
+        location.href = "@{ListClienteR}";
+};
+
+document.getElementById("btnCadEnt").onclick = function () {
+        location.href = "@{CadEntregaR}";
+};
+
+document.getElementById("btnListEnt").onclick = function () {
+        location.href = "@{ListEntregaR}";
+};
+
+document.getElementById("btnCadFil").onclick = function () {
+        location.href = "@{CadFilialR}";
+};
+
+document.getElementById("btnListFil").onclick = function () {
+        location.href = "@{ListFilialR}";
+};
 document.getElementById("btnLog").onclick = function () {
         location.href = "@{LogoutR}";
 };
