@@ -130,6 +130,27 @@ func = do
        optionsPairs $ fmap (\ent -> (usuariosNome $ entityVal ent, entityKey ent)) entidades  
 --------------------- METODOS POST -----------------------------
 
+postCadClienteR :: Handler Html
+postCadClienteR = do
+           ((result, _), _) <- runFormPost clienteForm
+           case result of 
+               FormSuccess cli -> (runDB $ insert cli) >> redirect SucessoR
+               _ -> redirect ErroR
+               
+postCadEntregaR :: Handler Html
+postCadEntregaR = do
+           ((result, _), _) <- runFormPost entregaForm
+           case result of 
+               FormSuccess ent -> (runDB $ insert ent) >> redirect SucessoR
+               _ -> redirect ErroR
+               
+postCadFilialR :: Handler Html
+postCadFilialR = do
+           ((result, _), _) <- runFormPost filialForm
+           case result of 
+               FormSuccess fili -> (runDB $ insert fili) >> redirect SucessoR
+               _ -> redirect ErroR
+               
 postCadUsuarioR :: Handler Html
 postCadUsuarioR = do
            ((result, _), _) <- runFormPost usuarioForm
@@ -165,7 +186,16 @@ postPerfilR pid = do
      redirect ListUsuarioR
                           
            
- 
+postPerfilFilialR :: FilialId -> Handler Html
+postPerfilFilialR pid = do
+     runDB $ delete pid
+     redirect ListFilialR       
+     
+           
+postPerfilClienteR :: ClienteId -> Handler Html
+postPerfilClienteR pid = do
+     runDB $ delete pid
+     redirect ListClienteR    
 
 ---------------- Área Administrador -----------------------
             
@@ -329,7 +359,7 @@ getPerfilR uid = do
             toWidgetHead $(hamletFile "templates/hamlet/head.hamlet") 
             toWidget $(luciusFile "templates/lucius/principal.lucius") 
             toWidget $(juliusFile "templates/julius/perfil.julius") 
-            toWidget $(whamletFile "templates/whamlet/perfil.hamlet") 
+            toWidget $(whamletFile "templates/whamlet/perfil/perfil.hamlet") 
     
 --------------------------- FUNCIONARIO  --------------------
 getFuncionarioR :: Handler Html
