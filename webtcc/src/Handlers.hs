@@ -165,6 +165,7 @@ postPerfilR pid = do
      redirect ListUsuarioR
                           
            
+ 
 
 ---------------- Área Administrador -----------------------
             
@@ -188,6 +189,56 @@ getAdminR = defaultLayout $ do
             toWidget $(cassiusFile "templates/cassius/admin.cassius")
             toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
             toWidget $(whamletFile "templates/whamlet/admin.hamlet")  
+
+--Página de Cadastro de Filial
+getCadFilialR :: Handler Html
+getCadFilialR = do  
+        (widget, enctype) <- generateFormPost filialForm
+        defaultLayout $ do 
+        setTitle "Sauípe Express| Cadastro Filial Empresa"
+        addStylesheet $ StaticR css_bootstrap_css
+        addStylesheet $ StaticR css_fontawesomemin_css
+        addStylesheet $ StaticR css_main_css 
+        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        toWidget $(luciusFile "templates/lucius/principal.lucius") 
+        toWidget $(cassiusFile "templates/cassius/form.cassius")
+        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
+        toWidget $(whamletFile "templates/whamlet/cadfilial.hamlet") 
+        
+        
+--Página de Cadastro de Cliente
+getCadClienteR :: Handler Html
+getCadClienteR = do  
+        (widget, enctype) <- generateFormPost clienteForm
+        defaultLayout $ do 
+        setTitle "Sauípe Express| Cadastro Cliente"
+        addStylesheet $ StaticR css_bootstrap_css
+        addStylesheet $ StaticR css_fontawesomemin_css
+        addStylesheet $ StaticR css_main_css 
+        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        toWidget $(luciusFile "templates/lucius/principal.lucius") 
+        toWidget $(cassiusFile "templates/cassius/form.cassius")
+        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
+        toWidget $(whamletFile "templates/whamlet/cadcliente.hamlet")   
+
+--Página de Cadastro de Entrega 
+getCadEntregaR :: Handler Html
+getCadEntregaR = do  
+        (widget, enctype) <- generateFormPost entregaForm
+        defaultLayout $ do 
+        setTitle "Sauípe Express| Cadastro Entrega"
+        addStylesheet $ StaticR css_bootstrap_css
+        addStylesheet $ StaticR css_fontawesomemin_css
+        addStylesheet $ StaticR css_main_css
+        -- addStylesheet $ StaticR css_principal_css
+        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        toWidget $(luciusFile "templates/lucius/principal.lucius") 
+        toWidget $(cassiusFile "templates/cassius/form.cassius")
+        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
+        toWidget $(whamletFile "templates/whamlet/cadentrega.hamlet")    
 
 
 -- Página Cadastro de Funcionário 

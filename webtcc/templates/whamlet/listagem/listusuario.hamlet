@@ -5,8 +5,12 @@
                                 <h2 ."central">_{MsgAdmin5}
                                 <img src=@{StaticR imagens_logotipo10anos_png} ."img-responsive logotipo">
                             <div ."col-md-6">
-                                <h3 ."txtadmin"> Funcionários Cadastrados: <br>
+                                <h3 ."txtadmin"> _{MsgCadastro1} <br>
                                 <table border="1">
+                                    <tr>
+                                        <th>_{MsgTxtNome}
+                                        <th>_{MsgTxtCargo}
+                                        <th>_{MsgTxtAcao}                                
                                  $forall Entity pid usuario <- listaP
                                      <tr>
                                          <td><a href=@{PerfilR pid}> #{usuariosNome usuario} 
