@@ -234,8 +234,24 @@ getCadFilialR = do
         toWidget $(luciusFile "templates/lucius/principal.lucius") 
         toWidget $(cassiusFile "templates/cassius/form.cassius")
         toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-        toWidget $(whamletFile "templates/whamlet/cadfilial.hamlet") 
+        toWidget $(whamletFile "templates/whamlet/cadastro/cadfilial.hamlet") 
         
+getListFilialR :: Handler Html
+getListFilialR = do
+        filial <- runDB $ selectList [] [Asc FilialNome]
+        defaultLayout $ do 
+        setTitle "Sauípe Express|Lista de Filial"
+        addStylesheet $ StaticR css_bootstrap_css
+        addStylesheet $ StaticR css_fontawesomemin_css
+        addStylesheet $ StaticR css_main_css 
+        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
+        toWidget $(luciusFile "templates/lucius/principal.lucius") 
+        toWidget $(cassiusFile "templates/cassius/list.cassius") 
+        toWidget $(juliusFile "templates/julius/list.julius")
+        toWidget $(whamletFile "templates/whamlet/listagem/listfilial.hamlet")
+         
         
 --Página de Cadastro de Cliente
 getCadClienteR :: Handler Html
@@ -251,8 +267,24 @@ getCadClienteR = do
         toWidget $(luciusFile "templates/lucius/principal.lucius") 
         toWidget $(cassiusFile "templates/cassius/form.cassius")
         toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-        toWidget $(whamletFile "templates/whamlet/cadcliente.hamlet")   
+        toWidget $(whamletFile "templates/whamlet/cadastro/cadcliente.hamlet")   
 
+getListClienteR :: Handler Html        
+getListClienteR = do
+        cliente <- runDB $ selectList [] [Asc ClienteNome]
+        defaultLayout $ do 
+        setTitle "Sauípe Express|Lista de Filial"
+        addStylesheet $ StaticR css_bootstrap_css
+        addStylesheet $ StaticR css_fontawesomemin_css
+        addStylesheet $ StaticR css_main_css 
+        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
+        toWidget $(luciusFile "templates/lucius/principal.lucius") 
+        toWidget $(cassiusFile "templates/cassius/list.cassius") 
+        toWidget $(juliusFile "templates/julius/list.julius")
+        toWidget $(whamletFile "templates/whamlet/listagem/listcliente.hamlet")        
+        
 --Página de Cadastro de Entrega 
 getCadEntregaR :: Handler Html
 getCadEntregaR = do  
@@ -268,25 +300,23 @@ getCadEntregaR = do
         toWidget $(luciusFile "templates/lucius/principal.lucius") 
         toWidget $(cassiusFile "templates/cassius/form.cassius")
         toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-        toWidget $(whamletFile "templates/whamlet/cadentrega.hamlet")    
+        toWidget $(whamletFile "templates/whamlet/cadastro/cadentrega.hamlet")    
 
-
--- Página Cadastro de Funcionário 
-getCadUsuarioR :: Handler Html
-getCadUsuarioR = do  
-        (widget, enctype) <- generateFormPost usuarioForm
+getListEntregaR :: Handler Html        
+getListEntregaR = do 
+        entregas <- runDB $ (rawSql "SELECT ??, ??, ?? FROM entrega INNER JOIN cliente ON entrega.cliente_id=cliente.id INNER JOIN usuarios ON entrega.funcionario_id=usuarios.id" [])::Handler [(Entity Entrega, Entity Cliente, Entity Usuarios)] 
         defaultLayout $ do 
-        setTitle "Sauípe Express| Cadastro Funcionário"
+        setTitle "Sauípe Express|Lista Entregas"
         addStylesheet $ StaticR css_bootstrap_css
         addStylesheet $ StaticR css_fontawesomemin_css
-        addStylesheet $ StaticR css_main_css
-        -- addStylesheet $ StaticR css_principal_css
+        addStylesheet $ StaticR css_main_css 
         addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
         addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        toWidget $(luciusFile "templates/lucius/principal.lucius") 
-        toWidget $(cassiusFile "templates/cassius/form.cassius")
         toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-        toWidget $(whamletFile "templates/whamlet/cadusuario.hamlet") 
+        toWidget $(luciusFile "templates/lucius/principal.lucius") 
+        toWidget $(cassiusFile "templates/cassius/list.cassius") 
+        toWidget $(juliusFile "templates/julius/list.julius")
+        toWidget $(whamletFile "templates/whamlet/listagem/listentrega.hamlet") 
 
 -- Lista Funcionário Cadastrado 
 getListUsuarioR :: Handler Html
