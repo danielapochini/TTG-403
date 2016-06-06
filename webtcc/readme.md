@@ -27,24 +27,4 @@ arquivos em Whamlet -> html da tag body
 PASTA TEMPLATES/WIDGETS: footer e header.
 a chamada é feita utilizando ^{footer} e ^{header} dentro
 das páginas whamlet em templates.
-
-============================================
-
-widgetForm :: Route SauipeExpress -> Enctype -> Widget -> Widget -> Widget
--- função que gera formulários em forma genérica 
-widgetForm x enctype widget novaWidget = [whamlet|
-            <h1>
-                ^{novaWidget}
-            <form method=post action=@{x} enctype=#{enctype}>
-                ^{widget}
-                <input ."btn btn-primary" type="submit" value="_{MsgCadastroBtn}" #"cadastrar">
-            <h3>_{MsgCadastro}
-|]
-
-Chamada do formulário personalizado dentro de uma página whamlet (templates/whamlet/cadusuario.hamlet):
-
-^{widgetForm CadFuncionarioR enctype widget funcWid} 
-
-funcWid fica no lugar do ^{novaWidget}, é o arquivo de texto da internacionalização em forma de widget.
-As declarações estão nas primeiras linhas de Handlers.hs
-
+ 

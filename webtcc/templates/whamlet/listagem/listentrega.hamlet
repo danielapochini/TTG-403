@@ -10,7 +10,8 @@
                                     <tr>
                                         <th>ID
                                         <th>_{MsgTxtData}  
-                                        <th>_{MsgTxtCliente}  
+                                        <th>_{MsgTxtCliente} 
+                                        <th>_{MsgTxtEndereco} 
                                         <th>_{MsgTxtCidade} 
                                         <th>_{MsgTxtFuncionario}  
                                  $forall (Entity eq entrega, Entity _ nc, Entity _ nu) <- entregas
@@ -18,6 +19,7 @@
                                          <td> #{fromSqlKey eq}
                                          <td> #{show $ utctDay $ entregaData entrega}
                                          <td> #{clienteNome nc} 
+                                         <td> #{clienteEndereco nc} 
                                          <td> #{clienteCidade nc} 
                                          <td> #{usuariosNome nu} 
                                              
