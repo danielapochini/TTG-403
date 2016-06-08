@@ -2,7 +2,4 @@
                         <div ."container fundo1">
                             <div ."row"> 
                                 <div ."col-md-12 text-center">
-                                    <h1>_{MsgSucesso}
-                                
-                                    
-^{footer}
+                                    <h1>_{MsgSucesso} 

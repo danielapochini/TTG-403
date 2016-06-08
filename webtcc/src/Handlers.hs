@@ -6,6 +6,7 @@
 module Handlers where
 import Routes
 import Yesod
+import Utils
 import Database.Persist.Postgresql
 import Foundation
 import Control.Monad.Logger (runStdoutLoggingT)
@@ -25,53 +26,7 @@ import Database.Persist.Postgresql
 
 mkYesodDispatch "SauipeExpress" pRoutes
  
-
------------------------ WIDGETS PERSONALIZADAS / FORMULARIO GENÉRICO + INTERNACIONALIZAÇÃO  ------------------------------
-cliWid :: Widget
-cliWid = [whamlet| 
-    _{MsgAdmin1} 
-|]
-
-funcWid :: Widget
-funcWid = [whamlet| 
-    _{MsgAdmin2} 
-|]
-
-entWid :: Widget
-entWid = [whamlet| 
-    _{MsgEntrega} 
-|]
-
-filWid :: Widget
-filWid = [whamlet| 
-    _{MsgFilial} 
-|]
-
-logWid :: Widget
-logWid = [whamlet| 
-    _{MsgLogin1}
-|]
-
------------------- ESTRUTURA DO SITE: HEADER/NAVEGAÇÃO/FOOTER---------------------
-header :: Widget
-header = $(whamletFile "templates/widgets/header.hamlet") 
-{-- as informações de header e footer são as mesmas em todas as páginas, para não ter
-retrabalho em escreeve-las em cada página nova, é só importar o widget 
-usando ^{header} ou ^{footer} dentro da pagina html --}
-footer :: Widget
-footer = $(whamletFile "templates/widgets/footer.hamlet")   
-
-widgetForm :: Route SauipeExpress -> Enctype -> Widget -> Widget -> Widget
--- função que gera formulários em forma genérica 
-widgetForm x enctype widget novaWidget = [whamlet|
-            <h1>
-                ^{novaWidget}
-            <form method=post action=@{x} enctype=#{enctype}>
-                ^{widget}
-                <input ."btn btn-primary" type="submit" value="_{MsgCadastroBtn}" #"cadastrar">
-            <h3>_{MsgCadastro}
-|]
-
+ 
 -- formulário Filial
 filialForm :: Form Filial 
 filialForm = renderDivs $ Filial <$>   
@@ -167,10 +122,7 @@ postLoginR = do
                 FormSuccess (login,senha) -> do 
                    user <- runDB $ selectFirst [UsuariosLogin ==. login, UsuariosSenha ==. senha] []
                    case user of 
-                       {--UsuariosTipo == "Administrador" -> setSession "_ID" "Administrador" >> redirect (AdminR)
-                       UsuariosTipo == "Funcionário" -> setSession "_ID" "Funcionário" >> redirect (FuncionarioR) --}
-                       
-                       --Caso o User venha 'vazio'            
+                    
                        Nothing -> redirect LoginR
                        --Caso o user seja retornado com sucesso, setamos a sessão e redirecionamos para FuncionarioR
                        --Abaixo: "pid" é o ID, e "u" contém todos os outros campos do registro
@@ -178,6 +130,7 @@ postLoginR = do
                        Just (Entity pid u) -> setSession "_ID" (pack $ show $ fromSqlKey pid) >> redirect (FuncionarioR)
                 _ -> redirect ErroR --Em caso de erro, redirect para ErroR
     
+    -- Just (Entity pid (Usuarios nome login Administrador)
            
 postPerfilR :: UsuariosId -> Handler Html
 postPerfilR pid = do
@@ -201,55 +154,27 @@ postPerfilClienteR pid = do
 -- Pagina apenas para Admin 
 getAdminR :: Handler Html
 getAdminR = defaultLayout $ do 
-            setTitle "Sauípe Express|Painel Admin"
-            addStylesheet $ StaticR css_bootstrap_css
-            addStylesheet $ StaticR css_fontawesomemin_css
-            addStylesheet $ StaticR css_main_css
-            -- addStylesheet $ StaticR css_principal_css
-            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-            addStylesheetRemote "https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css"
-            addStylesheetRemote "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css"
-            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            addScriptRemote "https://cdn.firebase.com/js/client/2.2.1/firebase.js"
-            addScriptRemote "https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js"
-            addScriptRemote "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.js"
-            toWidget $(luciusFile "templates/lucius/principal.lucius") 
+            setTitle "Sauípe Express|Painel Admin" 
+            padmWidget $(whamletFile "templates/whamlet/admin.hamlet") >> geoWidget 
             toWidget $(juliusFile "templates/julius/geoadmin.julius") 
-            toWidget $(cassiusFile "templates/cassius/admin.cassius")
-            toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-            toWidget $(whamletFile "templates/whamlet/admin.hamlet")  
+            toWidget $(cassiusFile "templates/cassius/admin.cassius") 
 
 --Página de Cadastro de Filial
 getCadFilialR :: Handler Html
 getCadFilialR = do  
         (widget, enctype) <- generateFormPost filialForm
         defaultLayout $ do 
-        setTitle "Sauípe Express| Cadastro Filial Empresa"
-        addStylesheet $ StaticR css_bootstrap_css
-        addStylesheet $ StaticR css_fontawesomemin_css
-        addStylesheet $ StaticR css_main_css 
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        toWidget $(luciusFile "templates/lucius/principal.lucius") 
-        toWidget $(cassiusFile "templates/cassius/form.cassius")
-        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-        toWidget $(whamletFile "templates/whamlet/cadastro/cadfilial.hamlet") 
+        setTitle "Sauípe Express| Cadastro Filial Empresa" 
+        padmWidget $(whamletFile "templates/whamlet/cadastro/cadfilial.hamlet") 
+        >> cadWidget
         
 getListFilialR :: Handler Html
 getListFilialR = do
         filial <- runDB $ selectList [] [Asc FilialNome]
         defaultLayout $ do 
-        setTitle "Sauípe Express|Lista de Filial"
-        addStylesheet $ StaticR css_bootstrap_css
-        addStylesheet $ StaticR css_fontawesomemin_css
-        addStylesheet $ StaticR css_main_css 
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-        toWidget $(luciusFile "templates/lucius/principal.lucius") 
-        toWidget $(cassiusFile "templates/cassius/list.cassius") 
-        toWidget $(juliusFile "templates/julius/list.julius")
-        toWidget $(whamletFile "templates/whamlet/listagem/listfilial.hamlet")
+        setTitle "Sauípe Express|Lista de Filial"   
+        padmWidget $(whamletFile "templates/whamlet/listagem/listfilial.hamlet")
+        >> listWidget
          
         
 --Página de Cadastro de Cliente
@@ -257,100 +182,52 @@ getCadClienteR :: Handler Html
 getCadClienteR = do  
         (widget, enctype) <- generateFormPost clienteForm
         defaultLayout $ do 
-        setTitle "Sauípe Express| Cadastro Cliente"
-        addStylesheet $ StaticR css_bootstrap_css
-        addStylesheet $ StaticR css_fontawesomemin_css
-        addStylesheet $ StaticR css_main_css 
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        toWidget $(luciusFile "templates/lucius/principal.lucius") 
-        toWidget $(cassiusFile "templates/cassius/form.cassius")
-        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-        toWidget $(whamletFile "templates/whamlet/cadastro/cadcliente.hamlet")   
+        setTitle "Sauípe Express| Cadastro Cliente" 
+        padmWidget $(whamletFile "templates/whamlet/cadastro/cadcliente.hamlet")    
+        >> cadWidget
 
 getListClienteR :: Handler Html        
 getListClienteR = do
         cliente <- runDB $ selectList [] [Asc ClienteNome]
         defaultLayout $ do 
-        setTitle "Sauípe Express|Lista de Filial"
-        addStylesheet $ StaticR css_bootstrap_css
-        addStylesheet $ StaticR css_fontawesomemin_css
-        addStylesheet $ StaticR css_main_css 
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-        toWidget $(luciusFile "templates/lucius/principal.lucius") 
-        toWidget $(cassiusFile "templates/cassius/list.cassius") 
-        toWidget $(juliusFile "templates/julius/list.julius")
-        toWidget $(whamletFile "templates/whamlet/listagem/listcliente.hamlet")        
+        setTitle "Sauípe Express|Lista de Filial" 
+        padmWidget $(whamletFile "templates/whamlet/listagem/listcliente.hamlet")      
+        >> listWidget
         
 --Página de Cadastro de Entrega 
 getCadEntregaR :: Handler Html
 getCadEntregaR = do  
         (widget, enctype) <- generateFormPost entregaForm
         defaultLayout $ do 
-        setTitle "Sauípe Express| Cadastro Entrega"
-        addStylesheet $ StaticR css_bootstrap_css
-        addStylesheet $ StaticR css_fontawesomemin_css
-        addStylesheet $ StaticR css_main_css
-        -- addStylesheet $ StaticR css_principal_css
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        toWidget $(luciusFile "templates/lucius/principal.lucius") 
-        toWidget $(cassiusFile "templates/cassius/form.cassius")
-        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-        toWidget $(whamletFile "templates/whamlet/cadastro/cadentrega.hamlet")    
+        setTitle "Sauípe Express| Cadastro Entrega" 
+        padmWidget $(whamletFile "templates/whamlet/cadastro/cadentrega.hamlet")    
+        >> cadWidget
 
 getListEntregaR :: Handler Html        
 getListEntregaR = do 
         entregas <- runDB $ (rawSql "SELECT ??, ??, ?? FROM entrega INNER JOIN cliente ON entrega.cliente_id=cliente.id INNER JOIN usuarios ON entrega.funcionario_id=usuarios.id" [])::Handler [(Entity Entrega, Entity Cliente, Entity Usuarios)] 
         defaultLayout $ do 
-        setTitle "Sauípe Express|Lista Entregas"
-        addStylesheet $ StaticR css_bootstrap_css
-        addStylesheet $ StaticR css_fontawesomemin_css
-        addStylesheet $ StaticR css_main_css 
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-        toWidget $(luciusFile "templates/lucius/principal.lucius") 
-        toWidget $(cassiusFile "templates/cassius/list.cassius") 
-        toWidget $(juliusFile "templates/julius/list.julius")
-        toWidget $(whamletFile "templates/whamlet/listagem/listentrega.hamlet") 
+        setTitle "Sauípe Express|Lista Entregas" 
+        padmWidget $(whamletFile "templates/whamlet/listagem/listentrega.hamlet") 
+        >> listWidget
 
 -- Página Cadastro de Funcionário 
 getCadUsuarioR :: Handler Html
 getCadUsuarioR = do  
         (widget, enctype) <- generateFormPost usuarioForm
         defaultLayout $ do 
-        setTitle "Sauípe Express| Cadastro Funcionário"
-        addStylesheet $ StaticR css_bootstrap_css
-        addStylesheet $ StaticR css_fontawesomemin_css
-        addStylesheet $ StaticR css_main_css
-        -- addStylesheet $ StaticR css_principal_css
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        toWidget $(luciusFile "templates/lucius/principal.lucius") 
-        toWidget $(cassiusFile "templates/cassius/form.cassius")
-        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-        toWidget $(whamletFile "templates/whamlet/cadastro/cadusuario.hamlet") 
+        setTitle "Sauípe Express| Cadastro Funcionário" 
+        padmWidget $(whamletFile "templates/whamlet/cadastro/cadusuario.hamlet") 
+        >> cadWidget
 
 -- Lista Funcionário Cadastrado 
 getListUsuarioR :: Handler Html
 getListUsuarioR = do
         listaP <- runDB $ selectList [] [Asc UsuariosNome]
         defaultLayout $ do 
-        setTitle "Sauípe Express|Lista"
-        addStylesheet $ StaticR css_bootstrap_css
-        addStylesheet $ StaticR css_fontawesomemin_css
-        addStylesheet $ StaticR css_main_css
-        -- addStylesheet $ StaticR css_principal_css
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-        toWidget $(luciusFile "templates/lucius/principal.lucius") 
-        toWidget $(cassiusFile "templates/cassius/list.cassius") 
-        toWidget $(juliusFile "templates/julius/list.julius")
-        toWidget $(whamletFile "templates/whamlet/listagem/listusuario.hamlet")
+        setTitle "Sauípe Express|Lista" 
+        padmWidget $(whamletFile "templates/whamlet/listagem/listusuario.hamlet") 
+        >> listWidget
  
 ---------------- Login, Logout -----------------------
 
@@ -359,17 +236,9 @@ getLoginR :: Handler Html
 getLoginR = do
         (widget, enctype) <- generateFormPost loginForm
         defaultLayout $ do 
-        setTitle "Sauípe Express|Login"
-        addStylesheet $ StaticR css_bootstrap_css
-        addStylesheet $ StaticR css_fontawesomemin_css
-        addStylesheet $ StaticR css_main_css
-        -- addStylesheet $ StaticR css_principal_css
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        toWidget $(luciusFile "templates/lucius/principal.lucius") 
-        toWidget $(cassiusFile "templates/cassius/form.cassius")
-        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-        toWidget $(whamletFile "templates/whamlet/login.hamlet")    
+        setTitle "Sauípe Express|Login" 
+        padmWidget $(whamletFile "templates/whamlet/login.hamlet")    
+        toWidget $(cassiusFile "templates/cassius/form.cassius") 
         
  
 -- Pagina de Logout 
@@ -377,17 +246,9 @@ getLogoutR :: Handler Html
 getLogoutR = do
      deleteSession "_ID"
      defaultLayout $ do
-            setTitle "Sauípe Express"
-            addStylesheet $ StaticR css_bootstrap_css
-            addStylesheet $ StaticR css_fontawesomemin_css
-            addStylesheet $ StaticR css_main_css
-            --addStylesheet $ StaticR css_principal_css
-            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            toWidgetHead $(hamletFile "templates/hamlet/headhome.hamlet")
-            toWidget $(luciusFile "templates/lucius/principal.lucius") 
-            toWidget $(whamletFile "templates/whamlet/logout.hamlet") 
-       
+            setTitle "Sauípe Express" 
+            padmWidget $(whamletFile "templates/whamlet/logout.hamlet") 
+            toWidgetHead $(hamletFile "templates/hamlet/headhome.hamlet") 
         
 ----------- PERFIL USUARIO -------------      
 
@@ -395,17 +256,9 @@ getPerfilR :: UsuariosId -> Handler Html
 getPerfilR uid = do
       user <- runDB $ get404 uid
       defaultLayout $ do 
-            setTitle "Sauípe Express|Funcionário"
-            addStylesheet $ StaticR css_bootstrap_css
-            addStylesheet $ StaticR css_fontawesomemin_css
-            addStylesheet $ StaticR css_main_css
-            -- addStylesheet $ StaticR css_principal_css
-            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" 
-            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"    
-            toWidgetHead $(hamletFile "templates/hamlet/head.hamlet") 
-            toWidget $(luciusFile "templates/lucius/principal.lucius") 
-            toWidget $(juliusFile "templates/julius/perfil.julius") 
-            toWidget $(whamletFile "templates/whamlet/perfil/perfil.hamlet") 
+            setTitle "Sauípe Express|Funcionário" 
+            padmWidget $(whamletFile "templates/whamlet/perfil/perfil.hamlet") 
+            >> perfWidget
     
 ----------- PERFIL Cliente -------------      
 
@@ -413,17 +266,9 @@ getPerfilClienteR :: ClienteId -> Handler Html
 getPerfilClienteR uid = do
       cliente <- runDB $ get404 uid
       defaultLayout $ do 
-            setTitle "Sauípe Express|Cliente"
-            addStylesheet $ StaticR css_bootstrap_css
-            addStylesheet $ StaticR css_fontawesomemin_css
-            addStylesheet $ StaticR css_main_css
-            -- addStylesheet $ StaticR css_principal_css
-            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" 
-            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"    
-            toWidgetHead $(hamletFile "templates/hamlet/head.hamlet") 
-            toWidget $(luciusFile "templates/lucius/principal.lucius") 
-            toWidget $(juliusFile "templates/julius/perfil.julius") 
-            toWidget $(whamletFile "templates/whamlet/perfil/cliente.hamlet")     
+            setTitle "Sauípe Express|Cliente" 
+            padmWidget $(whamletFile "templates/whamlet/perfil/cliente.hamlet")   
+            >> perfWidget
 
 ----------- PERFIL Filial -------------      
 
@@ -432,136 +277,64 @@ getPerfilFilialR uid = do
       filial <- runDB $ get404 uid
       defaultLayout $ do 
             setTitle "Sauípe Express|Filial"
-            addStylesheet $ StaticR css_bootstrap_css
-            addStylesheet $ StaticR css_fontawesomemin_css
-            addStylesheet $ StaticR css_main_css
-            -- addStylesheet $ StaticR css_principal_css
-            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" 
-            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"    
-            toWidgetHead $(hamletFile "templates/hamlet/head.hamlet") 
-            toWidget $(luciusFile "templates/lucius/principal.lucius") 
-            toWidget $(juliusFile "templates/julius/perfil.julius") 
-            toWidget $(whamletFile "templates/whamlet/perfil/filial.hamlet")     
+            padmWidget $(whamletFile "templates/whamlet/perfil/filial.hamlet")  
+            >> perfWidget
         
 --------------------------- FUNCIONARIO  --------------------
 getFuncionarioR :: Handler Html
 getFuncionarioR = do
      mu <- lookupSession "_ID"
-     case mu of
-        --Se em 'mu' houver sessão:
-        Just sess -> do
-            --Na Session é guardado um Text, mas só é possível converter de Text para String (unpack), e de String para Int (read)
-            --O 'toSqlKey' converte de Int para Key(do BD)
-
-            --(toSqlKey $ read $ unpack sess) <--- Transforma a Session de Text pra String, de String pra Inteiro e de Int pra chave
+     case mu of 
+        Just sess -> do 
             uid <- return (toSqlKey $ read $ unpack sess) :: Handler (Key Usuarios)
             user <- runDB $ get404 uid
             defaultLayout $ do 
-            setTitle "Sauípe Express|Funcionário"
-            addStylesheet $ StaticR css_bootstrap_css
-            addStylesheet $ StaticR css_fontawesomemin_css
-            addStylesheet $ StaticR css_main_css
-            --addStylesheet $ StaticR css_principal_css
-            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-            addStylesheetRemote "https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css"
-            addStylesheetRemote "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css"
-            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            addScriptRemote "https://cdn.firebase.com/js/client/2.2.1/firebase.js"
-            addScriptRemote "https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js"
-            addScriptRemote "https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.js"
-            toWidget $(juliusFile "templates/julius/geolocalizacao.julius") 
-            toWidget $(luciusFile "templates/lucius/principal.lucius") 
-            toWidget $(cassiusFile "templates/cassius/funcionario.cassius")
-            toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-            toWidget $(whamletFile "templates/whamlet/funcionario.hamlet") 
-        --Se não houver (é Nothing):
+            setTitle "Sauípe Express|Funcionário"  
+            padmWidget $(whamletFile "templates/whamlet/funcionario.hamlet") >> geoWidget
+            toWidget $(cassiusFile "templates/cassius/funcionario.cassius") 
+            toWidget $(juliusFile "templates/julius/geolocalizacao.julius")
+            
         Nothing -> redirect ErroR
   
 ----------------Páginas do Site - Home, Quem Somos, Serviços, Contato-----------------------
 
 getHomeR :: Handler Html
 getHomeR = defaultLayout $ do
-            setTitle "Sauípe Express|Home"
-            addStylesheet $ StaticR css_bootstrap_css
-            addStylesheet $ StaticR css_fontawesomemin_css
-            addStylesheet $ StaticR css_main_css 
-            --addStylesheet $ StaticR css_principal_css
-            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-            toWidget $(luciusFile "templates/lucius/principal.lucius") 
-            toWidget $(whamletFile "templates/whamlet/home.hamlet") 
+        setTitle "Sauípe Express|Home" 
+        customWidget $(whamletFile "templates/whamlet/home.hamlet") 
 
 getQuemSomosR :: Handler Html
 getQuemSomosR = defaultLayout $ do
-        setTitle "Sauípe Express|QuemSomos"
-        addStylesheet $ StaticR css_bootstrap_css
-        addStylesheet $ StaticR css_fontawesomemin_css
-        addStylesheet $ StaticR css_main_css
-        --addStylesheet $ StaticR css_principal_css
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-        toWidget $(luciusFile "templates/lucius/principal.lucius") 
+        setTitle "Sauípe Express|QuemSomos" 
+        customWidget $(whamletFile "templates/whamlet/quemsomos.hamlet")
         toWidget $(cassiusFile "templates/cassius/contato.cassius") 
-        toWidget $(whamletFile "templates/whamlet/quemsomos.hamlet")
 
 getServicosR :: Handler Html
 getServicosR = defaultLayout $ do
-        setTitle "Sauípe Express|Serviços"
-        addStylesheet $ StaticR css_bootstrap_css
-        addStylesheet $ StaticR css_fontawesomemin_css
-        addStylesheet $ StaticR css_main_css
-        --addStylesheet $ StaticR css_principal_css
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        toWidgetHead $(hamletFile "templates/hamlet/head.hamlet")
-        toWidget $(luciusFile "templates/lucius/principal.lucius") 
-        toWidget $(whamletFile "templates/whamlet/servicos.hamlet")
+        setTitle "Sauípe Express|Serviços" 
+        customWidget $(whamletFile "templates/whamlet/servicos.hamlet")
 
 getContatoR :: Handler Html  
 getContatoR = do  
         defaultLayout $ do
-        setTitle "Sauípe Express|Contato" 
-        addStylesheet $ StaticR css_bootstrap_css
-        addStylesheet $ StaticR css_fontawesomemin_css
-        addStylesheet $ StaticR css_main_css
-        --addStylesheet $ StaticR css_principal_css
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-        addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        toWidgetHead $(hamletFile "templates/hamlet/headcontato.hamlet")
-        toWidget $(luciusFile "templates/lucius/principal.lucius") 
+        setTitle "Sauípe Express|Contato"   
+        customWidget $(whamletFile "templates/whamlet/contato.hamlet")
         toWidget $(cassiusFile "templates/cassius/contato.cassius")
-        toWidget $(whamletFile "templates/whamlet/contato.hamlet")
          
 --------------------- Ações ----------------------
 
 -- Pagina de Erro 
 getErroR :: Handler Html
 getErroR = defaultLayout $ do  
-            setTitle "Sauípe Express"
-            addStylesheet $ StaticR css_bootstrap_css
-            addStylesheet $ StaticR css_fontawesomemin_css
-            addStylesheet $ StaticR css_main_css
-            --addStylesheet $ StaticR css_principal_css
-            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            toWidgetHead $(hamletFile "templates/hamlet/headhome.hamlet")
-            toWidget $(luciusFile "templates/lucius/principal.lucius") 
-            toWidget $(whamletFile "templates/whamlet/error.hamlet") 
+        setTitle "Sauípe Express|Erro!" 
+        customWidget $(whamletFile "templates/whamlet/error.hamlet")  
+        toWidgetHead $(hamletFile "templates/hamlet/headhome.hamlet")
 
 -- Pagina de Sucesso 
 getSucessoR :: Handler Html
 getSucessoR = defaultLayout $ do  
-            setTitle "Sauípe Express"
-            addStylesheet $ StaticR css_bootstrap_css
-            addStylesheet $ StaticR css_fontawesomemin_css
-            addStylesheet $ StaticR css_main_css
-            --addStylesheet $ StaticR css_principal_css
-            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
-            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            toWidgetHead $(hamletFile "templates/hamlet/headadmin.hamlet")
-            toWidget $(luciusFile "templates/lucius/principal.lucius") 
-            toWidget $(whamletFile "templates/whamlet/sucesso.hamlet") 
+        setTitle "Sauípe Express"  
+        padmWidget $(whamletFile "templates/whamlet/sucesso.hamlet") 
+        toWidgetHead $(hamletFile "templates/hamlet/headadmin.hamlet") 
 
  

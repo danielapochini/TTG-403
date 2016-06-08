@@ -8,5 +8,3 @@
                                     <p> _{MsgTxtEndereco} #{filialEndereco filial}  
                                     <p> _{MsgTxtCidade} #{filialCidade filial}  
                                     <button type="button" ."btn btn-primary btn-lg" #"filBtn">_{MsgVoltar}
-                    
-^{footer}

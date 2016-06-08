@@ -51,6 +51,7 @@ Form: Registration
 Funcionario1: Profile of
 Funcionario2: You're logged as
 Funcionario: Employee Area
+LocalizacaoArea: Real-Time Tracking:
 Home1: In the year of our 10th anniversary, we redesigned our website to serve you better.
 Home2: Now with a fully responsive website to make it easy for you to access on PC, Notebook, Tablet, mobile phone and other devices.
 Home: Home
@@ -101,7 +102,7 @@ TxtData: Date
 TxtEmail: Email
 TxtEndereco: Address
 TxtFilial: Branch
-TxtFuncionario: Employee
+TxtFuncionario: Motoboy
 TxtLogin: Login:
 TxtNascimento: Birthday
 TxtNome: Name

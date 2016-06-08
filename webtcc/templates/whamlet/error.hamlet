@@ -1,4 +1,3 @@
-^{header}
                     <div ."section">
                         <div ."container fundo1">
                             <div ."row">
@@ -7,5 +6,4 @@
                                   <img .="img-responsive" src=@{StaticR imagens_erro1_png}>
                                   <h3>_{MsgErro1}
                                   <p>_{MsgErro2}
-                                  <br>_{MsgErro3}
-^{footer}
+                                  <br>_{MsgErro3} 

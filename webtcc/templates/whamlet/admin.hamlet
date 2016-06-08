@@ -24,10 +24,9 @@
                                     <h3 ."txtadmin"> _{MsgAdmin10}
                                     <button type="button" ."btn btn-primary btn-lg" #"btnListEnt">_{MsgAdmin6}
                                 <div ."col-md-12 text-center">
-                                    <h1>Localização Atual: 
+                                    <h1>_{MsgLocalizacaoArea} 
                                     <div #"map">
                                     <br>
                                     <button type="button" ."btn btn-primary btn-lg" #"btnLog">_{MsgLogout}
                                     <br>
-                                    
-^{footer}
+ 

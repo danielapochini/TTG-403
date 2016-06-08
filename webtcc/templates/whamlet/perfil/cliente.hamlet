@@ -11,5 +11,3 @@
                                     <p> _{MsgTxtTelefone} #{clienteTelefone cliente} 
                                     <p> _{MsgTxtEndereco} #{clienteEndereco cliente}  
                                     <button type="button" ."btn btn-primary btn-lg" #"cliBtn">_{MsgVoltar}
-                    
-^{footer}

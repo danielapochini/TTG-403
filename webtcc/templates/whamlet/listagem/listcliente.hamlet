@@ -17,4 +17,4 @@
                                              <form method=post action=@{PerfilClienteR cid}> 
                                                 <input ."btn btn-primary" type="submit" value="_{MsgDeletarBtn}" #"deletar"><br>
                             <button type="button" ."btn btn-primary btn-lg center-block" #"btnVoltarAdmin">_{MsgVoltar}
-^{footer}
+ 

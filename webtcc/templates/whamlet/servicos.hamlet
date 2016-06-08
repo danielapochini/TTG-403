@@ -1,4 +1,3 @@
-^{header}
                     <div ."section">
                         <div ."container fundo1">
                             <div ."row">
@@ -17,5 +16,4 @@
                                     <p>_{MsgServicos9}
                                     <h2>_{MsgServicos10}
                                     <p>_{MsgServicos11}
-                                    <a href=@{ContatoR}>_{MsgServicos12}
-^{footer}
+                                    <a href=@{ContatoR}>_{MsgServicos12} 

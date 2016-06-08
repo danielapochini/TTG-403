@@ -7,5 +7,4 @@
                                     <p> _{MsgFuncionario2} #{usuariosLogin user} 
                                     <div #"map">
                                     <button type="button" ."btn btn-primary btn-lg" #"btnLog">_{MsgLogout}
-                    
-^{footer}
+ 

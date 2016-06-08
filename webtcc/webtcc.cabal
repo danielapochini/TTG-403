@@ -6,7 +6,7 @@ build-type:        Simple
 executable         webtcc
     hs-source-dirs: src
     
-    other-modules: Foundation, Handlers, Routes
+    other-modules: Foundation, Handlers, Routes, Utils
 
     main-is:           ../main.hs
 
@@ -64,4 +64,4 @@ executable         webtcc
                  , unordered-containers
                  , containers
                  , vector
-                 , time
+                 , time  

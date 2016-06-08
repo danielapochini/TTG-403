@@ -1,4 +1,3 @@
-^{header}
                     <div ."section">
                         <div ."container fundo1">
                                 <div ."col-md-12">
@@ -42,4 +41,4 @@
                                         <p>Celular: (13)99747-7862<br>
                                         _{MsgTelefone}<br>
                                         _{MsgNextel}
-^{footer}
+ 

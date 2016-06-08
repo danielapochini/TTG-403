@@ -1,5 +1,4 @@
-^{header}
-                    <div ."section">
+                     <div ."section">
                         <div ."container fundo1">
                             <div ."row">
                                 <div ."col-md-12">
@@ -7,4 +6,4 @@
                                     <p>_{MsgHome1}
                                     <img src=@{StaticR imagens_designResponsivoLogo_png} alt="Dispositivos móveis(Design Responsivo)" title="Dispositivos móveis(Design Responsivo)" ."center-block hidden-xs">
                                     <p>_{MsgHome2}
-^{footer}
+ 

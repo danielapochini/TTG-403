@@ -6,5 +6,3 @@
                                     <p> _{MsgPerfil1} #{usuariosNome user} 
                                     <p> _{MsgPerfil2} #{usuariosLogin user}  
                                     <button type="button" ."btn btn-primary btn-lg" #"btnVoltar">_{MsgVoltar}
-                    
-^{footer}

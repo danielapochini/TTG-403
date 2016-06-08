@@ -1,13 +1,13 @@
 Admin10: Lista de Entregas
-Admin1: Cadastro de Clientes
-Admin2: Cadastro de Funcionários
-Admin3: Cadastro de Filiais
+Admin1: Cadastro Clientes
+Admin2: Cadastro Funcionários
+Admin3: Cadastro Filiais
 Admin4: Adicionar
 Admin5: Lista de Funcionários
 Admin6: Ir
 Admin7: Lista de Clientes
 Admin8: Lista de Filiais
-Admin9: Cadastro de Entregas
+Admin9: Cadastro Entregas 
 Admin: Área do Administrador
 Avenida2: Av. Afonso Pena, 45 - Macuco, Santos - SP
 Avenida: Av. Afonso Pena, 45 - Macuco,
@@ -50,7 +50,8 @@ Form4: Tipo
 Form: Cadastro de
 Funcionario1: Perfil de
 Funcionario2: Você está logado como
-Funcionario: Área do Funcionário
+Funcionario: Área do Funcionário 
+LocalizacaoArea: Monitoramento da Localização:
 Home1: No ano que fazemos nosso aniversário de 10 anos, reformulamos nosso site para melhor atendê-lo.
 Home2: Agora com o site totalmente responsivo, facilitando seu acesso através do Computador, Notebook, Tablet, celular e demais dispositivos móveis
 Home: Início
@@ -101,7 +102,7 @@ TxtData: Data
 TxtEmail: Email
 TxtEndereco: Endereço
 TxtFilial: Filial
-TxtFuncionario: Funcionário
+TxtFuncionario: Motoboy
 TxtLogin: Login
 TxtNascimento: Data de Nascimento
 TxtNome: Nome
