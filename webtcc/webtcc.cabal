@@ -4,11 +4,11 @@ cabal-version:     >= 1.8
 build-type:        Simple
 
 executable         webtcc
-    hs-source-dirs: src
+    hs-source-dirs: ., src
     
-    other-modules: Foundation, Handlers, Routes, Utils
+    other-modules: Foundation, Handlers, Routes, Utils, Tipo
 
-    main-is:           ../main.hs
+    main-is:       main.hs
 
     ghc-options:       -threaded -O2 -rtsopts -with-rtsopts=-N
 
@@ -40,6 +40,7 @@ executable         webtcc
                  , classy-prelude-yesod          >= 0.10.2
                  , bytestring                    >= 0.9        && < 0.11
                  , text                          >= 0.11       && < 2.0
+                 , blaze-html
                  , persistent                    >= 2.0        && < 2.3
                  , persistent-postgresql         >= 2.1.1      && < 2.3
                  , persistent-sqlite             >= 2.1.1      && < 2.3
@@ -65,3 +66,4 @@ executable         webtcc
                  , containers
                  , vector
                  , time  
+                 , mime-mail
