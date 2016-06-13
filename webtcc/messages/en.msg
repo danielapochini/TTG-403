@@ -61,6 +61,7 @@ Login: Authorized Personnel Only
 Logout: Logout
 LogoutTxt: You have been logged out successfully.
 MapaSite: Site Map
+Mensagem: Message
 Navegacao: Navigation
 Nextel: Nextel(ID): 129*20237
 Perfil1: Profile of
@@ -107,5 +108,6 @@ TxtLogin: Login:
 TxtNascimento: Birthday
 TxtNome: Name
 TxtSenha: Password:
+TxtContato: Contact
 TxtTelefone: Contact Number
 Voltar: Go Back

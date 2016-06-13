@@ -10,19 +10,26 @@ import Control.Monad.Logger (runStdoutLoggingT)
 import Control.Applicative
 import Data.Text
 import qualified Data.Text as T
+import qualified Data.Text.Lazy as L
 import Text.Julius
 import Text.Lucius  
 import Text.Hamlet
 import Text.Cassius 
-import Network.Mail.Mime
+import Network.Mail.Mime 
 import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
 import Data.Text.Lazy.Encoding
+
 
 -----------------------  WIDGETS   ------------------ 
 
 cliWid :: Widget
 cliWid = [whamlet| 
     _{MsgAdmin1} 
+|]
+
+contWid :: Widget
+contWid = [whamlet| 
+    _{MsgTxtContato} 
 |]
 
 funcWid :: Widget
@@ -98,16 +105,13 @@ widgetForm x enctype widget novaWidget = [whamlet|
             <h3>_{MsgCadastro}
 |]
 
-enviarEmail :: Text -> Text -> Mail
-enviarEmail nome email = simpleMail' to' from' titulo mensagem
-       where titulo = T.concat [T.pack "Cadastro SauipeExpress - ", nome]
-             to' = Address (Just "contato@tcc.com") "contato@tcc.com" 
-             from' = Address (Just "contato@tcc.com") "contato@tcc.com"
-             mensagem = decodeUtf8 $ renderHtml [shamlet|
-                            <h1> SauipeExpress
-                            <p> Cadastro de #{nome} feito com sucesso
-                        |]
-                        
+data Email = Email {nome, email:: Text, msg :: Textarea} 
+
+enviarEmail (Email n e m) = simpleMail' to' from' titulo mensagem
+       where titulo = T.concat [T.pack "Novo Contato de:", e , " -", n]
+             to' = Address (Just "contato@tcc.com") "pocchini@live.dk" 
+             from' = Address (Just "contato@tcc.com") "pocchini@live.dk"
+             mensagem = L.pack $ show $ unTextarea m
 
 
 

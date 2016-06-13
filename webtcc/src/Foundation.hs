@@ -28,7 +28,7 @@ Usuarios
    nome Text 
    login Text
    senha Text 
-   tipo Text
+   tipo Tipo
    deriving Show
    
 Filial

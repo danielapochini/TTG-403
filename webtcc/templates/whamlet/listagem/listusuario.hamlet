@@ -14,7 +14,7 @@
                                  $forall Entity pid usuario <- listaP
                                      <tr>
                                          <td><a href=@{PerfilR pid}> #{usuariosNome usuario} 
-                                         <td>#{usuariosTipo usuario} 
+                                         <td>#{show $ usuariosTipo usuario} 
                                          <td>
                                              <form method=post action=@{PerfilR pid}> 
                                                 <input ."btn btn-primary" type="submit" value="_{MsgDeletarBtn}" #"deletar"><br>

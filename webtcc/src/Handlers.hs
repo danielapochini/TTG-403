@@ -18,6 +18,7 @@ import Text.Julius
 import Text.Lucius  
 import Text.Hamlet
 import Text.Cassius 
+import Tipo
 import Yesod.Form.Jquery
 import Yesod.Static
 import Network.Mail.Mime
@@ -26,7 +27,13 @@ import Database.Persist.Postgresql
 
 mkYesodDispatch "SauipeExpress" pRoutes
  
- 
+-- formulário de Contato
+contatoForm :: Form Email
+contatoForm = renderDivs $ Email <$>   
+       areq textField (fieldSettingsLabel MsgTxtNome) Nothing <*>  
+       areq textField (fieldSettingsLabel MsgTxtEmail) Nothing <*> 
+       areq textareaField (fieldSettingsLabel MsgMensagem) Nothing  
+       
 -- formulário Filial
 filialForm :: Form Filial 
 filialForm = renderDivs $ Filial <$>   
@@ -63,7 +70,7 @@ usuarioForm = renderDivs $ Usuarios <$>
        areq textField (fieldSettingsLabel MsgTxtNome) Nothing <*>  
        areq textField (fieldSettingsLabel MsgTxtLogin) Nothing <*> 
        areq passwordField (fieldSettingsLabel MsgTxtSenha) Nothing <*>
-       areq (selectField $ optionsPairs [(MsgForm3, "Administrador"),(MsgForm2, "Funcionário")]) (fieldSettingsLabel MsgForm4) Nothing
+       areq (selectField $ optionsPairs [(MsgForm3, Administrador),(MsgForm2, Funcionario)]) (fieldSettingsLabel MsgForm4) Nothing
 
 --Abaixo, criamos o Form com uma Tupla de dois Text, pois queremos acessar apenas os campos Login e Senha de usuarios,
 --Mas NÃO queremos o campo Nome (Senão bastaria usar o formusuario acima) 
@@ -81,10 +88,11 @@ cli = do
        optionsPairs $ fmap (\ent -> (clienteNome $ entityVal ent, entityKey ent)) entidades
 
 func = do
-       entidades <- runDB $ selectList [UsuariosTipo ==. "Funcionário"] [Asc UsuariosNome]
+       entidades <- runDB $ selectList [UsuariosTipo ==. Funcionario] [Asc UsuariosNome]
        optionsPairs $ fmap (\ent -> (usuariosNome $ entityVal ent, entityKey ent)) entidades  
 --------------------- METODOS POST -----------------------------
-postCadClienteR :: Handler Html
+
+{-- postCadClienteR :: Handler Html
 postCadClienteR = do
            ((result, _), _) <- runFormPost clienteForm
            case result of 
@@ -92,8 +100,24 @@ postCadClienteR = do
                                   (runDB $ insert cli)
                                   defaultLayout $ liftIO $ renderSendMail $ enviarEmail (clienteNome cli) (clienteEmail cli)
                                   redirect SucessoR
-               _ -> redirect ErroR
+               _ -> redirect ErroR--}
                
+postCadClienteR :: Handler Html
+postCadClienteR = do
+           ((result, _), _) <- runFormPost clienteForm
+           case result of 
+               FormSuccess cli -> (runDB $ insert cli) >> redirect SucessoR
+               _ -> redirect ErroR               
+              
+postContatoR :: Handler Html
+postContatoR = do
+           ((result, _), _) <- runFormPost contatoForm
+           case result of 
+               FormSuccess contato -> do
+                                    {-- defaultLayout $ liftIO $ renderSendMail $ enviarEmail (adicionar algo aqui) --}
+                                    redirect SucessoR
+               _ -> redirect ErroR               
+
 postCadEntregaR :: Handler Html
 postCadEntregaR = do
            ((result, _), _) <- runFormPost entregaForm
@@ -118,23 +142,15 @@ postCadUsuarioR = do
 postLoginR :: Handler Html
 postLoginR = do
            ((result, _), _) <- runFormPost loginForm
-           case result of 
-               --Caso seja Admin:
-                FormSuccess ("admin","admin") -> setSession "_ID" "Administrador" >> redirect AdminR
-               --Caso seja Usuário Comum:
+           case result of  
                 FormSuccess (login,senha) -> do 
                    user <- runDB $ selectFirst [UsuariosLogin ==. login, UsuariosSenha ==. senha] []
-                   case user of 
-                    
-                       Nothing -> redirect LoginR
-                       --Caso o user seja retornado com sucesso, setamos a sessão e redirecionamos para FuncionarioR
-                       --Abaixo: "pid" é o ID, e "u" contém todos os outros campos do registro
-                       --A session é setada com o id do usuário
-                       Just (Entity pid u) -> setSession "_ID" (pack $ show $ fromSqlKey pid) >> redirect (FuncionarioR)
-                _ -> redirect ErroR --Em caso de erro, redirect para ErroR
-    
-    -- Just (Entity pid (Usuarios nome login Administrador)
-           
+                   case user of  
+                       Nothing -> redirect LoginR 
+                       Just (Entity pid (Usuarios nome login senha Administrador)) ->  setSession "_ID" (pack $ show $ Administrador) >> redirect AdminR
+                       Just (Entity pid (Usuarios nome login senha Funcionario)) ->  setSession "_ID" (pack $ show $ fromSqlKey pid) >> redirect (FuncionarioR)
+                _ -> redirect ErroR  
+                
 postPerfilR :: UsuariosId -> Handler Html
 postPerfilR pid = do
      runDB $ delete pid
@@ -319,6 +335,7 @@ getServicosR = defaultLayout $ do
 
 getContatoR :: Handler Html  
 getContatoR = do  
+        (widget, enctype) <- generateFormPost contatoForm
         defaultLayout $ do
         setTitle "Sauípe Express|Contato"   
         customWidget $(whamletFile "templates/whamlet/contato.hamlet")

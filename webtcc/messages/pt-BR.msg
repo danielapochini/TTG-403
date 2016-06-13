@@ -61,6 +61,7 @@ Login: Acesso Restrito
 Logout: Sair
 LogoutTxt: Você foi deslogado com sucesso.
 MapaSite: Mapa do Site
+Mensagem: Mensagem
 Navegacao: Navigacao
 Nextel: Nextel(ID): 129*20237
 Perfil1: Perfil de
@@ -98,6 +99,7 @@ TxtCidade: Cidade
 TxtCliente: Cliente
 TxtCnpj: CNPJ
 TxtCpf: CPF
+TxtContato: Contato
 TxtData: Data
 TxtEmail: Email
 TxtEndereco: Endereço
