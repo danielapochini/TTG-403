@@ -4,15 +4,18 @@
              GeneralizedNewtypeDeriving, ViewPatterns #-}
 module Foundation where
 import Routes
+import Prelude
 import Yesod
 import Yesod.Static
 import Data.Time
 import qualified Data.Text as T
 import Data.Text
 import Yesod.Form.Jquery
+import Tipo
 import Database.Persist.Postgresql
     ( ConnectionPool, SqlBackend, runSqlPool, runMigration )
-    
+
+
 {-- tipo SauipeExpress com um data Constructor SauipeExpress + record syntax --} 
 data SauipeExpress = SauipeExpress {getStatic :: Static, connPool :: ConnectionPool}
 

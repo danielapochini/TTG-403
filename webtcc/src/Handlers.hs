@@ -20,9 +20,9 @@ import Text.Hamlet
 import Text.Cassius 
 import Yesod.Form.Jquery
 import Yesod.Static
-
+import Network.Mail.Mime
 import Database.Persist.Postgresql
-
+-- import Network.Mail.Mime (renderEmail)
 
 mkYesodDispatch "SauipeExpress" pRoutes
  
@@ -88,7 +88,10 @@ postCadClienteR :: Handler Html
 postCadClienteR = do
            ((result, _), _) <- runFormPost clienteForm
            case result of 
-               FormSuccess cli -> (runDB $ insert cli) >> redirect SucessoR
+               FormSuccess cli -> do 
+                                  (runDB $ insert cli)
+                                  defaultLayout $ liftIO $ renderSendMail $ enviarEmail (clienteNome cli) (clienteEmail cli)
+                                  redirect SucessoR
                _ -> redirect ErroR
                
 postCadEntregaR :: Handler Html

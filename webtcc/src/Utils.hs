@@ -9,10 +9,14 @@ import Foundation
 import Control.Monad.Logger (runStdoutLoggingT)
 import Control.Applicative
 import Data.Text
+import qualified Data.Text as T
 import Text.Julius
 import Text.Lucius  
 import Text.Hamlet
 import Text.Cassius 
+import Network.Mail.Mime
+import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
+import Data.Text.Lazy.Encoding
 
 -----------------------  WIDGETS   ------------------ 
 
@@ -93,3 +97,19 @@ widgetForm x enctype widget novaWidget = [whamlet|
                 <input ."btn btn-primary" type="submit" value="_{MsgCadastroBtn}" #"cadastrar">
             <h3>_{MsgCadastro}
 |]
+
+enviarEmail :: Text -> Text -> Mail
+enviarEmail nome email = simpleMail' to' from' titulo mensagem
+       where titulo = T.concat [T.pack "Cadastro SauipeExpress - ", nome]
+             to' = Address (Just "contato@tcc.com") "contato@tcc.com" 
+             from' = Address (Just "contato@tcc.com") "contato@tcc.com"
+             mensagem = decodeUtf8 $ renderHtml [shamlet|
+                            <h1> SauipeExpress
+                            <p> Cadastro de #{nome} feito com sucesso
+                        |]
+                        
+
+
+
+
+
