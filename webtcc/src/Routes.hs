@@ -16,6 +16,7 @@ pRoutes = [parseRoutes|
    /admin/list/filial/  ListFilialR GET   
    /admin/list/usuario/ ListUsuarioR GET   
    /contato ContatoR GET POST
+   /contato/sucesso Sucesso2R GET
    /erro ErroR GET
    /funcionario FuncionarioR GET
    /login LoginR GET POST

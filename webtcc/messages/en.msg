@@ -90,7 +90,7 @@ Servicos7: Part-time (morning)
 Servicos8: 4h/day
 Servicos9: P.S.: In case of unforeseen circumstances, replacement of the driver or vehicle will be arranged at most within 90 minutes.
 Servicos: Business
-Sucesso: Registered with sucess!
+Sucesso: Your form was successfully submitted!
 Telefone2: Contact number:
 Telefone: Phone:+55 13 32239211 or +55 13 32245876
 TxtAcao: Remove

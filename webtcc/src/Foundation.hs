@@ -77,6 +77,7 @@ instance Yesod SauipeExpress where
     isAuthorized HomeR _      = return Authorized
     isAuthorized QuemSomosR _ = return Authorized
     isAuthorized ServicosR _  = return Authorized
+    isAuthorized Sucesso2R _   = return Authorized 
     isAuthorized ContatoR _   = return Authorized 
     isAuthorized AdminR _     = isAdmin
     isAuthorized CadFilialR _  = isAdmin

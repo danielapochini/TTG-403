@@ -90,7 +90,7 @@ Servicos7: Meio Período (Manhã)
 Servicos8: Jornada de 4h/dia
 Servicos9: Obs.: Em caso de algum imprevisto, a substituição do condutor ou veículo será efetuada em no máximo 90 minutos.
 Servicos: Serviços
-Sucesso: Cadastrado com sucesso!
+Sucesso: Formulário enviado com sucesso.
 Telefone2: Telefones para contato:
 Telefone: Telefone: (13) 3223-9211 ou 3224-5876
 TxtAcao: Remover

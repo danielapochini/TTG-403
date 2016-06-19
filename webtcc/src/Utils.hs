@@ -16,9 +16,10 @@ import Text.Lucius
 import Text.Hamlet
 import Text.Cassius 
 import Network.Mail.Mime 
+import Network.Mail.SMTP 
 import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
-import Data.Text.Lazy.Encoding
-
+import Data.Text.Lazy.Encoding 
+ 
 
 -----------------------  WIDGETS   ------------------ 
 
@@ -29,7 +30,7 @@ cliWid = [whamlet|
 
 contWid :: Widget
 contWid = [whamlet| 
-    _{MsgTxtContato} 
+    _{MsgContato4} 
 |]
 
 funcWid :: Widget
@@ -51,8 +52,7 @@ logWid :: Widget
 logWid = [whamlet| 
     _{MsgLogin1}
 |]
-
-
+ 
 perfWidget = do   
             toWidget $(juliusFile "templates/julius/perfil.julius") 
 cadWidget = do    
@@ -105,15 +105,19 @@ widgetForm x enctype widget novaWidget = [whamlet|
             <h3>_{MsgCadastro}
 |]
 
-data Email = Email {nome, email:: Text, msg :: Textarea} 
+data Email = Email {nomeEmail, remetenteEmail, assuntoEmail:: Text, msgEmail :: Textarea} 
 
-enviarEmail (Email n e m) = simpleMail' to' from' titulo mensagem
-       where titulo = T.concat [T.pack "Novo Contato de:", e , " -", n]
-             to' = Address (Just "contato@tcc.com") "pocchini@live.dk" 
-             from' = Address (Just "contato@tcc.com") "pocchini@live.dk"
-             mensagem = L.pack $ show $ unTextarea m
+enviarEmail (Email n r a m) = simpleMail' to' from' titulo mensagem
+       where titulo = T.concat [T.pack "Novo Contato de: ", n , " - SauipeExpress"]
+             to' = Address (Just "sauipexpress@gmail.com") "sauipexpress@gmail.com" 
+             from' = Address (Just n) r
+             mensagem = decodeUtf8 $ renderHtml [shamlet|
+                            Formulário de Contato - Sauipe Express
+                            Nome: #{n} 
+                            Email: #{r}
+                            Assunto: #{a} 
+                            Mensagem: #{m}
+                        |]
+             
 
-
-
-
-
+mandaEmail = sendMailWithLogin' host port login password

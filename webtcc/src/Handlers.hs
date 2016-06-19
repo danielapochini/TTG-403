@@ -32,6 +32,7 @@ contatoForm :: Form Email
 contatoForm = renderDivs $ Email <$>   
        areq textField (fieldSettingsLabel MsgTxtNome) Nothing <*>  
        areq textField (fieldSettingsLabel MsgTxtEmail) Nothing <*> 
+       areq textField (fieldSettingsLabel MsgContato5) Nothing <*>
        areq textareaField (fieldSettingsLabel MsgMensagem) Nothing  
        
 -- formulário Filial
@@ -92,16 +93,6 @@ func = do
        optionsPairs $ fmap (\ent -> (usuariosNome $ entityVal ent, entityKey ent)) entidades  
 --------------------- METODOS POST -----------------------------
 
-{-- postCadClienteR :: Handler Html
-postCadClienteR = do
-           ((result, _), _) <- runFormPost clienteForm
-           case result of 
-               FormSuccess cli -> do 
-                                  (runDB $ insert cli)
-                                  defaultLayout $ liftIO $ renderSendMail $ enviarEmail (clienteNome cli) (clienteEmail cli)
-                                  redirect SucessoR
-               _ -> redirect ErroR--}
-               
 postCadClienteR :: Handler Html
 postCadClienteR = do
            ((result, _), _) <- runFormPost clienteForm
@@ -113,10 +104,8 @@ postContatoR :: Handler Html
 postContatoR = do
            ((result, _), _) <- runFormPost contatoForm
            case result of 
-               FormSuccess contato -> do
-                                    {-- defaultLayout $ liftIO $ renderSendMail $ enviarEmail (adicionar algo aqui) --}
-                                    redirect SucessoR
-               _ -> redirect ErroR               
+               FormSuccess contato -> (liftIO $ mandaEmail $ enviarEmail contato) >> redirect Sucesso2R
+               _ -> redirect ErroR
 
 postCadEntregaR :: Handler Html
 postCadEntregaR = do
@@ -356,5 +345,13 @@ getSucessoR = defaultLayout $ do
         setTitle "Sauípe Express"  
         padmWidget $(whamletFile "templates/whamlet/sucesso.hamlet") 
         toWidgetHead $(hamletFile "templates/hamlet/headadmin.hamlet") 
+        
+ -- Pagina de Sucesso Email       
+getSucesso2R :: Handler Html
+getSucesso2R = defaultLayout $ do  
+        setTitle "Sauípe Express"  
+        padmWidget $(whamletFile "templates/whamlet/sucesso.hamlet") 
+        toWidgetHead $(hamletFile "templates/hamlet/headcontato.hamlet") 
 
+ 
  

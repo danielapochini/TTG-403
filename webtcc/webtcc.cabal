@@ -67,3 +67,6 @@ executable         webtcc
                  , vector
                  , time  
                  , mime-mail
+                 , smtp-mail
+                 , HaskellNet-SSL
+                 , HaskellNet
