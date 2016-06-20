@@ -57,6 +57,7 @@ perfWidget = do
             toWidget $(juliusFile "templates/julius/perfil.julius") 
 cadWidget = do    
             toWidget $(cassiusFile "templates/cassius/form.cassius") 
+            toWidget $(juliusFile "templates/julius/list.julius")
 
 listWidget = do
             toWidget $(cassiusFile "templates/cassius/list.cassius") 
@@ -101,13 +102,14 @@ widgetForm x enctype widget novaWidget = [whamlet|
                 ^{novaWidget}
             <form method=post action=@{x} enctype=#{enctype}>
                 ^{widget}
+                <input ."btn btn-primary" type="reset" value="_{MsgContato12}" #"limpar">
                 <input ."btn btn-primary" type="submit" value="_{MsgCadastroBtn}" #"cadastrar">
-            <h3>_{MsgCadastro}
+            <p>_{MsgCadastro}
 |]
 
 data Email = Email {nomeEmail, remetenteEmail, assuntoEmail:: Text, msgEmail :: Textarea} 
 
-enviarEmail (Email n r a m) = simpleMail' to' from' titulo mensagem
+estruturaEmail (Email n r a m) = simpleMail' to' from' titulo mensagem
        where titulo = T.concat [T.pack "Novo Contato de: ", n , " - SauipeExpress"]
              to' = Address (Just "sauipexpress@gmail.com") "sauipexpress@gmail.com" 
              from' = Address (Just n) r
@@ -120,4 +122,4 @@ enviarEmail (Email n r a m) = simpleMail' to' from' titulo mensagem
                         |]
              
 
-mandaEmail = sendMailWithLogin' host port login password
+enviarEmail = sendMailWithLogin' host port login password

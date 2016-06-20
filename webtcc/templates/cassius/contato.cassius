@@ -24,7 +24,7 @@
     
     textarea 
         width: 12.5em
-        height: 9em
+        height: 7em
     
     h1
         font-weight: bold

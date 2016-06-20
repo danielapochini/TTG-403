@@ -104,7 +104,7 @@ postContatoR :: Handler Html
 postContatoR = do
            ((result, _), _) <- runFormPost contatoForm
            case result of 
-               FormSuccess contato -> (liftIO $ mandaEmail $ enviarEmail contato) >> redirect Sucesso2R
+               FormSuccess contato -> (liftIO $ enviarEmail $ estruturaEmail contato) >> redirect Sucesso2R
                _ -> redirect ErroR
 
 postCadEntregaR :: Handler Html

@@ -2,6 +2,7 @@
                     <header ."container">
                         <div ."row">
                             <div ."col-md-6">
+                                <button type="button" ."btn-link" #"btnVoltarAdmin">&laquo; _{MsgVoltar}
                                 <img src=@{StaticR imagens_logotipo10anos_png} ."img-responsive logotipo">
                             <div ."col-md-6">
                                 ^{widgetForm CadEntregaR enctype widget entWid} 
