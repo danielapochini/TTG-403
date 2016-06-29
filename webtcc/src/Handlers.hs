@@ -231,7 +231,7 @@ getCadUsuarioR = do
 -- Lista Funcionário Cadastrado 
 getListUsuarioR :: Handler Html
 getListUsuarioR = do
-        listaP <- runDB $ selectList [] [Asc UsuariosNome]
+        listaP <- runDB $ selectList [] [Asc UsuariosTipo, Asc UsuariosNome]
         defaultLayout $ do 
         setTitle "Sauípe Express|Lista" 
         padmWidget $(whamletFile "templates/whamlet/listagem/listusuario.hamlet") 

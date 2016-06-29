@@ -54,7 +54,7 @@ Funcionario: Área do Funcionário
 LocalizacaoArea: Monitoramento da Localização:
 Home1: No ano que fazemos nosso aniversário de 10 anos, reformulamos nosso site para melhor atendê-lo.
 Home2: Agora com o site totalmente responsivo, facilitando seu acesso através do Computador, Notebook, Tablet, celular e demais dispositivos móveis
-Home: Início
+Home: Home
 Localizacao: Localização
 Login1: Área de Login
 Login: Acesso Restrito

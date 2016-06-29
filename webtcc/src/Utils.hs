@@ -122,4 +122,4 @@ estruturaEmail (Email n r a m) = simpleMail' to' from' titulo mensagem
                         |]
              
 
-enviarEmail = sendMailWithLogin' host port login password
+enviarEmail = sendMailWithLogin' "mail.smtp2go.com" 2525 "pocchini" "dzA2cWh0NzVybTBl"
